@@ -2,11 +2,10 @@
 ## MODELING EXTENSION DICTIONARY ##
 ###################################
 
-# Version 1.2.0 17th July 2018
+# Version 1.2.1 18th July 2018
 # JH/BV
 
-##BV: Will these definitions suffice for fragment assembly methods such as Rosetta?
-##BV: Need to address provenance details for spatial restraints used in the modeling
+#BV: Need to address local and global quality assessment metrics
 
 data_mmcif_ma.dic
 
@@ -23,7 +22,7 @@ data_mmcif_ma.dic
 
     _dictionary.title           mmcif_ma.dic
     _dictionary.datablock_id    mmcif_ma.dic
-    _dictionary.version         1.2.0
+    _dictionary.version         1.2.1
 #
      loop_
     _dictionary_history.version
@@ -86,6 +85,13 @@ data_mmcif_ma.dic
   Changes (jh/bv/jw/gt/sb)
   + Added MA_ALIGNMENT_INFO, MA_TARGET_ENTITY_INSTANCE
   + Revised MA_TEMPLATE_DETAILS, MA_TARGET_TEMPLATE_POLY_MAPPING, MA_ALIGNMENT_DETAILS
+;
+;
+  1.2.1   2018-07-18
+;
+  Changes (jh/bv/jw/gt/sb)
+  + Added MA_POLY_TEMPLATE_LIBRARY_DETAILS, MA_POLY_TEMPLATE_LIBRARY_LIST
+  + Added MA_POLY_TEMPLATE_LIBRARY_COMPONENTS
 ;
 
 #########################
@@ -538,7 +544,7 @@ save__ma_template_details.template_description
 save_ma_template_poly
     _category.description
 ;              Data items in the MA_TEMPLATE_POLY category record details about
-               the polymeric templates.
+               the polymeric structural templates used in homology/comparative modeling.
 ;
     _category.id                  ma_template_poly
     _category.mandatory_code      no
@@ -633,7 +639,8 @@ save__ma_template_poly.details
 save_ma_template_non_poly
     _category.description
 ;              Data items in the MA_TEMPLATE_NON_POLY category record details about
-               the non-polymeric templates used in the modeling.
+               the non-polymeric structural templates used in the homology/comparative 
+               modeling.
 ;
     _category.id                  ma_template_non_poly
     _category.mandatory_code      no
@@ -731,7 +738,8 @@ save__ma_template_non_poly.details
 save_ma_template_poly_segment
     _category.description
 ;              Data items in the MA_TEMPLATE_POLY_SEGMENT category record details about
-               the template segments used in the modeling.
+               the segments of the structural templates used in the homology/comparative 
+               modeling.
 ;
     _category.id                  ma_template_poly_segment
     _category.mandatory_code      no
@@ -848,7 +856,7 @@ save__ma_template_poly_segment.segment_length
 save_ma_template_ref_db_details
     _category.description
 ;              Data items in the MA_TEMPLATE_REF_DB_DETAILS category record details about
-               the templates from the reference database. 
+               the structural templates obtained from the reference database. 
 ;
     _category.id                  ma_template_ref_db_details
     _category.mandatory_code      no
@@ -937,7 +945,7 @@ save__ma_template_ref_db_details.db_accession_code
 save_ma_template_customized
     _category.description
 ;              Data items in the MA_TEMPLATE_CUSTOMIZED category record details about
-               the customized templates that are not from a reference database. 
+               the customized structural templates that are not from a reference database. 
 ;
     _category.id                  ma_template_customized
     _category.mandatory_code      no
@@ -999,7 +1007,7 @@ save__ma_template_customized.details
 save_ma_template_trans_matrix
     _category.description
 ;              Data items in the MA_TEMPLATE_TRANS_MATRIX category records the
-               details of the transormatrix matrix applied to the template
+               details of the transormatrix matrix applied to the structural template
                to generate the starting structure used in the current modeling. 
                The template can be a polymer or a non-polymer and can be either
                referenced from an existing database or can be a customized 
@@ -1488,7 +1496,7 @@ save__ma_target_ref_db_details.seq_db_align_end
 save_ma_target_template_poly_mapping
     _category.description
 ;              Data items in the MA_TARGET_TEMPLATE_MAPPING category record details about
-               the target-template mappings for polymeric targets.
+               the mappings of the polymeric targets to the structural templates. 
 ;
     _category.id                  ma_target_template_poly_mapping
     _category.mandatory_code      no
@@ -1798,7 +1806,7 @@ save_ma_alignment_info
     _category.description
 ;               Data items in the MA_ALIGNMENT_INFO category record
                 list of target-template alignments (pairwise as well as
-                multiple-sequence alignments) used in the modeling.
+                multiple-sequence alignments) used in the homology/comparative modeling.
                 Additional details are included in the MA_ALIGNMENT_DETAILS category
                 and the actual alignments are captured in the MA_ALIGNMENT category. 
 ;
@@ -1945,7 +1953,7 @@ save_ma_alignment_details
     _category.description
 ;               Data items in the MA_ALIGNMENT_DETAILS category record
                 details of the target-template pairwise and multiple sequence 
-                alignments used in the modeling.
+                alignments used in the homology/comparative modeling.
                 The actual alignments are captured in the MA_ALIGNMENT category. 
 ;
     _category.id                  ma_alignment_details
@@ -2120,9 +2128,9 @@ save__ma_alignment_details.sequence_identity_denominator_other_details
 save_ma_alignment
     _category.description
 ;              Data items in the MA_ALIGMNENT category record details about
-               the relationship between the template sequences and the target 
-               sequence obtained through multiple sequence alignment methods. 
-         Alignments can be fully gapped or partial. 
+               the relationship between the sequences of the target and the 
+               structural template obtained through multiple sequence alignment
+               methods. Alignments can be fully gapped or partial. 
          
 ;
     _category.id                  ma_alignment
@@ -2507,9 +2515,9 @@ save__ma_template_coord.pdb_model_num
 
 save_ma_data
     _category.description
-;              Data items in the MA_DATA category capture the data
-               used in the modeling. These can be multiple sequence 
-               alignments, restraints etc.    
+;              Data items in the MA_DATA category capture the different kinds of 
+               data used in the modeling. These can be multiple sequence 
+               alignments, spatial restraints, template structures etc.    
 ;
     _category.id                  ma_data
     _category.mandatory_code      yes
@@ -2563,6 +2571,7 @@ save__ma_data.content_type
     _item_enumeration.value
       'target'
       'template structure'
+      'polymeric template library'
       'spatial restraints'
       'target-template alignment'
       'coevolution MSA'
@@ -3062,8 +3071,8 @@ save__ma_coevolution_msa_details.software_parameter_group_id
 save_ma_restraints
     _category.description
 ;              Data items in the MA_RESTRAINTS category provides the
-               list of the different types of restraints used in the
-               modeling.   
+               list of the different types of spatial restraints used 
+               in the modeling.   
 ;
     _category.id                  ma_restraints
     _category.mandatory_code      no
@@ -4675,6 +4684,350 @@ save__ma_software_parameter.type
     'float'   
     'string'
     'boolean'             
+     save_
+
+######################################
+## MA_POLY_TEMPLATE_LIBRARY_DETAILS ##
+######################################
+
+save_ma_poly_template_library_details
+    _category.description
+;              Data items in the MA_POLY_TEMPLATE_LIBRARY_DETAILS category record details 
+               about the polymeric template libraries used in the modeling. 
+;
+    _category.id                  ma_poly_template_library_details
+    _category.mandatory_code      no
+    _category_key.name            '_ma_poly_template_library_details.library_id'
+    loop_
+    _category_group.id            'inclusive_group'
+                                  'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 -
+;
+;
+    loop_
+    _ma_poly_template_library_details.library_id
+    _ma_poly_template_library_details.target_entity_id
+    _ma_poly_template_library_details.data_id
+    _ma_poly_template_library_details.software_id
+    _ma_poly_template_library_details.software_parameter_group_id
+    _ma_poly_template_library_details.fragment_library_flag
+    _ma_poly_template_library_details.description
+    1 . . . . . . 
+    # ...  abbreviated ...
+;
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_poly_template_library_details
+     save_
+
+save__ma_poly_template_library_details.library_id
+    _item_description.description
+;     A unique identifier for the template library.
+;
+    _item.name                  '_ma_poly_template_library_details.library_id'
+    _item.category_id             ma_poly_template_library_details
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_poly_template_library_details.target_entity_id
+    _item_description.description
+;     A unique identifier for the target entity for which the
+      template library is used.
+      This data item is a pointer to _ma_target_entity.entity_id
+      in the MA_TARGET_ENTITY category.
+;
+    _item.name                  '_ma_poly_template_library_details.target_entity_id'
+    _item.category_id             ma_poly_template_library_details
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_poly_template_library_details.target_entity_id'
+    _item_linked.parent_name    '_ma_target_entity.entity_id'
+     save_
+
+save__ma_poly_template_library_details.fragment_library_flag
+    _item_description.description
+;    A flag that indicates whether the template library is used as a
+     customized fragment library in a fragment assembly modeling method. 
+;
+    _item.name                  '_ma_poly_template_library_details.fragment_library_flag'
+    _item.category_id             ma_poly_template_library_details
+    _item.mandatory_code          yes
+    _item_type.code               code
+    loop_
+    _item_enumeration.value
+    'yes'
+    'no'
+     save_
+
+save__ma_poly_template_library_details.data_id
+    _item_description.description
+;     The data_id identifier for the template library. This data item is a pointer to
+      _ma_data.id in the MA_DATA category.
+;
+    _item.name                  '_ma_poly_template_library_details.data_id'
+    _item.category_id             ma_poly_template_library_details
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_poly_template_library_details.data_id'
+    _item_linked.parent_name    '_ma_data.id'
+     save_
+
+save__ma_poly_template_library_details.software_id
+    _item_description.description
+;     The identifier corresponding to the software used to build the template library.
+      This data item is a pointer to the _software.pdbx_ordinal in the
+      SOFTWARE category.
+;
+    _item.name                  '_ma_poly_template_library_details.software_id'
+    _item.category_id             ma_poly_template_library_details
+    _item.mandatory_code          yes
+    _item_type.code               code
+    _item_linked.child_name     '_ma_poly_template_library_details.software_id'
+    _item_linked.parent_name    '_software.pdbx_ordinal'
+     save_
+
+save__ma_poly_template_library_details.software_parameter_group_id
+    _item_description.description
+;   Identifier that denotes a set of parameters used with the software
+    in order to build the template library.
+    This data item is a pointer to _ma_software_parameter.group_id
+    in the MA_SOFTWARE_PARAMETER category.
+;
+    _item.name                  '_ma_poly_template_library_details.software_parameter_group_id'
+    _item.category_id             ma_poly_template_library_details
+    _item.mandatory_code          no
+    _item_type.code               int
+    _item_linked.child_name     '_ma_poly_template_library_details.software_parameter_group_id'
+    _item_linked.parent_name    '_ma_software_parameter.group_id'
+     save_
+
+save__ma_poly_template_library_details.description
+    _item_description.description
+;     Description of the template library.
+;
+    _item.name                  '_ma_poly_template_library_details.description'
+    _item.category_id             ma_poly_template_library_details
+    _item.mandatory_code          no
+    _item_type.code               text
+     save_
+
+###################################
+## MA_POLY_TEMPLATE_LIBRARY_LIST ##
+###################################
+
+save_ma_poly_template_library_list
+    _category.description
+;              Data items in the MA_POLY_TEMPLATE_LIBRARY_LIST category carries the list of
+               templates used to build a template library. 
+;
+    _category.id                  ma_poly_template_library_list
+    _category.mandatory_code      no
+    _category_key.name            '_ma_poly_template_library_list.id'
+    loop_
+    _category_group.id            'inclusive_group'
+                                  'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 -
+;
+;
+    loop_
+    _ma_poly_template_library_list.id
+    _ma_poly_template_library_list.db_name
+    _ma_poly_template_library_list.db_accession_code
+    _ma_poly_template_library_list.asym_id
+    _ma_poly_template_library_list.residue_number_begin
+    _ma_poly_template_library_list.residue_number_end
+    1  PDB 5KKO A . . 
+    2  PDB 5CX2 A . . 
+    3  PDB 5DHA A . . 
+
+    # ...  abbreviated ...
+;
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_poly_template_library_list
+     save_
+
+save__ma_poly_template_library_list.id
+    _item_description.description
+;     A unique identifier for the template. 
+;
+    _item.name                  '_ma_poly_template_library_list.id'
+    _item.category_id             ma_poly_template_library_list
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_poly_template_library_list.db_name
+    _item_description.description
+;     The name of the reference database.
+;
+    _item.name                  '_ma_poly_template_library_list.db_name'
+    _item.category_id             ma_poly_template_library_list
+    _item.mandatory_code          yes  
+    _item_type.code               code 
+    loop_
+    _item_enumeration.value
+    'PDB'       'Protein Data Bank'
+    'PDB-Dev'   'PDB-Dev'
+    'MA'        'Model Archive'
+     save_
+
+save__ma_poly_template_library_list.db_accession_code
+    _item_description.description
+;     The accession code corresponding to the reference database entry.
+;
+    _item.name                  '_ma_poly_template_library_list.db_accession_code'
+    _item.category_id             ma_poly_template_library_list
+    _item.mandatory_code          yes
+    _item_type.code               line
+     save_
+
+save__ma_poly_template_library_list.asym_id
+    _item_description.description
+;     The asym id of the template used in the template library. 
+;
+    _item.name                  '_ma_poly_template_library_list.asym_id'
+    _item.category_id             ma_poly_template_library_list
+    _item.mandatory_code          yes
+    _item_type.code               code
+     save_
+
+save__ma_poly_template_library_list.model_num
+    _item_description.description
+;     The model number of the template used in the template library.
+;
+    _item.name                  '_ma_poly_template_library_list.model_num'
+    _item.category_id             ma_poly_template_library_list
+    _item.mandatory_code          no
+    _item_type.code               code
+     save_
+
+save__ma_poly_template_library_list.residue_number_begin
+    _item_description.description
+;     The leading residue index for the template segment used in the template library.
+;
+    _item.name                  '_ma_poly_template_library_list.residue_number_begin'
+    _item.category_id             ma_poly_template_library_list
+    _item.mandatory_code          no
+    _item_type.code               int
+     save_
+
+save__ma_poly_template_library_list.residue_number_end
+    _item_description.description
+;     The trailing residue index for the template segment used in the template library.
+;
+    _item.name                  '_ma_poly_template_library_list.residue_number_end'
+    _item.category_id             ma_poly_template_library_list
+    _item.mandatory_code          no
+    _item_type.code               int
+     save_
+
+save__ma_poly_template_library_list.residue_name_begin
+    _item_description.description
+;     The leading residue name (3-letter code) for the template segment 
+      used in the template library.
+;
+    _item.name                  '_ma_poly_template_library_list.residue_name_begin'
+    _item.category_id             ma_poly_template_library_list
+    _item.mandatory_code          no
+    _item_type.code               ucode
+     save_
+
+save__ma_poly_template_library_list.residue_name_end
+    _item_description.description
+;     The trailing residue name (3-letter code) for the template segment 
+      used in the template library.
+;
+    _item.name                  '_ma_poly_template_library_list.residue_name_end'
+    _item.category_id             ma_poly_template_library_list
+    _item.mandatory_code          no
+    _item_type.code               ucode
+     save_
+
+#########################################
+## MA_POLY_TEMPLATE_LIBRARY_COMPONENTS ##
+#########################################
+
+save_ma_poly_template_library_components
+    _category.description
+;              Data items in the MA_POLY_TEMPLATE_LIBRARY_COMPONENTS category record details about
+               the components in a template library. 
+;
+    _category.id                  ma_poly_template_library_components
+    _category.mandatory_code      no
+    _category_key.name            '_ma_poly_template_library_components.ordinal_id'
+    loop_
+    _category_group.id            'inclusive_group'
+                                  'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 -
+;
+;
+    loop_
+    _ma_poly_template_library_components.ordinal_id
+    _ma_poly_template_library_components.template_id
+    _ma_poly_template_library_components.library_id
+    1  1  1
+    2  2  1
+    3  3  1
+    # ...  abbreviated ...
+;
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_poly_template_library_components
+     save_
+
+save__ma_poly_template_library_components.ordinal_id
+    _item_description.description
+;     A unique identifier for the category. 
+;
+    _item.name                  '_ma_poly_template_library_components.ordinal_id'
+    _item.category_id             ma_poly_template_library_components
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_poly_template_library_components.template_id
+    _item_description.description
+;     An identifier for the template in the template library. 
+      This data item is a pointer to _ma_poly_template_library_list.id
+      in the MA_POLY_TEMPLATE_LIBRARY_REF_DB_DETAILS category. 
+;
+    _item.name                  '_ma_poly_template_library_components.template_id'
+    _item.category_id             ma_poly_template_library_components
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_poly_template_library_components.template_id'
+    _item_linked.parent_name    '_ma_poly_template_library_list.id'
+     save_
+
+save__ma_poly_template_library_components.library_id
+    _item_description.description
+;     The identifier for the template library.
+      This data item is a pointer to _ma_poly_template_library_details.library_id in the
+      MA_POLY_TEMPLATE_LIBRARY_DETAILS category. 
+;
+    _item.name                  '_ma_poly_template_library_components.library_id'
+    _item.category_id             ma_poly_template_library_components
+    _item.mandatory_code          yes  
+    _item_type.code               code 
+    _item_linked.child_name     '_ma_poly_template_library_components.library_id'
+    _item_linked.parent_name    '_ma_poly_template_library_details.library_id'
      save_
 
 ###############
