@@ -1,0 +1,4712 @@
+###################################
+## MODELING EXTENSION DICTIONARY ##
+###################################
+
+# Version 1.2.0 17th July 2018
+# JH/BV
+
+##BV: Will these definitions suffice for fragment assembly methods such as Rosetta?
+##BV: Need to address provenance details for spatial restraints used in the modeling
+
+data_mmcif_ma.dic
+
+    _datablock.id                          mmcif_ma.dic
+    _datablock.description
+;
+     This data block holds the extension dictionary for structural models obtained using
+     computational methods. This extension is based on the PDBx/mmCIF dictionary (http://mmcif.wwpdb.org).
+     This resource is actively developed and maintained in a github repository available at
+     https://github.com/JuergenHaasSIB/modeling_dictionary.
+     Structural models that are compliant to this extension dictionary can be deposited
+     to the Model Archive at https://www.modelarchive.org.
+;
+
+    _dictionary.title           mmcif_ma.dic
+    _dictionary.datablock_id    mmcif_ma.dic
+    _dictionary.version         1.2.0
+#
+     loop_
+    _dictionary_history.version
+    _dictionary_history.update
+    _dictionary_history.revision
+
+  1.1.1   2018-07-06
+;
+  Changes (jh/bv)
+  + Release as initial version 1.1.1
+;
+  1.1.2   2018-07-09
+;
+  Changes (jh/bv/jw/gt/sb)
+  + Updated MA_MODEL_LIST, MA_STRUCT_ASSEMBLY, MA_PROTCOL_STEP
+  + Removed MA_STEP_INPUT, MA_STEP_OUTPUT
+;
+  1.1.3   2018-07-10
+;
+  Changes (jh/bv/jw/gt/sb)
+  + Added MA_PDB_TEMPLATE, MA_TARGET_REF_DB_DETAILS, MA_DATA_GROUP
+;
+  1.1.4   2018-07-10
+;
+  Changes (jh/bv/jw/gt/sb)
+  + Added MA_TARGET_TEMPLATE_MAPPING, MA_PDB_TEMPLATE_TRANS_MATRIX, MA_TARGET_STRUCT
+  + Removed MA_STEP_CRITERIA
+;
+  1.1.5   2018-07-11
+;
+  Changes (jh/bv/jw/gt/sb)
+  + Revised MA_TARGET_TEMPLATE_MAPPING, MA_ALIGNMENT_DETAILS, MA_TEMPLATE_DETAILS 
+  + Revised MA_PDB_TEMPLATE, MA_TEMPLATE_COORD
+  + Added MA_TEMPLATE_POLY_SEGMENT
+;
+  1.1.6   2018-07-12
+;
+  Changes (jh/bv/jw/gt/sb)
+  + Revised MA_ALIGNMENT_DETAILS, MA_PROTOCOL_STEP, MA_TARGET_TEMPLATE_MAPPING
+  + Added MA_SOFTWARE_PARAMETER
+;
+  1.1.7   2018-07-13
+;
+  Changes (jh/bv/jw/gt/sb)
+  + Revised MA_TEMPLATE_DETAILS, MA_TEMPLATE_POLY_SEGMENT, MA_TEMPLATE_POLY, MA_TEMPLATE_POLY_SEGMENT
+  + Added MA_TEMPLATE_NON_POLY, MA_TEMPLATE_CUSTOMIZED
+;
+  1.1.8   2018-07-16
+;
+  Changes (jh/bv/jw/gt/sb)
+  + Addressed requirements for coevolution MSA and predicted contacts
+;
+  1.1.9   2018-07-16
+;
+  Changes (jh/bv/jw/gt/sb)
+  + Revised MA_TEMPLATE_POLY_SEGMENT, MA_TARGET_TEMPLATE_POLY_MAPPING, MA_ALIGNMENT_DETAILS
+;
+  1.2.0   2018-07-17
+;
+  Changes (jh/bv/jw/gt/sb)
+  + Added MA_ALIGNMENT_INFO, MA_TARGET_ENTITY_INSTANCE
+  + Revised MA_TEMPLATE_DETAILS, MA_TARGET_TEMPLATE_POLY_MAPPING, MA_ALIGNMENT_DETAILS
+;
+
+#########################
+## CATEGORY_GROUP_LIST ##
+#########################
+
+     loop_
+    _category_group_list.id
+    _category_group_list.parent_id
+    _category_group_list.description
+##
+              'inclusive_group'   .
+;              The parent category group containing all of the data categories in the macromolecular dictionary.
+;
+              'ma_group'
+              'inclusive_group'
+;              Categories that describe the modeling extension dictionary.
+;
+
+####################
+## ITEM_TYPE_LIST ##
+####################
+#
+#
+#  The regular expressions defined here are not compliant
+#  with the POSIX 1003.2 standard as they include the
+#  '\n' and '\t' special characters.  These regular expressions
+#  have been tested using version 0.12 of Richard Stallman's
+#  GNU regular expression library in POSIX mode.
+#
+#
+##############################################################################
+
+     loop_
+    _item_type_list.code
+    _item_type_list.primitive_code
+    _item_type_list.construct
+    _item_type_list.detail
+               code      char
+               '[][_,.;:"&<>()/\{}'`~!@#$%A-Za-z0-9*|+-]*'
+;              code item types/single words ...
+;
+               ucode      uchar
+               '[][_,.;:"&<>()/\{}'`~!@#$%A-Za-z0-9*|+-]*'
+;              code item types/single words  (case insensitive) ...
+;
+               line      char
+               '[][ \t_(),.;:"&<>/\{}'`~!@#$%?+=*A-Za-z0-9|^-]*'
+;              char item types / multi-word items ...
+;
+               uline      uchar
+               '[][ \t_(),.;:"&<>/\{}'`~!@#$%?+=*A-Za-z0-9|^-]*'
+;              char item types / multi-word items (case insensitive)...
+;
+               text      char
+               '[][ \n\t()_,.;:"&<>/\{}'`~!@#$%?+=*A-Za-z0-9|^-]*'
+;              text item types / multi-line text ...
+;
+               int       numb
+               '[+-]?[0-9]+'
+;              int item types are the subset of numbers that are the negative
+               or positive integers.
+;
+               float     numb
+          '-?(([0-9]+)[.]?|([0-9]*[.][0-9]+))([(][0-9]+[)])?([eE][+-]?[0-9]+)?'
+;              float item types are the subset of numbers that are the floating
+               numbers.
+;
+               name      uchar
+               '_[_A-Za-z0-9]+\.[][_A-Za-z0-9%-]+'
+;              name item types take the form...
+;
+
+#####################
+## ITEM_UNITS_LIST ##
+#####################
+
+     loop_
+    _item_units_list.code
+    _item_units_list.detail
+     'angstroms'              'Angstroms   (metres * 10^(-10)^)'
+     '8pi2_angstroms_squared' '8pi^2^ * Angstroms squared (metres * 10^(-10)^)^2^'
+
+################
+## MA_MODEL_LIST
+################
+
+save_ma_model_list
+    _category.description
+;              Data items in the MA_MODEL_LIST category record the
+               details of the models being deposited.
+;
+    _category.id                  ma_model_list
+    _category.mandatory_code      no
+     loop_
+    _category_key.name          '_ma_model_list.ordinal_id'
+
+    loop_
+    _category_group.id           'inclusive_group'
+                                 'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 -
+;
+;
+    loop_
+    _ma_model_list.ordinal_id
+    _ma_model_list.model_id
+    _ma_model_list.model_group_id
+    _ma_model_list.model_name
+    _ma_model_list.model_group_name
+    _ma_model_list.assembly_id
+    _ma_model_list.data_id
+    _ma_model_list.model_type
+
+    1    1      1    'Best scoring model'        'cluster1'     1    1   'Homology model'
+    2    2      1    '2nd Best scoring model'    'cluster1'     1    2   'Homology model'
+    3    3      1    '3rd Best scoring model'    'cluster1'     1    3   'Homology model'
+    4    4      1    '4th Best scoring model'    'cluster1'     1    4   'Homology model'
+    5    5      1    '5th Best scoring model'    'cluster1'     1    5   'Homology model'
+    6    6      2    'Best scoring model'        'cluster2'     1    6   'Homology model'
+    7    7      2    '2nd Best scoring model'    'cluster2'     1    7   'Homology model'
+    8    8      2    '3rd Best scoring model'    'cluster2'     1    8   'Homology model'
+    9    9      2    '4th Best scoring model'    'cluster2'     1    9   'Homology model'
+   10   10      2    '5th Best scoring model'    'cluster2'     1   10   'Homology model'
+   # ...  abbreviated ... 
+;
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_model_list
+     save_
+
+save__ma_model_list.ordinal_id
+    _item_description.description
+;     A unique identifier for the model / model group combination.
+;
+    _item.name                  '_ma_model_list.ordinal_id'
+    _item.category_id             ma_model_list
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_model_list.model_id
+    _item_description.description
+;     A unique identifier for the structural model being deposited.
+;
+    _item.name                  '_ma_model_list.model_id'
+    _item.category_id             ma_model_list
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.parent_name    '_ma_model_list.model_id'
+    _item_linked.child_name     '_atom_site.pdbx_PDB_model_num'
+     save_
+
+save__ma_model_list.model_group_id
+    _item_description.description
+;     An identifier to group structural models into collections or sets.
+      A cluster of models and its representative can either be grouped together 
+      or can be separate groups in the ma_model_list table. The choice between 
+      the two options should be decided based on how the modeling was carried out 
+      and how the representative was chosen. If the representative is a member of 
+      the ensemble (i.e., best scoring model), then it is recommended that the 
+      representative and the ensemble belong to the same model group. If the 
+      representative is calculated from the ensemble (i.e., centroid), then it is 
+      recommended that the representative be separated into a different group. 
+      If the models do not need to be grouped into collections, then the
+      _ma_model_list.model_group_id is the same as _ma_model_list.model_id.
+;
+    _item.name                  '_ma_model_list.model_group_id'
+    _item.category_id             ma_model_list
+    _item.mandatory_code          no
+    _item_type.code               int
+     save_
+
+save__ma_model_list.model_name
+    _item_description.description
+;     A decsriptive name for the model.
+;
+    _item.name                  '_ma_model_list.model_name'
+    _item.category_id             ma_model_list
+    _item.mandatory_code          no
+    _item_type.code               line
+    loop_
+    _item_examples.case
+    'Best scoring model'
+    '2nd best scoring model'
+    'Cluster center'
+     save_
+
+save__ma_model_list.model_group_name
+    _item_description.description
+;     A decsriptive name for the model group. 
+;
+    _item.name                  '_ma_model_list.model_group_name'
+    _item.category_id             ma_model_list
+    _item.mandatory_code          no
+    _item_type.code               line
+    loop_
+    _item_examples.case
+    'cluster1'
+    'cluster2'
+     save_
+
+save__ma_model_list.assembly_id
+    _item_description.description
+;     An identifier to the structural assembly corresponding to the model.
+;
+    _item.name                  '_ma_model_list.assembly_id'
+    _item.category_id             ma_model_list
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_model_list.model_type
+    _item_description.description
+;     The type of model. 
+;
+    _item.name                  '_ma_model_list.model_type'
+    _item.category_id             ma_model_list
+    _item.mandatory_code          yes
+    _item_type.code               line
+    loop_
+    _item_enumeration.value
+    _item_enumeration.detail
+    'Homology model'    'Homology or comparative model based on existing templates'
+    'Ab initio model'   'Ab initio or template-free models'
+    'Other'             'Other computational models'
+     save_
+
+save__ma_model_list.model_type_other_details
+    _item_description.description
+;     Details for other model types. 
+;
+    _item.name                  '_ma_model_list.model_type_other_details'
+    _item.category_id             ma_model_list
+    _item.mandatory_code          no
+    _item_type.code               text
+     save_
+
+save__ma_model_list.data_id
+    _item_description.description
+;     The data_id identifier. This data item is a pointer to
+      _ma_data.id in the MA_DATA category.
+;
+    _item.name                  '_ma_model_list.data_id'
+    _item.category_id             ma_model_list
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_model_list.data_id'
+    _item_linked.parent_name    '_ma_data.id'
+     save_
+
+#########################
+## MA_TEMPLATE_DETAILS ##
+#########################
+
+save_ma_template_details
+    _category.description
+;              Data items in the MA_TEMPLATE_DETAILS category record details about
+               the structural templates used in to obtain the homology/comparative models. 
+               The template can be a polymer or a non-polymer and can be either
+               referenced from an existing database or can be a customized 
+               template provided by the user.
+;
+    _category.id                  ma_template_details
+    _category.mandatory_code      no
+    _category_key.name            '_ma_template_details.ordinal_id'
+    loop_
+    _category_group.id            'inclusive_group'
+                                  'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 -
+;
+;
+    loop_
+    _ma_template_details.ordinal_id
+    _ma_template_details.template_id
+    _ma_template_details.template_origin
+    _ma_template_details.template_entity_type
+    _ma_template_details.template_trans_matrix_id
+    _ma_template_details.template_data_id
+    _ma_template_details.target_asym_id
+    _ma_template_details.template_label_asym_id
+    _ma_template_details.template_label_entity_id
+    _ma_template_details.template_model_num
+    1 1  "reference database" polymer  1 1 A A 1 1
+    2 2  "reference database" polymer  1 1 B B 2 1
+    3 3  "reference database" polymer  1 1 C C 3 1
+    # ...  abbreviated ...
+;
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_template_details
+     save_
+
+save__ma_template_details.ordinal_id
+    _item_description.description
+;     A unique identifier for the category.
+;
+    _item.name                  '_ma_template_details.ordinal_id'
+    _item.category_id             ma_template_details
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_template_details.template_id
+    _item_description.description
+;     A unique identifier for this template record.
+;
+    _item.name                  '_ma_template_details.template_id'
+    _item.category_id             ma_template_details
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_template_details.template_entity_type
+    _item_description.description
+;    The type of template. 
+;
+    _item.name                  '_ma_template_details.template_entity_type'
+    _item.category_id             ma_template_details
+    _item.mandatory_code          yes
+    _item_type.code               code
+    loop_
+    _item_enumeration.value
+    'polymer'
+    'non-polymer'
+    'water'
+    'macrolide'
+     save_
+
+save__ma_template_details.template_origin
+    _item_description.description
+;   The origin of the template. 
+;
+    _item.name                  '_ma_template_details.template_origin'
+    _item.category_id             ma_template_details
+    _item.mandatory_code          yes
+    _item_type.code               line
+    loop_
+    _item_enumeration.value
+    _item_enumeration.detail
+    'reference database'    'template is obtained from an exisiting structural database'
+    'customized'            'template is a customized one, provided by the user'
+     save_
+
+save__ma_template_details.template_data_id
+    _item_description.description
+;     The data_id identifier for the structural template. This data item is a pointer to
+      _ma_data.id in the MA_DATA category.
+;
+    _item.name                  '_ma_template_details.template_data_id'
+    _item.category_id             ma_template_details
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_template_details.template_data_id'
+    _item_linked.parent_name    '_ma_data.id'
+     save_
+
+save__ma_template_details.target_asym_id
+    _item_description.description
+;     A unique identifier for the target instance for which the 
+      structural template is used.
+      This data item is a pointer to _ma_target_entity_instance.asym_id
+      in the MA_TARGET_ENTITY_INSTANCE caategory.
+;
+    _item.name                  '_ma_template_details.target_asym_id'
+    _item.category_id             ma_template_details
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_template_details.target_asym_id'
+    _item_linked.parent_name    '_ma_target_entity_instance.asym_id'
+     save_
+
+save__ma_template_details.template_label_asym_id
+    _item_description.description
+;     The asym ID corresponding to the template.
+;  
+    _item.name                  '_ma_template_details.template_label_asym_id'
+    _item.category_id             ma_template_details
+    _item.mandatory_code          yes
+    _item_type.code               code
+     save_
+
+save__ma_template_details.template_label_entity_id
+    _item_description.description
+;     The entity ID corresponding to the template.
+; 
+    _item.name                  '_ma_template_details.template_label_entity_id'
+    _item.category_id             ma_template_details
+    _item.mandatory_code          yes
+    _item_type.code               code
+     save_
+
+save__ma_template_details.template_model_num
+    _item_description.description
+;     The model number corresponding to the template.
+;
+    _item.name                  '_ma_template_details.template_model_num'
+    _item.category_id             ma_template_details
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_template_details.template_trans_matrix_id
+    _item_description.description
+;     The identifier to the transformation matrix applied to the template
+      in order to generate the starting structure used in the current modeling.
+      An identify matrix should be referenced in case of no transformation. 
+;
+    _item.name                  '_ma_template_details.template_trans_matrix_id'
+    _item.category_id             ma_template_details
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_template_details.template_trans_matrix_id'
+    _item_linked.parent_name    '_ma_template_trans_matrix.id'
+     save_
+
+save__ma_template_details.template_name
+    _item_description.description
+;     A name for the template.
+;
+    _item.name                  '_ma_template_details.template_name'
+    _item.category_id             ma_template_details
+    _item.mandatory_code          no
+    _item_type.code               line
+     save_
+
+save__ma_template_details.template_description
+    _item_description.description
+;     Description of the template.
+;
+    _item.name                  '_ma_template_details.template_description'
+    _item.category_id             ma_template_details
+    _item.mandatory_code          no
+    _item_type.code               text
+     save_
+
+######################
+## MA_TEMPLATE_POLY ##
+######################
+
+save_ma_template_poly
+    _category.description
+;              Data items in the MA_TEMPLATE_POLY category record details about
+               the polymeric templates.
+;
+    _category.id                  ma_template_poly
+    _category.mandatory_code      no
+    _category_key.name            '_ma_template_poly.template_id'
+    loop_
+    _category_group.id            'inclusive_group'
+                                  'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 -
+;
+;
+    loop_
+    _ma_template_poly.template_id
+    _ma_template_poly.full_seq_one_letter_code
+    _ma_template_poly.full_seq_one_letter_code_can
+    1  
+;SNAKYFQIDELTLNALRITTIESLTPEQRLELIKAHLLNIKTPSDDNEPWDEF
+;
+;SNAKYFQIDELTLNALRITTIESLTPEQRLELIKAHLLNIKTPSDDNEPWDEF
+;
+    2  
+;HDTQQEIFDKQRRLQELSEKVRTCHQEISALRKALQEKEAELQVLEDIQTI
+;
+;HDTQQEIFDKQRRLQELSEKVRTCHQEISALRKALQEKEAELQVLEDIQTI
+;
+    3  
+;KHHHHHHPSDYDIPTTENLYFQGAEPVEDRSIEISIRVDDFTKTGETVRY
+;
+;KHHHHHHPSDYDIPTTENLYFQGAEPVEDRSIEISIRVDDFTKTGETVRY
+;
+    # ...  abbreviated ...
+;
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_template_poly
+     save_
+
+save__ma_template_poly.template_id
+    _item_description.description
+;     A unique identifier for the template.
+      This data item is a pointer to _ma_template_details.template_id
+      in the MA_TEMPLATE_DETAILS caategory. 
+;
+    _item.name                  '_ma_template_poly.template_id'
+    _item.category_id             ma_template_poly
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_template_poly.template_id'
+    _item_linked.parent_name    '_ma_template_details.template_id'
+     save_
+
+save__ma_template_poly.seq_one_letter_code
+    _item_description.description
+;   Chemical sequence of the template expressed as string of one-letter amino acid / nucleotide codes.
+    Modifications and non-standard amino acids are included as three-letter codes within parentheses.
+;
+    _item.name                  '_ma_template_poly.seq_one_letter_code'
+    _item.category_id             ma_template_poly
+    _item.mandatory_code          no
+    _item_type.code               text
+     save_
+
+save__ma_template_poly.seq_one_letter_code_can
+    _item_description.description
+;   The canonical chemical sequence of the template expressed as string of one-letter amino acid / nucleotide codes.
+    Modifications are coded as the parent amino acid / nucleotide where possible.
+;
+    _item.name                  '_ma_template_poly.seq_one_letter_code_can'
+    _item.category_id             ma_template_poly
+    _item.mandatory_code          no
+    _item_type.code               text
+     save_
+
+save__ma_template_poly.details
+    _item_description.description
+;     Additional details about the polymeric template.
+;
+    _item.name                  '_ma_template_poly.details'
+    _item.category_id             ma_template_poly
+    _item.mandatory_code          no
+    _item_type.code               text
+     save_
+
+##########################
+## MA_TEMPLATE_NON_POLY ##
+##########################
+
+save_ma_template_non_poly
+    _category.description
+;              Data items in the MA_TEMPLATE_NON_POLY category record details about
+               the non-polymeric templates used in the modeling.
+;
+    _category.id                  ma_template_non_poly
+    _category.mandatory_code      no
+    _category_key.name            '_ma_template_non_poly.template_id'
+    loop_
+    _category_group.id            'inclusive_group'
+                                  'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 -
+;
+;
+    loop_
+    _ma_template_non_poly.template_id
+    _ma_template_non_poly.inchi_key
+    1 . 
+    # ...  abbreviated ...
+;
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_template_non_poly
+     save_
+
+save__ma_template_non_poly.template_id
+    _item_description.description
+;     A unique identifier for the template.
+      This data item is a pointer to _ma_template_details.template_id
+      in the MA_TEMPLATE_DETAILS caategory. 
+;
+    _item.name                  '_ma_template_non_poly.template_id'
+    _item.category_id             ma_template_non_poly
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_template_non_poly.template_id'
+    _item_linked.parent_name    '_ma_template_details.template_id'
+     save_
+
+save__ma_template_non_poly.smiles
+    _item_description.description
+;     The smile string of the non-polymeric template.
+;
+    _item.name                  '_ma_template_non_poly.smiles'
+    _item.category_id             ma_template_non_poly
+    _item.mandatory_code          no
+    _item_type.code               line
+     save_
+
+save__ma_template_non_poly.smiles_canonical
+    _item_description.description
+;     The canonical smile string of the non-polymeric template.
+;
+    _item.name                  '_ma_template_non_poly.smiles_canonical'
+    _item.category_id             ma_template_non_poly
+    _item.mandatory_code          no
+    _item_type.code               line
+     save_
+
+save__ma_template_non_poly.inchi
+    _item_description.description
+;     The IUPAC INCHI descriptor of the non-polymeric template.
+;
+    _item.name                  '_ma_template_non_poly.inchi'
+    _item.category_id             ma_template_non_poly
+    _item.mandatory_code          no
+    _item_type.code               line
+     save_
+
+save__ma_template_non_poly.inchi_key
+    _item_description.description
+;     The hashed INCHI key of the non-polymeric template.
+;
+    _item.name                  '_ma_template_non_poly.inchi_key'
+    _item.category_id             ma_template_non_poly
+    _item.mandatory_code          no
+    _item_type.code               line
+     save_
+
+save__ma_template_non_poly.details
+    _item_description.description
+;     Additional details about the non-polymeric template.
+;
+    _item.name                  '_ma_template_non_poly.details'
+    _item.category_id             ma_template_non_poly
+    _item.mandatory_code          no
+    _item_type.code               text
+     save_
+
+##############################
+## MA_TEMPLATE_POLY_SEGMENT ##
+##############################
+
+save_ma_template_poly_segment
+    _category.description
+;              Data items in the MA_TEMPLATE_POLY_SEGMENT category record details about
+               the template segments used in the modeling.
+;
+    _category.id                  ma_template_poly_segment
+    _category.mandatory_code      no
+    _category_key.name            '_ma_template_poly_segment.id'
+    loop_
+    _category_group.id            'inclusive_group'
+                                  'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 -
+;
+;
+    loop_
+    _ma_template_poly_segment.id
+    _ma_template_poly_segment.template_id
+    _ma_template_poly_segment.residue_number_begin
+    _ma_template_poly_segment.residue_number_end
+    _ma_template_poly_segment.segment_length
+    _ma_template_poly_segment.residue_name_begin
+    _ma_template_poly_segment.residue_name_end
+
+    1  1  1 53 53 MET VAL  
+    2  2  1 60 60 ILE ALA  
+    # ...  abbreviated ...
+;
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_template_poly_segment
+     save_
+
+save__ma_template_poly_segment.id
+    _item_description.description
+;     A unique identifier for the template segment used in the modeling. 
+;
+    _item.name                  '_ma_template_poly_segment.id'
+    _item.category_id             ma_template_poly_segment
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_template_poly_segment.template_id
+    _item_description.description
+;     An identifier to the full template. 
+      This data item is a pointer to _ma_template_poly.template_id
+      in the MA_TEMPLATE_POLY category. 
+;
+    _item.name                  '_ma_template_poly_segment.template_id'
+    _item.category_id             ma_template_poly_segment
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_template_poly_segment.template_id'
+    _item_linked.parent_name    '_ma_template_poly.template_id'
+     save_
+
+save__ma_template_poly_segment.residue_number_begin
+    _item_description.description
+;     The leading residue index for the template segment in the template structure.
+;
+    _item.name                  '_ma_template_poly_segment.residue_number_begin'
+    _item.category_id             ma_template_poly_segment
+    _item.mandatory_code          no
+    _item_type.code               int
+     save_
+
+save__ma_template_poly_segment.residue_number_end
+    _item_description.description
+;     The trailing residue index for the template segment in the template structure.
+;
+    _item.name                  '_ma_template_poly_segment.residue_number_end'
+    _item.category_id             ma_template_poly_segment
+    _item.mandatory_code          no
+    _item_type.code               int
+     save_
+
+save__ma_template_poly_segment.residue_name_begin
+    _item_description.description
+;     The leading residue name (3-letter code) for the template segment 
+      in the template structure.
+;
+    _item.name                  '_ma_template_poly_segment.residue_name_begin'
+    _item.category_id             ma_template_poly_segment
+    _item.mandatory_code          no
+    _item_type.code               ucode
+     save_
+
+save__ma_template_poly_segment.residue_name_end
+    _item_description.description
+;     The trailing residue name (3-letter code) for the template segment 
+      in the template structure.
+;
+    _item.name                  '_ma_template_poly_segment.residue_name_end'
+    _item.category_id             ma_template_poly_segment
+    _item.mandatory_code          no
+    _item_type.code               ucode
+     save_
+
+save__ma_template_poly_segment.segment_length
+    _item_description.description
+;     The length of the template segment.
+;
+    _item.name                  '_ma_template_poly_segment.segment_length'
+    _item.category_id             ma_template_poly_segment
+    _item.mandatory_code          no
+    _item_type.code               int
+     save_
+
+################################
+## MA_TEMPLATE_REF_DB_DETAILS ##
+################################
+
+save_ma_template_ref_db_details
+    _category.description
+;              Data items in the MA_TEMPLATE_REF_DB_DETAILS category record details about
+               the templates from the reference database. 
+;
+    _category.id                  ma_template_ref_db_details
+    _category.mandatory_code      no
+    _category_key.name            '_ma_template_ref_db_details.template_id'
+    loop_
+    _category_group.id            'inclusive_group'
+                                  'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 -
+;
+;
+    loop_
+    _ma_template_ref_db_details.template_id
+    _ma_template_ref_db_details.db_name
+    _ma_template_ref_db_details.db_accession_code
+
+    1  PDB 5KKO 
+    2  PDB 5CX2 
+    3  PDB 5DHA
+
+    # ...  abbreviated ...
+;
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_template_ref_db_details
+     save_
+
+save__ma_template_ref_db_details.template_id
+    _item_description.description
+;     A unique identifier for this template record. This data item is a 
+      pointer to '_ma_template_details.template_id in the
+      MA_TEMPLATE_DETAILS category. 
+;
+    _item.name                  '_ma_template_ref_db_details.template_id'
+    _item.category_id             ma_template_ref_db_details
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_template_ref_db_details.template_id'
+    _item_linked.parent_name    '_ma_template_details.template_id'
+     save_
+
+save__ma_template_ref_db_details.db_name
+    _item_description.description
+;     The name of the reference database.
+;
+    _item.name                  '_ma_template_ref_db_details.db_name'
+    _item.category_id             ma_template_ref_db_details
+    _item.mandatory_code          yes  
+    _item_type.code               code 
+    loop_
+    _item_enumeration.value
+    'PDB'       'Protein Data Bank'
+    'PDB-Dev'   'PDB-Dev'
+    'MA'        'Model Archive'
+    'Other'     'Other'
+     save_
+
+save__ma_template_ref_db_details.db_name_other_details
+    _item_description.description
+;     The name of the other reference database.
+;   
+    _item.name                  '_ma_template_ref_db_details.db_name_other_details'
+    _item.category_id             ma_template_ref_db_details
+    _item.mandatory_code          no
+    _item_type.code               line  
+     save_
+
+save__ma_template_ref_db_details.db_accession_code
+    _item_description.description
+;     The accession code corresponding to the reference database entry.
+;
+    _item.name                  '_ma_template_ref_db_details.db_accession_code'
+    _item.category_id             ma_template_ref_db_details
+    _item.mandatory_code          yes
+    _item_type.code               line
+     save_
+
+############################
+## MA_TEMPLATE_CUSTOMIZED ##
+############################
+
+save_ma_template_customized
+    _category.description
+;              Data items in the MA_TEMPLATE_CUSTOMIZED category record details about
+               the customized templates that are not from a reference database. 
+;
+    _category.id                  ma_template_customized
+    _category.mandatory_code      no
+    _category_key.name            '_ma_template_customized.template_id'
+    loop_
+    _category_group.id            'inclusive_group'
+                                  'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 -
+;
+;
+    loop_
+    _ma_template_customized.template_id
+    _ma_template_customized.details
+
+    1  .
+    2  .
+    3  .
+
+    # ...  abbreviated ...
+;
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_template_customized
+     save_
+
+save__ma_template_customized.template_id
+    _item_description.description
+;     A unique identifier for this template record.
+      This data item is a pointer to _ma_template_details.template_id
+      in the MA_TEMPLATE_DETAILS category. 
+;
+    _item.name                  '_ma_template_customized.template_id'
+    _item.category_id             ma_template_customized
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_template_customized.template_id'
+    _item_linked.parent_name    '_ma_template_details.template_id'
+     save_
+
+save__ma_template_customized.details
+    _item_description.description
+;     Additional textual details about how the customized template was built. 
+;   
+    _item.name                  '_ma_template_customized.details'
+    _item.category_id             ma_template_customized
+    _item.mandatory_code          no
+    _item_type.code               line  
+     save_
+
+##############################
+## MA_TEMPLATE_TRANS_MATRIX ##
+##############################
+
+save_ma_template_trans_matrix
+    _category.description
+;              Data items in the MA_TEMPLATE_TRANS_MATRIX category records the
+               details of the transormatrix matrix applied to the template
+               to generate the starting structure used in the current modeling. 
+               The template can be a polymer or a non-polymer and can be either
+               referenced from an existing database or can be a customized 
+               template provided by the user. 
+;
+    _category.id                  ma_template_trans_matrix
+    _category.mandatory_code      no
+     loop_
+    _category_key.name          '_ma_template_trans_matrix.id'
+
+    loop_
+    _category_group.id           'inclusive_group'
+                                 'ihm_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 -
+;
+;
+    _ma_template_trans_matrix.id                                1
+    _ma_template_trans_matrix.rot_matrix[1][1]                1.0
+    _ma_template_trans_matrix.rot_matrix[2][1]                0.0
+    _ma_template_trans_matrix.rot_matrix[3][1]                0.0
+    _ma_template_trans_matrix.rot_matrix[1][2]                0.0
+    _ma_template_trans_matrix.rot_matrix[2][2]                1.0
+    _ma_template_trans_matrix.rot_matrix[3][2]                0.0
+    _ma_template_trans_matrix.rot_matrix[1][3]                0.0
+    _ma_template_trans_matrix.rot_matrix[2][3]                0.0
+    _ma_template_trans_matrix.rot_matrix[3][3]                1.0
+    _ma_template_trans_matrix.tr_vector[1]                    0.0
+    _ma_template_trans_matrix.tr_vector[2]                    0.0
+    _ma_template_trans_matrix.tr_vector[3]                    0.0
+;
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_template_trans_matrix
+     save_
+
+save__ma_template_trans_matrix.id
+    _item_description.description
+;     A unique identifier for the transformation matrix. 
+;
+    _item.name                  '_ma_template_trans_matrix.id'
+    _item.category_id             ma_template_trans_matrix
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_template_trans_matrix.rot_matrix[1][1]
+    _item_description.description
+;     Data item [1][1] of the rotation matrix.
+;
+    _item.name                  '_ma_template_trans_matrix.rot_matrix[1][1]'
+    _item.category_id             ma_template_trans_matrix
+    _item.mandatory_code          no
+    _item_type.code               float
+     save_
+
+save__ma_template_trans_matrix.rot_matrix[2][1]
+    _item_description.description
+;     Data item [2][1] of the rotation matrix.
+;
+    _item.name                  '_ma_template_trans_matrix.rot_matrix[2][1]'
+    _item.category_id             ma_template_trans_matrix
+    _item.mandatory_code          no
+    _item_type.code               float
+     save_
+
+save__ma_template_trans_matrix.rot_matrix[3][1]
+    _item_description.description
+;     Data item [3][1] of the rotation matrix.
+;
+    _item.name                  '_ma_template_trans_matrix.rot_matrix[3][1]'
+    _item.category_id             ma_template_trans_matrix
+    _item.mandatory_code          no
+    _item_type.code               float
+     save_
+
+save__ma_template_trans_matrix.rot_matrix[1][2]
+    _item_description.description
+;     Data item [1][2] of the rotation matrix.
+;
+    _item.name                  '_ma_template_trans_matrix.rot_matrix[1][2]'
+    _item.category_id             ma_template_trans_matrix
+    _item.mandatory_code          no
+    _item_type.code               float
+     save_
+
+save__ma_template_trans_matrix.rot_matrix[2][2]
+    _item_description.description
+;     Data item [2][2] of the rotation matrix.
+;
+    _item.name                  '_ma_template_trans_matrix.rot_matrix[2][2]'
+    _item.category_id             ma_template_trans_matrix
+    _item.mandatory_code          no
+    _item_type.code               float
+     save_
+
+save__ma_template_trans_matrix.rot_matrix[3][2]
+    _item_description.description
+;     Data item [3][2] of the rotation matrix.
+;
+    _item.name                  '_ma_template_trans_matrix.rot_matrix[3][2]'
+    _item.category_id             ma_template_trans_matrix
+    _item.mandatory_code          no
+    _item_type.code               float
+     save_
+
+save__ma_template_trans_matrix.rot_matrix[1][3]
+    _item_description.description
+;     Data item [1][3] of the rotation matrix.
+;
+    _item.name                  '_ma_template_trans_matrix.rot_matrix[1][3]'
+    _item.category_id             ma_template_trans_matrix
+    _item.mandatory_code          no
+    _item_type.code               float
+     save_
+
+save__ma_template_trans_matrix.rot_matrix[2][3]
+    _item_description.description
+;     Data item [2][3] of the rotation matrix.
+;
+    _item.name                  '_ma_template_trans_matrix.rot_matrix[2][3]'
+    _item.category_id             ma_template_trans_matrix
+    _item.mandatory_code          no
+    _item_type.code               float
+     save_
+
+save__ma_template_trans_matrix.rot_matrix[3][3]
+    _item_description.description
+;     Data item [3][3] of the rotation matrix.
+;
+    _item.name                  '_ma_template_trans_matrix.rot_matrix[3][3]'
+    _item.category_id             ma_template_trans_matrix
+    _item.mandatory_code          no
+    _item_type.code               float
+     save_
+
+save__ma_template_trans_matrix.tr_vector[1]
+    _item_description.description
+;     Data item [1] of the tranlation vector.
+;
+    _item.name                  '_ma_template_trans_matrix.tr_vector[1]'
+    _item.category_id             ma_template_trans_matrix
+    _item.mandatory_code          no
+    _item_type.code               float
+     save_
+
+save__ma_template_trans_matrix.tr_vector[2]
+    _item_description.description
+;     Data item [2] of the tranlation vector.
+;
+    _item.name                  '_ma_template_trans_matrix.tr_vector[2]'
+    _item.category_id             ma_template_trans_matrix
+    _item.mandatory_code          no
+    _item_type.code               float
+     save_
+
+save__ma_template_trans_matrix.tr_vector[3]
+    _item_description.description
+;     Data item [3] of the tranlation vector.
+;
+    _item.name                  '_ma_template_trans_matrix.tr_vector[3]'
+    _item.category_id             ma_template_trans_matrix
+    _item.mandatory_code          no
+    _item_type.code               float
+     save_
+
+######################
+## MA_TARGET_ENTITY ##
+######################
+
+save_ma_target_entity
+    _category.description
+;              Data items in the MA_TARGET_ENTITY category record details about
+               the target entities. The details are provided for each entity 
+               being modeled. 
+;
+    _category.id                  ma_target_entity
+    _category.mandatory_code      no
+    _category_key.name            '_ma_target_entity.entity_id'
+    loop_
+    _category_group.id            'inclusive_group'
+                                  'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 -
+;
+;
+    loop_
+    _ma_target_entity.entity_id 
+    _ma_target_entity.data_id
+    _ma_target_entity.origin
+
+    1 1 "reference database"
+
+    2 2 "reference database"
+ 
+;
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_target_entity
+   save_
+
+save__ma_target_entity.entity_id
+    _item_description.description
+;     A unique identifier for the distinct molecular entity of the target.
+      This data item is a pointer to _entity.id in the ENTITY category.
+;
+    _item.name                  '_ma_target_entity.entity_id'
+    _item.category_id             ma_target_entity
+    _item.mandatory_code          yes
+    _item_type.code               code
+    _item_linked.child_name       '_ma_target_entity.entity_id'
+    _item_linked.parent_name      '_entity.id'
+     save_
+
+save__ma_target_entity.data_id
+    _item_description.description
+;     The data_id identifier. This data item is a pointer to
+      _ma_data.id in the MA_DATA category.
+;
+    _item.name                  '_ma_target_entity.data_id'
+    _item.category_id             ma_target_entity
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_target_entity.data_id'
+    _item_linked.parent_name    '_ma_data.id'
+     save_
+
+save__ma_target_entity.origin
+    _item_description.description
+;   The origin of the target entity.
+;
+    _item.name                  '_ma_target_entity.origin'
+    _item.category_id             ma_target_entity
+    _item.mandatory_code          yes
+    _item_type.code               line
+    loop_
+    _item_enumeration.value
+    _item_enumeration.detail
+    'reference database'    'target is obtained from an exisiting reference database'
+    'designed'              'target is designed by the user'
+     save_
+
+###############################
+## MA_TARGET_ENTITY_INSTANCE ##
+###############################
+
+save_ma_target_entity_instance
+    _category.description
+;              Data items in the MA_TARGET_ENTITY_INSTANCE category record details about
+               the instances of target entities modeled. 
+;
+    _category.id                  ma_target_entity_instance
+    _category.mandatory_code      no
+    _category_key.name            '_ma_target_entity_instance.asym_id'
+    loop_
+    _category_group.id            'inclusive_group'
+                                  'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 -
+;
+;
+    loop_
+    _ma_target_entity_instance.asym_id 
+    _ma_target_entity_instance.entity_id
+    _ma_target_entity_instance.details
+    A 1 .
+    B 1 .
+    #...abbreviated...
+;
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_target_entity_instance
+   save_
+
+save__ma_target_entity_instance.asym_id
+    _item_description.description
+;     A unique identifier for the instance of the entity. 
+;
+    _item.name                  '_ma_target_entity_instance.asym_id'
+    _item.category_id             ma_target_entity_instance
+    _item.mandatory_code          yes
+    _item_type.code               code
+    _item_linked.child_name       '_struct_asym.id'
+    _item_linked.parent_name      '_ma_target_entity_instance.asym_id'
+     save_
+
+save__ma_target_entity_instance.entity_id
+    _item_description.description
+;     A unique identifier for the distinct molecular entity of the target.
+      This data item is a pointer to _ma_target_entity.entity_id in the 
+      MA_TARGET_ENTITY category.
+;
+    _item.name                  '_ma_target_entity_instance.entity_id'
+    _item.category_id             ma_target_entity_instance
+    _item.mandatory_code          yes
+    _item_type.code               code
+    loop_
+    _item_linked.child_name 
+    _item_linked.parent_name 
+    '_ma_target_entity_instance.entity_id'  '_ma_target_entity.entity_id'
+    '_struct_asym.entity_id'                '_ma_target_entity_instance.entity_id'
+     save_
+
+save__ma_target_entity_instance.details
+    _item_description.description
+;     Additional details about the entity instance. 
+;
+    _item.name                  '_ma_target_entity_instance.details'
+    _item.category_id             ma_target_entity_instance
+    _item.mandatory_code          no
+    _item_type.code               text
+     save_
+
+##############################
+## MA_TARGET_REF_DB_DETAILS ##
+##############################
+
+save_ma_target_ref_db_details
+    _category.description
+;              Data items in the MA_TARGET_REF_DB_DETAILS category record details about
+               the reference databases for the target sequences.
+;
+    _category.id                  ma_target_ref_db_details
+    _category.mandatory_code      no
+    _category_key.name            '_ma_target_ref_db_details.target_entity_id'
+    loop_
+    _category_group.id            'inclusive_group'
+                                  'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 -
+;
+;
+    loop_
+    _ma_target_ref_db_details.target_entity_id
+    _ma_target_ref_db_details.db_name 
+    _ma_target_ref_db_details.db_code   
+    _ma_target_ref_db_details.db_accession  
+    _ma_target_ref_db_details.seq_db_isoform          
+    _ma_target_ref_db_details.seq_db_align_begin 
+    _ma_target_ref_db_details.seq_db_align_end
+
+    1 UNP B2RHG4_PORG3 B2RHG4  ?  26  51
+    2 GB AE000513.1 11612676  ?  254393  254514
+;
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_target_ref_db_details
+   save_
+
+save__ma_target_ref_db_details.target_entity_id
+    _item_description.description
+;     An identifier for the target entity. 
+;
+    _item.name                  '_ma_target_ref_db_details.target_entity_id'
+    _item.category_id             ma_target_ref_db_details
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_target_ref_db_details.target_entity_id'
+    _item_linked.parent_name    '_ma_target_entity.entity_id'
+     save_
+
+save__ma_target_ref_db_details.db_name
+    _item_description.description
+;              The name of the database containing reference information about
+               this entity or biological unit.
+;
+    _item.name                  '_ma_target_ref_db_details.db_name'
+    _item.category_id            ma_target_ref_db_details
+    _item.mandatory_code          yes
+    _item_type.code               line
+    loop_
+    _item_enumeration.value
+    _item_enumeration.detail
+      'UNP'     'UniProtKB'
+      'GB'      'Genbank'
+      'Other'   'Other'
+     save_
+
+save__ma_target_ref_db_details.db_name_other_details
+    _item_description.description
+;    The other database name. 
+;
+    _item.name                  '_ma_target_ref_db_details.db_name_other_details'
+    _item.category_id             ma_target_ref_db_details
+    _item.mandatory_code          no
+    _item_type.code               line
+     save_
+
+save__ma_target_ref_db_details.db_code
+    _item_description.description
+;              The code for this entity or biological unit or for a closely
+               related entity or biological unit in the named database.
+               This can include the version number. 
+;
+    _item.name                  '_ma_target_ref_db_details.db_code'
+    _item.category_id             ma_target_ref_db_details
+    _item.mandatory_code          yes
+    _item_type.code               line
+    loop_
+    _item_examples.case
+      'B2RHG4_PORG3'
+      'AE000513.1'
+     save_
+
+save__ma_target_ref_db_details.db_accession
+    _item_description.description
+;              Accession code assigned by the reference database.
+;
+    _item.name                  '_ma_target_ref_db_details.db_accession'
+    _item.category_id             ma_target_ref_db_details
+    _item.mandatory_code          yes
+    _item_type.code               code
+    loop_
+    _item_examples.case
+      'P07617'
+      '11612676'
+      'B2RHG4'
+     save_
+
+save__ma_target_ref_db_details.seq_db_isoform
+    _item_description.description
+;  Database code assigned by the reference database for a sequence isoform.   An isoform sequence is an
+   alternative protein sequence that can be generated from the same gene by a single or by a combination of
+   biological events such as: alternative promoter usage, alternative splicing, alternative initiation
+   and ribosomal frameshifting.
+;
+    _item.name                  '_ma_target_ref_db_details.seq_db_isoform'
+    _item.category_id             ma_target_ref_db_details
+    _item.mandatory_code          no
+    _item_type.code               code
+    loop_
+     _item_examples.case          'P29994-6'
+      save_
+
+save__ma_target_ref_db_details.seq_db_align_begin
+    _item_description.description
+;
+               Beginning index in the chemical sequence from the
+               reference database.
+;
+    _item.name                  '_ma_target_ref_db_details.seq_db_align_begin'
+    _item.category_id             ma_target_ref_db_details
+    _item.mandatory_code          no
+    _item_type.code               code
+     loop_
+    _item_examples.case         '1' '2'
+     save_
+
+save__ma_target_ref_db_details.seq_db_align_end
+    _item_description.description
+;    Ending index in the chemical sequence from the
+     reference database.
+;
+    _item.name                  '_ma_target_ref_db_details.seq_db_align_end'
+    _item.category_id             ma_target_ref_db_details
+    _item.mandatory_code          no
+    _item_type.code               code
+     loop_
+    _item_examples.case         '105' '245'
+     save_
+
+#####################################
+## MA_TARGET_TEMPLATE_POLY_MAPPING ##
+#####################################
+
+save_ma_target_template_poly_mapping
+    _category.description
+;              Data items in the MA_TARGET_TEMPLATE_MAPPING category record details about
+               the target-template mappings for polymeric targets.
+;
+    _category.id                  ma_target_template_poly_mapping
+    _category.mandatory_code      no
+    _category_key.name            '_ma_target_template_poly_mapping.id'
+    loop_
+    _category_group.id            'inclusive_group'
+                                  'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 -
+;
+;
+    loop_
+    _ma_target_template_poly_mapping.id
+    _ma_target_template_poly_mapping.template_segment_id
+    _ma_target_template_poly_mapping.target_asym_id 
+    _ma_target_template_poly_mapping.target_seq_id_begin
+    _ma_target_template_poly_mapping.target_seq_id_end
+
+    1  1  A  1  53 
+    2  2  B  1  60 
+    # ...  abbreviated ...
+;
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_target_template_poly_mapping
+     save_
+
+save__ma_target_template_poly_mapping.id
+    _item_description.description
+;     A unique identifier for the target-template mapping. 
+;
+    _item.name                  '_ma_target_template_poly_mapping.id'
+    _item.category_id             ma_target_template_poly_mapping
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_target_template_poly_mapping.template_segment_id
+    _item_description.description
+;     An identifier to the template segment. 
+      This data item is a pointer to _ma_template_poly_segment.id
+      in the MA_TEMPLATE_POLY_SEGMENT category. 
+;
+    _item.name                  '_ma_target_template_poly_mapping.template_segment_id'
+    _item.category_id             ma_target_template_poly_mapping
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_target_template_poly_mapping.template_segment_id'
+    _item_linked.parent_name    '_ma_template_poly_segment.id'
+     save_
+
+save__ma_target_template_poly_mapping.target_asym_id
+    _item_description.description
+;     The identifier for the corresponding target instance for which this template is used.
+      This data item is a pointer to _ma_target_entity_instance.asym_id in the
+      MA_TARGET_ENTITY_INSTANCE category.
+;
+    _item.name                  '_ma_target_template_poly_mapping.target_asym_id'
+    _item.category_id             ma_target_template_poly_mapping
+    _item.mandatory_code          yes
+    _item_type.code               code
+    _item_linked.child_name       '_ma_target_template_poly_mapping.target_asym_id'
+    _item_linked.parent_name      '_ma_target_entity_instance.asym_id'
+     save_
+
+save__ma_target_template_poly_mapping.target_seq_id_begin
+    _item_description.description
+;     The leading residue index for the target sequence segment. 
+;
+    _item.name                  '_ma_target_template_poly_mapping.target_seq_id_begin'
+    _item.category_id             ma_target_template_poly_mapping
+    _item.mandatory_code          no
+    _item_type.code               int
+     save_
+
+save__ma_target_template_poly_mapping.target_seq_id_end
+    _item_description.description
+;     The trailing residue index for the target sequence segment.
+;
+    _item.name                  '_ma_target_template_poly_mapping.target_seq_id_end'
+    _item.category_id             ma_target_template_poly_mapping
+    _item.mandatory_code          no
+    _item_type.code               int
+     save_
+
+########################
+## MA_STRUCT_ASSEMBLY ##
+########################
+
+save_ma_struct_assembly
+    _category.description
+;              Data items in the MA_STRUCT_ASSEMBLY category records the
+               details of the structural assemblies modeled. 
+;
+    _category.id                  ma_struct_assembly
+    _category.mandatory_code      no
+     loop_
+    _category_key.name          '_ma_struct_assembly.ordinal_id'
+
+    loop_
+    _category_group.id           'inclusive_group'
+                                 'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 
+;
+;
+    loop_
+    _ma_struct_assembly.ordinal_id
+    _ma_struct_assembly.assembly_id
+    _ma_struct_assembly.entity_id
+    _ma_struct_assembly.asym_id
+    _ma_struct_assembly.seq_id_begin
+    _ma_struct_assembly.seq_id_end
+
+         1   0   1  A  1   726 
+         2   0   2  B  1   744 
+         3   0   3  C  1  1037 
+         4   0   4  D  1  1157 
+         5   1   1  A  1   726
+         6   2   2  B  1   744
+         7   3   3  C  1  1037
+         8   4   4  D  1  1157 
+         #...abbreviated...
+;
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_struct_assembly
+     save_
+
+save__ma_struct_assembly.ordinal_id
+    _item_description.description
+;     A unique identifier for the structural assembly description.
+;
+    _item.name                  '_ma_struct_assembly.ordinal_id'
+    _item.category_id             ma_struct_assembly
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_struct_assembly.assembly_id
+    _item_description.description
+;     An identifier for the structural assembly. 
+      This data item will remain the same for all components 
+      of an assembly. 
+      This data item is a pointer to _ma_model_list.assembly_id in the
+      MA_MODEL_LIST category. 
+;
+    _item.name                  '_ma_struct_assembly.assembly_id'
+    _item.category_id             ma_struct_assembly
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_struct_assembly.assembly_id'
+    _item_linked.parent_name    '_ma_model_list.assembly_id'
+     save_
+
+save__ma_struct_assembly.entity_description
+    _item_description.description
+;     A text description of the molecular entity
+
+;
+    _item.name                  '_ma_struct_assembly.entity_description'
+    _item.category_id             ma_struct_assembly
+    _item.mandatory_code          no
+    _item_type.code               line
+    _item_linked.child_name     '_ma_struct_assembly.entity_description'
+    _item_linked.parent_name    '_entity.pdbx_description'
+     save_
+
+save__ma_struct_assembly.entity_id
+    _item_description.description
+;     A unique identifier for distinct molecular entities.
+      This data item is a pointer to _entity_poly_seq.entity_id in the 
+      ENTITY_POLY_SEQ category.
+;
+    _item.name                  '_ma_struct_assembly.entity_id'
+    _item.category_id             ma_struct_assembly
+    _item.mandatory_code          yes
+    _item_type.code               code
+    _item_linked.child_name       '_ma_struct_assembly.entity_id'
+    _item_linked.parent_name      '_entity.id'
+     save_
+
+save__ma_struct_assembly.asym_id
+    _item_description.description
+;     An asym/strand identifier for the component in the assembly.
+      This data item is a pointer to _struct_asym.id in the
+      STRUCT_ASYM category.
+;
+    _item.name                  '_ma_struct_assembly.asym_id'
+    _item.category_id             ma_struct_assembly
+    _item.mandatory_code          yes
+    _item_type.code               code
+    _item_linked.child_name       '_ma_struct_assembly.asym_id'
+    _item_linked.parent_name      '_struct_asym.id'
+     save_
+
+save__ma_struct_assembly.seq_id_begin
+    _item_description.description
+;     The starting residue index for the sequence segment of the entity instance 
+      that is part of the assembly.
+;
+    _item.name                  '_ma_struct_assembly.seq_id_begin'
+    _item.category_id             ma_struct_assembly
+    _item.mandatory_code          no
+    _item_type.code               int
+    _item_linked.child_name       '_ma_struct_assembly.seq_id_begin'
+    _item_linked.parent_name      '_entity_poly_seq.num'
+     save_
+
+save__ma_struct_assembly.seq_id_end
+    _item_description.description
+;     The ending residue index for the sequence segment of the entity instance 
+      that is part of the assembly.
+;
+    _item.name                  '_ma_struct_assembly.seq_id_end'
+    _item.category_id             ma_struct_assembly
+    _item.mandatory_code          no
+    _item_type.code               int
+    _item_linked.child_name       '_ma_struct_assembly.seq_id_end'
+    _item_linked.parent_name      '_entity_poly_seq.num'
+     save_
+
+################################
+## MA_STRUCT_ASSEMBLY_DETAILS ##
+################################
+
+save_ma_struct_assembly_details
+    _category.description
+;              Data items in the MA_STRUCT_ASSEMBLY_DETAILS category provides
+               additional details regarding the structure assembly. 
+;
+    _category.id                  ma_struct_assembly_details
+    _category.mandatory_code      no
+     loop_
+    _category_key.name          '_ma_struct_assembly_details.assembly_id'
+
+    loop_
+    _category_group.id           'inclusive_group'
+                                 'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 -
+;
+;
+    loop_
+    _ma_struct_assembly_details.assembly_id
+    _ma_struct_assembly_details.assembly_name
+    _ma_struct_assembly_details.assembly_description
+         1     "Assembly A"  "Subunits in assembly A"
+         2     "Assembly B"  "Subunits in assembly B"
+         # ...  abbreviated ...
+;
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_struct_assembly_details
+     save_
+
+save__ma_struct_assembly_details.assembly_id
+    _item_description.description
+;     A unique identifier for the structural assembly.
+;
+    _item.name                  '_ma_struct_assembly_details.assembly_id'
+    _item.category_id             ma_struct_assembly_details
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_struct_assembly_details.assembly_id'
+    _item_linked.parent_name    '_ma_struct_assembly.assembly_id'
+     save_
+
+save__ma_struct_assembly_details.assembly_name
+    _item_description.description
+;     A name for the structural assembly.
+;
+    _item.name                  '_ma_struct_assembly_details.assembly_name'
+    _item.category_id             ma_struct_assembly_details
+    _item.mandatory_code          no
+    _item_type.code               line
+     save_
+
+save__ma_struct_assembly_details.assembly_description
+    _item_description.description
+;     Description of the structural assembly.
+;
+    _item.name                  '_ma_struct_assembly_details.assembly_description'
+    _item.category_id             ma_struct_assembly_details
+    _item.mandatory_code          no
+    _item_type.code               text
+     save_
+
+#######################
+## MA_ALIGNMENT_INFO ##
+#######################
+
+save_ma_alignment_info
+    _category.description
+;               Data items in the MA_ALIGNMENT_INFO category record
+                list of target-template alignments (pairwise as well as
+                multiple-sequence alignments) used in the modeling.
+                Additional details are included in the MA_ALIGNMENT_DETAILS category
+                and the actual alignments are captured in the MA_ALIGNMENT category. 
+;
+    _category.id                  ma_alignment_info
+    _category.mandatory_code      no
+    _category_key.name           '_ma_alignment_info.alignment_id'
+    loop_
+    _category_group.id           'inclusive_group'
+                                 'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example - 1
+;
+;
+    loop_
+
+    _ma_alignment_info.alignment_id
+    _ma_alignment_info.data_id
+    _ma_alignment_info.software_id
+    _ma_alignment_info.alignment_length
+    _ma_alignment_info.alignment_type
+    _ma_alignment_info.alignment_mode
+    1 5 1  128 "target-template MSA" "local" 
+    2 6 1  163 "target-template pairwise alignment" "local" 
+    3 7 1  139 "target-template MSA" "local" 
+    4 8 1  385 "target-template pairwise alignment" "local" 
+    # ... abbreviated ... #
+;
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_alignment_info
+     save_
+
+save__ma_alignment_info.alignment_id
+    _item_description.description
+;     A unique identifier for the alignment. 
+;
+    _item.name                  '_ma_alignment_info.alignment_id'
+    _item.category_id             ma_alignment_info
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_alignment_info.data_id
+    _item_description.description
+;     The data_id identifier. This data item is a pointer to
+      _ma_data.id in the MA_DATA category. 
+;
+    _item.name                  '_ma_alignment_info.data_id'
+    _item.category_id             ma_alignment_info
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_alignment_info.data_id'
+    _item_linked.parent_name    '_ma_data.id'
+     save_
+
+save__ma_alignment_info.software_id
+    _item_description.description
+;     Identifier to the software used to obtaine the multiple sequence alignment.
+      This data item is a pointer to the _software.pdbx_ordinal in the
+      SOFTWARE category.
+;
+    _item.name                  '_ma_alignment_info.software_id'
+    _item.category_id             ma_alignment_info
+    _item.mandatory_code          no
+    _item_type.code               int
+    _item_linked.child_name       '_ma_alignment_info.software_id'
+    _item_linked.parent_name      '_software.pdbx_ordinal'
+     save_
+
+save__ma_alignment_info.software_parameter_group_id
+    _item_description.description
+;   Identifier that denotes a set of parameters used with the software
+    in the alignment.
+    This data item is a pointer to _ma_software_parameter.group_id
+    in the MA_SOFTWARE_PARAMETER category.
+;
+    _item.name                  '_ma_alignment_info.software_parameter_group_id'
+    _item.category_id             ma_alignment_info
+    _item.mandatory_code          no
+    _item_type.code               int
+    _item_linked.child_name     '_ma_alignment_info.software_parameter_group_id'
+    _item_linked.parent_name    '_ma_software_parameter.group_id'
+     save_
+
+save__ma_alignment_info.alignment_length
+    _item_description.description
+;     The total length of the alignment including gaps. 
+;
+    _item.name                  '_ma_alignment_info.alignment_length'
+    _item.category_id             ma_alignment_info
+    _item.mandatory_code          no
+    _item_type.code               int
+     save_
+
+save__ma_alignment_info.alignment_type
+    _item_description.description
+;     The alignment type. 
+;
+    _item.name                  '_ma_alignment_info.alignment_type'
+    _item.category_id             ma_alignment_info
+    _item.mandatory_code          no
+    _item_type.code               line
+    loop_
+    _item_enumeration.value
+      'target-template pairwise alignment'
+      'target-template MSA'
+      'other'
+     save_
+
+save__ma_alignment_info.alignment_type_other_details
+    _item_description.description
+;     Details for other alignment types. 
+;
+    _item.name                  '_ma_alignment_info.alignment_type_other_details'
+    _item.category_id             ma_alignment_info
+    _item.mandatory_code          no
+    _item_type.code               text
+     save_
+
+save__ma_alignment_info.alignment_mode
+    _item_description.description
+;     The alignment mode.
+;
+    _item.name                  '_ma_alignment_info.alignment_mode'
+    _item.category_id             ma_alignment_info
+    _item.mandatory_code          no
+    _item_type.code               line
+    loop_
+    _item_enumeration.value
+      'global'
+      'local'
+     save_
+
+#######################
+## MA_ALIGNMENT_DETAILS
+#######################
+
+save_ma_alignment_details
+    _category.description
+;               Data items in the MA_ALIGNMENT_DETAILS category record
+                details of the target-template pairwise and multiple sequence 
+                alignments used in the modeling.
+                The actual alignments are captured in the MA_ALIGNMENT category. 
+;
+    _category.id                  ma_alignment_details
+    _category.mandatory_code      no
+    _category_key.name           '_ma_alignment_details.ordinal_id'
+    loop_
+    _category_group.id           'inclusive_group'
+                                 'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example - 1
+;
+;
+    loop_
+
+    _ma_alignment_details.ordinal_id
+    _ma_alignment_details.alignment_id
+    _ma_alignment_details.template_segment_id
+    _ma_alignment_details.target_asym_id
+    _ma_alignment_details.score_type
+    _ma_alignment_details.score_value
+    _ma_alignment_details.percent_sequence_identity
+    _ma_alignment_details.sequence_identity_denominator
+    1 1 1 A "HHblits e-value" 0.1 24.0 "Other"
+    2 1 2 A "HHblits e-value" 0.5 15.0 "Other"
+    3 1 3 A "HHblits e-value" 0.1 21.0 "Other"
+    4 2 4 B "HHblits e-value" 0.5 18.0 "Other"
+    # ... abbreviated ... #
+;
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_alignment_details
+     save_
+
+save__ma_alignment_details.ordinal_id
+    _item_description.description
+;     A unique identifier for this record.
+;
+    _item.name                  '_ma_alignment_details.ordinal_id'
+    _item.category_id             ma_alignment_details
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_alignment_details.alignment_id
+    _item_description.description
+;     An identifier for the alignment. 
+      This data item is a pointer to _ma_alignment_info.alignment_id
+      in the MA_ALIGNMENT_INFO category. 
+;
+    _item.name                  '_ma_alignment_details.alignment_id'
+    _item.category_id             ma_alignment_details
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_alignment_details.alignment_id'
+    _item_linked.parent_name    '_ma_alignment_info.alignment_id'
+     save_
+
+save__ma_alignment_details.template_segment_id
+    _item_description.description
+;     The template segment identifier. This data item is a pointer to
+      _ma_template_poly_segment.id in the MA_TEMPLATE_POLY_SEGMENT category.
+;
+    _item.name                  '_ma_alignment_details.template_segment_id'
+    _item.category_id             ma_alignment_details
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_alignment_details.template_segment_id'
+    _item_linked.parent_name    '_ma_template_poly_segment.id '
+     save_
+
+save__ma_alignment_details.target_asym_id
+    _item_description.description
+;     The target instance identifier. This data item is a pointer to
+      _ma_target_entity_instance.asym_id in the MA_TARGET_ENTITY_INSTANCE category.
+;
+    _item.name                  '_ma_alignment_details.target_asym_id'
+    _item.category_id             ma_alignment_details
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_alignment_details.target_asym_id'
+    _item_linked.parent_name    '_ma_target_entity_instance.asym_id'
+     save_
+
+save__ma_alignment_details.score_type
+    _item_description.description
+;     The alignment score type.
+;
+    _item.name                  '_ma_alignment_details.score_type'
+    _item.category_id             ma_alignment_details
+    _item.mandatory_code          no
+    _item_type.code               line
+    loop_
+    _item_enumeration.value
+      'BLAST e-value'
+      'HHblits e-value'
+      'Other'
+     save_
+
+save__ma_alignment_details.score_type_other_details
+    _item_description.description
+;     Details for other score types. 
+;
+    _item.name                  '_ma_alignment_details.score_type_other_details'
+    _item.category_id             ma_alignment_details
+    _item.mandatory_code          no
+    _item_type.code               text
+     save_
+
+save__ma_alignment_details.score_value
+    _item_description.description
+;     The alignment score value. 
+;
+    _item.name                  '_ma_alignment_details.score_value'
+    _item.category_id             ma_alignment_details
+    _item.mandatory_code          no
+    _item_type.code               float
+     save_
+
+save__ma_alignment_details.percent_sequence_identity
+    _item_description.description
+;     The percent sequence identity between the template sequence and the target sequence being modeled.
+;
+    _item.name                  '_ma_alignment_details.percent_sequence_identity'
+    _item.category_id             ma_alignment_details
+    _item.mandatory_code          no
+    _item_type.code               float
+    loop_
+    _item_range.minimum
+    _item_range.maximum
+        0.0     0.0
+        0.0   100.0
+      100.0   100.0
+     save_
+
+save__ma_alignment_details.sequence_identity_denominator
+    _item_description.description
+;     The denominator used while calculating sequence identity. 
+;
+    _item.name                      '_ma_alignment_details.sequence_identity_denominator'
+    _item.category_id                 ma_alignment_details
+    _item.mandatory_code              no
+    _item_type.code                   line
+    _item_dependent.dependent_name  '_ma_alignment_details.percent_sequence_identity'
+    loop_
+    _item_enumeration.value
+     'Length of the shorter sequence'
+     'Number of aligned positions (including gaps)'
+     'Number of aligned residue pairs (not including the gaps)'
+     'Arithmetic mean sequence length'
+     'Other'
+     save_
+
+save__ma_alignment_details.sequence_identity_denominator_other_details
+    _item_description.description
+;     Details for other sequence identity denominators. 
+;
+    _item.name                      '_ma_alignment_details.sequence_identity_denominator_other_details'
+    _item.category_id                 ma_alignment_details
+    _item.mandatory_code              no
+    _item_type.code                   text
+     save_
+
+##################
+## MA_ALIGMNENT ##
+##################
+
+save_ma_alignment
+    _category.description
+;              Data items in the MA_ALIGMNENT category record details about
+               the relationship between the template sequences and the target 
+               sequence obtained through multiple sequence alignment methods. 
+         Alignments can be fully gapped or partial. 
+         
+;
+    _category.id                  ma_alignment
+    _category.mandatory_code      no
+    _category_key.name           '_ma_alignment.ordinal_id'
+    loop_
+    _category_group.id           'inclusive_group'
+                                 'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example - 1
+;
+;
+  loop_ 
+  _ma_alignment.ordinal_id
+  _ma_alignment.alignment_id
+  _ma_alignment.target_template_flag
+  _ma_alignment.sequence
+1  1  1  
+
+GAGFGDLKSPAGLQVLNDYLA----DKSYIEGYVPSQADVAVFEAVSSP------PPADLCHALRWYNHIKSYEKEKAS
+LPGVKKALGKYGPADVEDTT
+
+2  1  2  
+
+--GFGDLKSPAGLQVLNDYLA----DKSYIEGYVPSQADVAVFEAVSSP------PPADLCHALRWYNHIKSYEKEKAS
+LPGVKKALGKYGPADVEDTT
+
+3  1  2  
+
+----------PGHLKPFETLLSQNQGGKAFIVGDQISFADYNLLDLLLIHQVLAPGCLDNFPLLSAYVARLSARPKIKAF
+LSS-----------------
+
+    # ... abbreviated ... #
+;
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_alignment
+     save_
+
+save__ma_alignment.ordinal_id
+    _item_description.description
+;     A unique identifier for this record.
+;
+    _item.name                  '_ma_alignment.ordinal_id'
+    _item.category_id             ma_alignment
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_alignment.alignment_id
+    _item_description.description
+;     An identifier for the alignment. 
+      This data item is a pointer to _ma_alignment_details.alignment_id
+      in the MA_ALIGNMENT_DETAILS category. 
+;
+    _item.name                  '_ma_alignment.alignment_id'
+    _item.category_id             ma_alignment
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_alignment.alignment_id'
+    _item_linked.parent_name    '_ma_alignment_details.alignment_id'
+     save_
+
+save__ma_alignment.target_template_flag
+    _item_description.description
+;     A flag to indicate whether the sequence corresponds to the target or a template. 
+;
+    _item.name                  '_ma_alignment.target_template_flag'
+    _item.category_id             ma_alignment
+    _item.mandatory_code          yes
+    _item_type.code               int
+    loop_
+    _item_enumeration.value
+    _item_enumeration.detail
+     1  'Target'
+     2  'Template'
+     save_
+
+save__ma_alignment.sequence
+    _item_description.description
+;     The target / template sequence in the multiple sequence alignment. 
+      The sequence includes gaps and is reproduced as observed in the multiple sequence alignment. 
+      The sequence can span multiple lines and can be represented in FASTA format. 
+;
+    _item.name                  '_ma_alignment.sequence'
+    _item.category_id             ma_alignment
+    _item.mandatory_code          yes
+    _item_type.code               text
+     save_
+
+#######################
+## MA_TEMPLATE_COORD ##
+#######################
+
+save_ma_template_coord
+    _category.description
+;              Data items in the MA_TEMPLATE_COORD category records the coordinates
+               for customized structural templates used in model building. These are
+               provided by the user and not referenced from an existing database. 
+;
+    _category.id                  ma_template_coord
+    _category.mandatory_code      no
+     loop_
+    _category_key.name          '_ma_template_coord.ordinal_id'
+
+    loop_
+    _category_group.id           'inclusive_group'
+                                 'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 -
+;
+;
+        loop_
+        _ma_template_coord.template_id
+        _ma_template_coord.group_PDB
+        _ma_template_coord.type_symbol
+        _ma_template_coord.label_atom_id
+        _ma_template_coord.label_comp_id
+        _ma_template_coord.label_entity_id
+        _ma_template_coord.label_asym_id
+        _ma_template_coord.label_seq_id
+        _ma_template_coord.auth_seq_id
+        _ma_template_coord.auth_asym_id
+        _ma_template_coord.auth_atom_id
+        _ma_template_coord.auth_comp_id
+        _ma_template_coord.Cartn_x
+        _ma_template_coord.Cartn_y
+        _ma_template_coord.Cartn_z
+        _ma_template_coord.occupancy
+        _ma_template_coord.B_iso_or_equiv
+        _ma_template_coord.formal_charge
+        _ma_template_coord.ordinal_id
+        _ma_template_coord.pdb_model_num
+        1    ATOM     N   N    TYR  1  A  7  7 . . .  -9.852    10.605    -6.336   1.00    91.82  .      1     1
+        1    ATOM     C   CA   TYR  1  A  7  7 . . .  -8.986    11.688    -5.817   1.00    91.82  .      2     1
+        1    ATOM     C   CB   TYR  1  A  7  7 . . .  -7.787    11.073    -5.072   1.00    91.82  .      3     1
+        1    ATOM     C   CG   TYR  1  A  7  7 . . .  -6.741    12.117    -4.873   1.00    91.82  .      4     1
+        1    ATOM     C   CD1  TYR  1  A  7  7 . . .  -6.906    13.168    -3.998   1.00    91.82  .      5     1
+        1    ATOM     C   CD2  TYR  1  A  7  7 . . .  -5.561    12.013    -5.571   1.00    91.82  .      6     1
+        1    ATOM     C   CE1  TYR  1  A  7  7 . . .  -5.910    14.108    -3.843   1.00    91.82  .      7     1
+        1    ATOM     C   CE2  TYR  1  A  7  7 . . .  -4.566    12.945    -5.421   1.00    91.82  .      8     1
+        1    ATOM     C   CZ   TYR  1  A  7  7 . . .  -4.738    13.997    -4.558   1.00    91.82  .      9     1
+        1    ATOM     O   OH   TYR  1  A  7  7 . . .  -3.708    14.949    -4.411   1.00    91.82  .     10     1
+        1    ATOM     C   C    TYR  1  A  7  7 . . .  -8.513    12.596    -6.909   1.00    91.82  .     11     1
+         # ...  abbreviated ...
+;
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_template_coord
+     save_
+
+save__ma_template_coord.ordinal_id
+    _item_description.description
+;     A unique identifier for this coordinate position.
+;
+    _item.name                  '_ma_template_coord.ordinal_id'
+    _item.category_id             ma_template_coord
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_template_coord.template_id
+    _item_description.description
+;     The identifier for the customized template structure.
+      This data item is a pointer to _ma_template_customized.template_id
+      in the MA_TEMPLATE_CUSTOMIZED category.
+;
+    _item.name                  '_ma_template_coord.template_id'
+    _item.category_id             ma_template_coord
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_template_coord.template_id'
+    _item_linked.parent_name    '_ma_template_customized.template_id'
+     save_
+
+save__ma_template_coord.group_PDB
+    _item_description.description
+;    The group of atoms to which the atom site in the starting model belongs. This data
+     item is provided for compatibility with the original Protein Data Bank format,
+     and only for that purpose.
+;
+    _item.name                  '_ma_template_coord.group_PDB'
+    _item.category_id             ma_template_coord
+    _item.mandatory_code          no
+    _item_type.code               code
+    loop_
+    _item_enumeration.value
+            ATOM
+            HETATM
+     save_
+
+save__ma_template_coord.type_symbol
+    _item_description.description
+;     The atom type symbol(element symbol) corresponding to this coordinate position.
+;
+    _item.name                  '_ma_template_coord.type_symbol'
+    _item.category_id             ma_template_coord
+    _item.mandatory_code          yes
+    _item_type.code               code
+     save_
+
+save__ma_template_coord.label_entity_id
+    _item_description.description
+;     The entity identifier corresponding to this coordinate position.
+;
+    _item.name                  '_ma_template_coord.label_entity_id'
+    _item.category_id             ma_template_coord
+    _item.mandatory_code          yes
+    _item_type.code               code
+     save_
+
+save__ma_template_coord.label_atom_id
+    _item_description.description
+;     The atom identifier/name corresponding to this coordinate position.
+
+;
+    _item.name                  '_ma_template_coord.label_atom_id'
+    _item.category_id             ma_template_coord
+    _item.mandatory_code          yes
+    _item_type.code               code
+     save_
+
+save__ma_template_coord.label_comp_id
+    _item_description.description
+;     The component identifier corresponding to this coordinate position.
+;
+    _item.name                  '_ma_template_coord.label_comp_id'
+    _item.category_id             ma_template_coord
+    _item.mandatory_code          yes
+    _item_type.code               ucode
+     save_
+
+save__ma_template_coord.label_seq_id
+    _item_description.description
+;     The sequence index corresponding this to coordinate position.
+;
+    _item.name                  '_ma_template_coord.label_seq_id'
+    _item.category_id             ma_template_coord
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_template_coord.label_asym_id
+    _item_description.description
+;     The asym/strand id corresponding to this coordinate position.
+;
+    _item.name                  '_ma_template_coord.label_asym_id'
+    _item.category_id             ma_template_coord
+    _item.mandatory_code          yes
+    _item_type.code               code
+     save_
+
+save__ma_template_coord.auth_seq_id
+    _item_description.description
+;     The author provided sequence index corresponding this to coordinate position.
+;
+    _item.name                  '_ma_template_coord.auth_seq_id'
+    _item.category_id             ma_template_coord
+    _item.mandatory_code          no
+    _item_type.code               int
+     save_
+
+save__ma_template_coord.auth_atom_id
+    _item_description.description
+;     The author provided atom identifier/name corresponding to this coordinate position.
+
+;
+    _item.name                  '_ma_template_coord.auth_atom_id'
+    _item.category_id             ma_template_coord
+    _item.mandatory_code          no
+    _item_type.code               code
+     save_
+
+save__ma_template_coord.auth_comp_id
+    _item_description.description
+;     The author provided component identifier corresponding to this coordinate position.
+;
+    _item.name                  '_ma_template_coord.auth_comp_id'
+    _item.category_id             ma_template_coord
+    _item.mandatory_code          no
+    _item_type.code               ucode
+     save_
+
+save__ma_template_coord.auth_asym_id
+    _item_description.description
+;     The author provided asym/strand id corresponding to this coordinate position.
+;
+    _item.name                  '_ma_template_coord.auth_asym_id'
+    _item.category_id             ma_template_coord
+    _item.mandatory_code          no
+    _item_type.code               code
+     save_
+
+save__ma_template_coord.Cartn_x
+    _item_description.description
+;     The Cartesian X component corresponding to this coordinate position.
+;
+    _item.name                  '_ma_template_coord.Cartn_x'
+    _item.category_id             ma_template_coord
+    _item.mandatory_code          yes
+    _item_type.code               float
+    _item_units.code              angstroms
+     save_
+
+save__ma_template_coord.Cartn_y
+    _item_description.description
+;     The Cartesian Y component corresponding to this coordinate position.
+;
+    _item.name                  '_ma_template_coord.Cartn_y'
+    _item.category_id             ma_template_coord
+    _item.mandatory_code          yes
+    _item_type.code               float
+    _item_units.code              angstroms
+     save_
+
+save__ma_template_coord.Cartn_z
+    _item_description.description
+;     The Cartesian Z component corresponding to this coordinate position.
+;
+    _item.name                  '_ma_template_coord.Cartn_z'
+    _item.category_id             ma_template_coord
+    _item.mandatory_code          yes
+    _item_type.code               float
+    _item_units.code              angstroms
+     save_
+
+save__ma_template_coord.occupancy
+    _item_description.description
+;   The fraction of the atom type present at this site.
+    The sum of the occupancies of all the atom types at this site
+    may not significantly exceed 1.0 unless it is a dummy site.     
+;
+    _item.name                  '_ma_template_coord.occupancy'
+    _item.category_id             ma_template_coord
+    _item.mandatory_code          no
+    _item_type.code               float
+     save_
+
+save__ma_template_coord.B_iso_or_equiv
+    _item_description.description
+;     The isotropic temperature factor corresponding to this coordinate position.
+;
+    _item.name                  '_ma_template_coord.B_iso_or_equiv'
+    _item.category_id             ma_template_coord
+    _item.mandatory_code          no
+    _item_type.code               float
+    _item_units.code              8pi2_angstroms_squared
+     save_
+
+save__ma_template_coord.formal_charge
+    _item_description.description
+;     The formal charge corresponding to this coordinate position.
+;
+    _item.name                  '_ma_template_coord.formal_charge'
+    _item.category_id             ma_template_coord
+    _item.mandatory_code          no
+    _item_type.code               int
+     save_
+
+save__ma_template_coord.pdb_model_num
+    _item_description.description
+;     The PDB model number.
+;
+    _item.name                  '_ma_template_coord.pdb_model_num'
+    _item.category_id             ma_template_coord
+    _item.mandatory_code          no
+    _item_type.code               int
+     save_
+
+#############
+## MA_DATA ##
+#############
+
+save_ma_data
+    _category.description
+;              Data items in the MA_DATA category capture the data
+               used in the modeling. These can be multiple sequence 
+               alignments, restraints etc.    
+;
+    _category.id                  ma_data
+    _category.mandatory_code      yes
+     loop_
+    _category_key.name          '_ma_data.id'
+
+    loop_
+    _category_group.id           'inclusive_group'
+                                 'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 - 
+;
+;
+        loop_
+        _ma_data.id
+        _ma_data.name
+        _ma_data.content_type
+        0 "NMR NOE Distances" "spatial restraints" 
+        1 "Target Template Alignment" "target-template alignment"
+        2 "Coevolution Data" "coevolution MSA"
+         # ...  abbreviated ...
+;
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_data
+     save_
+
+save__ma_data.id
+    _item_description.description
+;    A unique identifier for the data.
+;
+    _item.name                  '_ma_data.id'
+    _item.category_id             ma_data
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_data.content_type
+    _item_description.description
+;    The type of data held in the dataset.
+;
+    _item.name                  '_ma_data.content_type'
+    _item.category_id             ma_data
+    _item.mandatory_code          yes
+    _item_type.code               line
+    loop_
+    _item_enumeration.value
+      'target'
+      'template structure'
+      'spatial restraints'
+      'target-template alignment'
+      'coevolution MSA'
+      'model coordinates'
+      'other'
+     save_
+
+save__ma_data.content_type_other_details
+    _item_description.description
+;    Details for other content types.
+;
+    _item.name                  '_ma_data.content_type_other_details'
+    _item.category_id             ma_data
+    _item.mandatory_code          no
+    _item_type.code               text
+     save_ 
+
+save__ma_data.name
+    _item_description.description
+;    An author-given name for the content held in the dataset.
+;
+    _item.name                  '_ma_data.name'
+    _item.category_id             ma_data
+    _item.mandatory_code          yes
+    _item_type.code               line
+    loop_
+    _item_examples.case
+    'NMR NOE Distances'
+    'Target Template Alignment'
+    'Coevolution Data'
+     save_
+     
+###################
+## MA_DATA_GROUP ##
+###################
+
+save_ma_data_group
+    _category.description
+;              Data items in the MA_DATA_GROUP category describes the
+               collection of data into groups so that they can be used
+               efficiently in the MA_PROTOCOL_STEP category. 
+;
+    _category.id                  ma_data_group
+    _category.mandatory_code      yes
+     loop_
+    _category_key.name          '_ma_data_group.ordinal_id'
+
+    loop_
+    _category_group.id           'inclusive_group'
+                                 'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 - 
+;
+;
+        loop_
+        _ma_data_group.ordinal_id
+        _ma_data_group.group_id
+        _ma_data_group.data_id
+        0 1 2
+        1 1 3
+        2 1 4
+        3 2 3 
+        4 2 4
+        5 2 5 
+       # ...  abbreviated ...
+;
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_data_group
+     save_
+
+save__ma_data_group.ordinal_id
+    _item_description.description
+;    A unique identifier for a group of data.
+;
+    _item.name                  '_ma_data_group.ordinal_id'
+    _item.category_id             ma_data_group
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_data_group.group_id
+    _item_description.description
+;    An identifier for the group entry.
+     If data does not need to be grouped, then _ma_data_group.group_id
+     is the same as _ma_data_group.data_id. 
+;
+    _item.name                  '_ma_data_group.group_id'
+    _item.category_id             ma_data_group
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_data_group.data_id
+    _item_description.description
+;    The identifier for the data. 
+     This data item is a pointer to _ma_data.id
+     in the MA_DATA category. 
+;
+    _item.name                  '_ma_data_group.data_id'
+    _item.category_id             ma_data_group
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_data_group.data_id'
+    _item_linked.parent_name    '_ma_data.id'    
+     save_
+
+###############################
+## MA_COEVOLUTION_SEQ_DB_REF ##
+###############################
+
+save_ma_coevolution_seq_db_ref
+    _category.description
+;              Data items in the MA_COEVOLUTION_SEQ_DB_REF category record details about
+               the reference database identifiers for the sequences in the coevolution
+               multiple sequence alignments.
+;
+    _category.id                  ma_coevolution_seq_db_ref
+    _category.mandatory_code      no
+    _category_key.name            '_ma_coevolution_seq_db_ref.seq_id'
+    loop_
+    _category_group.id            'inclusive_group'
+                                  'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 -
+;
+;
+    loop_
+    _ma_coevolution_seq_db_ref.seq_id
+    _ma_coevolution_seq_db_ref.seq_db_name 
+    _ma_coevolution_seq_db_ref.seq_db_code   
+    _ma_coevolution_seq_db_ref.seq_db_accession  
+    _ma_coevolution_seq_db_ref.seq_db_isoform          
+    _ma_coevolution_seq_db_ref.seq_db_align_begin 
+    _ma_coevolution_seq_db_ref.seq_db_align_end
+
+    1 UNP B2RHG4_PORG3 B2RHG4  ?  26  51
+    2 GB AE000513.1 11612676  ?  254393  254514
+;
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_coevolution_seq_db_ref
+   save_
+
+save__ma_coevolution_seq_db_ref.seq_id
+    _item_description.description
+;     An identifier for the sequence.  
+;
+    _item.name                  '_ma_coevolution_seq_db_ref.seq_id'
+    _item.category_id             ma_coevolution_seq_db_ref
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_coevolution_seq_db_ref.db_name
+    _item_description.description
+;              The name of the database containing reference information about
+               this sequence. 
+;
+    _item.name                  '_ma_coevolution_seq_db_ref.db_name'
+    _item.category_id             ma_coevolution_seq_db_ref
+    _item.mandatory_code          yes
+    _item_type.code               line
+    loop_
+    _item_enumeration.value
+    _item_enumeration.detail
+      'UNP'     'UniProtKB'
+      'GB'      'Genbank'
+     save_
+
+save__ma_coevolution_seq_db_ref.db_code
+    _item_description.description
+;              The code for this sequence in the named database.
+               This can include the version number. 
+;
+    _item.name                  '_ma_coevolution_seq_db_ref.db_code'
+    _item.category_id             ma_coevolution_seq_db_ref
+    _item.mandatory_code          yes
+    _item_type.code               line
+    loop_
+    _item_examples.case
+      'B2RHG4_PORG3'
+      'AE000513.1'
+     save_
+
+save__ma_coevolution_seq_db_ref.db_accession
+    _item_description.description
+;              Accession code assigned by the reference database.
+;
+    _item.name                  '_ma_coevolution_seq_db_ref.db_accession'
+    _item.category_id             ma_coevolution_seq_db_ref
+    _item.mandatory_code          yes
+    _item_type.code               code
+    loop_
+    _item_examples.case
+      'P07617'
+      '11612676'
+      'B2RHG4'
+     save_
+
+save__ma_coevolution_seq_db_ref.db_isoform
+    _item_description.description
+;  Database code assigned by the reference database for a sequence isoform.   An isoform sequence is an
+   alternative protein sequence that can be generated from the same gene by a single or by a combination of
+   biological events such as: alternative promoter usage, alternative splicing, alternative initiation
+   and ribosomal frameshifting.
+;
+    _item.name                  '_ma_coevolution_seq_db_ref.db_isoform'
+    _item.category_id             ma_coevolution_seq_db_ref
+    _item.mandatory_code          no
+    _item_type.code               code
+    loop_
+     _item_examples.case          'P29994-6'
+      save_
+
+save__ma_coevolution_seq_db_ref.seq_db_align_begin
+    _item_description.description
+;
+               Beginning index in the chemical sequence from the
+               reference database.
+;
+    _item.name                  '_ma_coevolution_seq_db_ref.seq_db_align_begin'
+    _item.category_id             ma_coevolution_seq_db_ref
+    _item.mandatory_code          no
+    _item_type.code               code
+     loop_
+    _item_examples.case         '1' '2'
+     save_
+
+save__ma_coevolution_seq_db_ref.seq_db_align_end
+    _item_description.description
+;    Ending index in the chemical sequence from the
+     reference database.
+;
+    _item.name                  '_ma_coevolution_seq_db_ref.seq_db_align_end'
+    _item.category_id             ma_coevolution_seq_db_ref
+    _item.mandatory_code          no
+    _item_type.code               code
+     loop_
+    _item_examples.case         '105' '245'
+     save_
+
+########################
+## MA_COEVOLUTION_MSA ##
+########################
+
+save_ma_coevolution_msa
+    _category.description
+;              Data items in the MA_COEVOLUTION_MSA category record details about
+               the coevolution multiple sequence alignments.
+;
+    _category.id                  ma_coevolution_msa
+    _category.mandatory_code      no
+    _category_key.name            '_ma_coevolution_msa.seq_id'
+    loop_
+    _category_group.id            'inclusive_group'
+                                  'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 -
+;
+;
+    loop_
+    _ma_coevolution_msa.ordinal_id
+    _ma_coevolution_msa.msa_id
+    _ma_coevolution_msa.seq_id
+    _ma_coevolution_msa.sequence
+
+    1 1 1 .
+    2 1 2 .
+    #...abbreviated...
+;
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_coevolution_msa
+   save_
+
+save__ma_coevolution_msa.ordinal_id
+    _item_description.description
+;     A unique identifier for the category.
+;
+    _item.name                  '_ma_coevolution_msa.ordinal_id'
+    _item.category_id             ma_coevolution_msa
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_coevolution_msa.msa_id
+    _item_description.description
+;     An identifier for the coevolution MSA.
+      This data item is a pointer to _ma_coevolution_msa_details.msa_id in the
+      MA_COEVOLUTION_MSA_DETAILS category. 
+;
+    _item.name                  '_ma_coevolution_msa.msa_id'
+    _item.category_id             ma_coevolution_msa
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name      '_ma_coevolution_msa.msa_id'
+    _item_linked.parent_name     '_ma_coevolution_msa_details.msa_id'
+     save_
+
+save__ma_coevolution_msa.seq_id
+    _item_description.description
+;     An identifier for the sequence.
+      This data item is a pointer to _ma_coevolution_seq_db_ref.seq_id in the
+      MA_COEVOLUTION_SEQ_DB_REF category. 
+;
+    _item.name                  '_ma_coevolution_msa.seq_id'
+    _item.category_id             ma_coevolution_msa
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_coevolution_msa.seq_id'
+    _item_linked.parent_name    '_ma_coevolution_seq_db_ref.seq_id'    
+     save_
+
+save__ma_coevolution_msa.sequence
+    _item_description.description
+;     The one letter code of the polymer sequence with gaps as in the alignment.
+;
+    _item.name                  '_ma_coevolution_msa.sequence'
+    _item.category_id             ma_coevolution_msa
+    _item.mandatory_code          yes
+    _item_type.code               text
+     save_
+
+################################
+## MA_COEVOLUTION_MSA_DETAILS ##
+################################
+
+save_ma_coevolution_msa_details
+    _category.description
+;              Data items in the MA_COEVOLUTION_MSA_DETAILS category record details about
+               the coevolution MSA used in the modeling.
+;
+    _category.id                  ma_coevolution_msa_details
+    _category.mandatory_code      no
+    _category_key.name            '_ma_coevolution_msa_details.msa_id'
+    loop_
+    _category_group.id            'inclusive_group'
+                                  'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 -
+;
+;
+    loop_
+    _ma_coevolution_msa_details.msa_id
+    _ma_coevolution_msa_details.target_entity_id
+    _ma_coevolution_msa_details.target_sequence
+    _ma_coevolution_msa_details.data_id 
+    _ma_coevolution_msa_details.software_id
+    _ma_coevolution_msa_details.seq_clust_db
+    _ma_coevolution_msa_details.seq_clust_db_version
+    1 1 . 1 2 . .
+    2 2 . 1 2 . .
+    #...abbreviated...
+;
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_coevolution_msa_details
+   save_
+
+save__ma_coevolution_msa_details.msa_id
+    _item_description.description
+;     An identifier for the coevolution MSA.
+;
+    _item.name                  '_ma_coevolution_msa_details.msa_id'
+    _item.category_id             ma_coevolution_msa_details
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_coevolution_msa_details.target_entity_id
+    _item_description.description
+;     An identifier for the target entity.
+;
+    _item.name                  '_ma_coevolution_msa_details.target_entity_id'
+    _item.category_id             ma_coevolution_msa_details
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_coevolution_msa_details.target_entity_id'
+    _item_linked.parent_name    '_ma_target_entity.entity_id'    
+     save_
+
+save__ma_coevolution_msa_details.target_sequence
+    _item_description.description
+;     The one letter code of the target sequence with gaps as in the alignment.
+;
+    _item.name                  '_ma_coevolution_msa_details.target_sequence'
+    _item.category_id             ma_coevolution_msa_details
+    _item.mandatory_code          yes
+    _item_type.code               text
+     save_
+
+save__ma_coevolution_msa_details.seq_clust_db
+    _item_description.description
+;     The sequence cluster database used to obtain the coevolution MSA. 
+;
+    _item.name                  '_ma_coevolution_msa_details.seq_clust_db'
+    _item.category_id             ma_coevolution_msa_details
+    _item.mandatory_code          yes
+    _item_type.code               line
+    loop_
+    _item_enumeration.value
+    _item_enumeration.detail
+    'UniRef100' .
+    'UniRef90'  .
+    'UniRef50'  .
+    'NR20'      .
+    'Other'     .
+     save_
+
+save__ma_coevolution_msa_details.seq_clust_db_other_details
+    _item_description.description
+;     Other details for sequence cluster database used. 
+;
+    _item.name                  '_ma_coevolution_msa_details.seq_clust_db_other_details'
+    _item.category_id             ma_coevolution_msa_details
+    _item.mandatory_code          yes
+    _item_type.code               line
+     save_
+
+save__ma_coevolution_msa_details.seq_clust_db_version
+    _item_description.description
+;     Version of the sequence cluster database. 
+      This might correspond to the release date of the database. 
+;   
+    _item.name                  '_ma_coevolution_msa_details.seq_clust_db_version'
+    _item.category_id             ma_coevolution_msa_details
+    _item.mandatory_code          yes
+    _item_type.code               line
+     save_
+
+save__ma_coevolution_msa_details.data_id
+    _item_description.description
+;     The data_id identifier. This data item is a pointer to
+      _ma_data.id in the MA_DATA category.
+;
+    _item.name                  '_ma_coevolution_msa_details.data_id'
+    _item.category_id             ma_coevolution_msa_details
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_coevolution_msa_details.data_id'
+    _item_linked.parent_name    '_ma_data.id'
+     save_
+
+save__ma_coevolution_msa_details.software_id
+    _item_description.description
+;     Identifier to the software used to obtain the coevolution multiple sequence alignment.
+      This data item is a pointer to the _software.pdbx_ordinal in the
+      SOFTWARE category.
+;
+    _item.name                  '_ma_coevolution_msa_details.software_id'
+    _item.category_id             ma_coevolution_msa_details
+    _item.mandatory_code          no
+    _item_type.code               int
+    _item_linked.child_name       '_ma_coevolution_msa_details.software_id'
+    _item_linked.parent_name      '_software.pdbx_ordinal'
+     save_
+
+save__ma_coevolution_msa_details.software_parameter_group_id
+    _item_description.description
+;   Identifier that denotes a set of parameters used with the software
+    in generating the coevolution MSA.
+    This data item is a pointer to _ma_software_parameter.group_id
+    in the MA_SOFTWARE_PARAMETER category.
+;
+    _item.name                  '_ma_coevolution_msa_details.software_parameter_group_id'
+    _item.category_id             ma_coevolution_msa_details
+    _item.mandatory_code          no
+    _item_type.code               int
+    _item_linked.child_name     '_ma_coevolution_msa_details.software_parameter_group_id'
+    _item_linked.parent_name    '_ma_software_parameter.group_id'
+     save_
+
+###################
+## MA_RESTRAINTS ##
+###################
+
+save_ma_restraints
+    _category.description
+;              Data items in the MA_RESTRAINTS category provides the
+               list of the different types of restraints used in the
+               modeling.   
+;
+    _category.id                  ma_restraints
+    _category.mandatory_code      no
+     loop_
+    _category_key.name          '_ma_restraints.restraint_id'
+
+    loop_
+    _category_group.id           'inclusive_group'
+                                 'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 - 
+;
+;
+        loop_
+        _ma_restraints.restraint_id
+        _ma_restraints.data_id
+        _ma_restraints.name
+        _ma_restraints.restraint_type
+        _ma_restraints.details
+        1 1 . "distance restraints" .
+        2 2 . "dihedral restraints" .
+        # ...  abbreviated ...
+;
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_restraints
+     save_
+
+save__ma_restraints.restraint_id
+    _item_description.description
+;     A unique identifier for the restraint. 
+;
+    _item.name                  '_ma_restraints.restraint_id'
+    _item.category_id             ma_restraints
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_restraints.name
+    _item_description.description
+;     An author-given name for the set of restraints. 
+;
+    _item.name                    '_ma_restraints.name'
+    _item.category_id             ma_restraints
+    _item.mandatory_code          yes
+    _item_type.code               line
+     save_
+     
+save__ma_restraints.restraint_type
+    _item_description.description
+;     The type of restraint.
+;
+    _item.name                    '_ma_restraints.restraint_type'
+    _item.category_id             ma_restraints
+    _item.mandatory_code          yes
+    _item_type.code               line
+    loop_
+    _item_enumeration.value
+    'distance restraint'
+    'dihedral restraint'
+    'angle restraint'
+    'other'
+     save_
+
+save__ma_restraints.restraint_type_other_details
+    _item_description.description
+;     Details for other restraint types.
+;
+    _item.name                    '_ma_restraints.restraint_type_other_details'
+    _item.category_id             ma_restraints
+    _item.mandatory_code          no
+    _item_type.code               text
+     save_
+
+save__ma_restraints.data_id
+    _item_description.description
+;   The identifier linking to the data category. 
+    This data item is a pointer to _ma_data.id
+    in the MA_DATA category. 
+;
+    _item.name                    '_ma_restraints.data_id'
+    _item.category_id             ma_restraints
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name       '_ma_restraints.data_id'
+    _item_linked.parent_name      '_ma_data.id'
+     save_
+
+save__ma_restraints.details
+    _item_description.description
+;    Additional details regarding the restraints used in the modeling. 
+;
+    _item.name                    '_ma_restraints.details'
+    _item.category_id             ma_restraints
+    _item.mandatory_code          yes
+    _item_type.code               text
+     save_
+
+############################
+## MA_DISTANCE_RESTRAINTS ##
+############################
+
+save_ma_distance_restraints
+    _category.description
+;              Data items in the MA_DISTANCE_RESTRAINTS category records the
+               list of distance restraints used in the modeling.
+               These distances can be atomic or residue-wise distances. 
+               This has been adapted from the widely used CASP RR format
+               (http://www.predictioncenter.org/casp8/index.cgi?page=format#RR).
+               These distances may be derived from various coevolution MSA or other
+               exeperimental or computational methods.
+;
+    _category.id                  ma_distance_restraints
+    _category.mandatory_code      no
+     loop_
+    _category_key.name          '_ma_distance_restraints.ordinal_id'
+
+    loop_
+    _category_group.id           'inclusive_group'
+                                 'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 - 
+;
+;
+        loop_
+        _ma_distance_restraints.ordinal_id
+        _ma_distance_restraints.restraint_id
+        _ma_distance_restraints.entity_id_1
+        _ma_distance_restraints.asym_id_1
+        _ma_distance_restraints.seq_id_1
+        _ma_distance_restraints.comp_id_1
+        _ma_distance_restraints.atom_id_1
+        _ma_distance_restraints.entity_id_2
+        _ma_distance_restraints.asym_id_2
+        _ma_distance_restraints.seq_id_2
+        _ma_distance_restraints.comp_id_2
+        _ma_distance_restraints.atom_id_2
+        _ma_distance_restraints.upper_limit
+        _ma_distance_restraints.upper_limit_esd
+        _ma_distance_restraints.restraint_type
+        _ma_distance_restraints.granularity
+          1  1  3  C   17  LYS  NZ  3  C  421  GLU  OE1  4.8  0.2  'upper bound' 'by-atom'
+          2  1  3  C  206  LYS  NZ  3  C  219  ASP  OD1  4.8  0.2  'upper bound' 'by-atom'
+          3  1  3  C   38  LYS  NZ  3  C  429  GLU  OE1  4.8  0.2  'upper bound' 'by-atom'
+          4  1  3  C  400  LYS  NZ  3  C  440  GLU  OE1  4.8  0.2  'upper bound' 'by-atom'
+          5  1  3  C  400  LYS  NZ  3  C  441  GLU  OE1  4.8  0.2  'upper bound' 'by-atom'
+          6  1  3  C  400  LYS  NZ  3  C  523  ASP  OD1  4.8  0.2  'upper bound' 'by-atom'
+          7  1  3  C  735  LYS  NZ  3  C  403  ASP  OD1  4.8  0.2  'upper bound' 'by-atom'
+          8  1  3  C  735  LYS  NZ  3  C  405  GLU  OE1  4.8  0.2  'upper bound' 'by-atom'
+          9  1  3  C  865  LYS  NZ  3  C  894  GLU  OE1  4.8  0.2  'upper bound' 'by-atom'
+         10  1  3  C  865  LYS  NZ  3  C  898  ASP  OD1  4.8  0.2  'upper bound' 'by-atom'
+         11  1  4  D  103  LYS  NZ  4  D  130  ASP  OD1  4.8  0.2  'upper bound' 'by-atom'
+         12  1  4  D  103  LYS  NZ  4  D  131  GLU  OE1  4.8  0.2  'upper bound' 'by-atom'
+         # ...  abbreviated ...
+;
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_distance_restraints
+     save_
+
+save__ma_distance_restraints.ordinal_id
+    _item_description.description
+;     A unique identifier for the distance restraint record.
+;
+    _item.name                  '_ma_distance_restraints.ordinal_id'
+    _item.category_id             ma_distance_restraints
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_distance_restraints.restraint_id
+    _item_description.description
+;     An identifier pointing to the _ma_restraints.restraint_id in the MA_RESTRAINTS category.
+;
+    _item.name                  '_ma_distance_restraints.restraint_id'
+    _item.category_id             ma_distance_restraints
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_distance_restraints.restraint_id'
+    _item_linked.parent_name    '_ma_restraints.restraint_id'
+     save_
+
+save__ma_distance_restraints.entity_id_1
+    _item_description.description
+;     The entity identifier for the first partner in the distance restraint. 
+      This data item is a pointer to _entity_poly_seq.entity_id in the ENTITY_POLY_SEQ category. 
+;
+    _item.name                    '_ma_distance_restraints.entity_id_1'
+    _item.category_id             ma_distance_restraints
+    _item.mandatory_code          yes
+    _item_type.code               code
+    _item_linked.child_name       '_ma_distance_restraints.entity_id_1'
+    _item_linked.parent_name      '_entity_poly_seq.entity_id'
+     save_
+
+save__ma_distance_restraints.entity_id_2
+    _item_description.description
+;     The entity identifier for the second partner in the distance restraint. 
+      This data item is a pointer to _entity_poly_seq.entity_id in the ENTITY_POLY_SEQ category. 
+;
+    _item.name                    '_ma_distance_restraints.entity_id_2'
+    _item.category_id             ma_distance_restraints
+    _item.mandatory_code          yes
+    _item_type.code               code
+    _item_linked.child_name       '_ma_distance_restraints.entity_id_2'
+    _item_linked.parent_name      '_entity_poly_seq.entity_id'
+     save_
+
+save__ma_distance_restraints.asym_id_1
+    _item_description.description
+;              An asym/strand identifier for the first partner in the distance restraint. 
+               This data item is a pointer to _struct_asym.id in the
+               STRUCT_ASY category.
+;
+    _item.name                    '_ma_distance_restraints.asym_id_1'
+    _item.category_id             ma_distance_restraints
+    _item.mandatory_code          yes
+    _item_type.code               code
+    _item_linked.child_name       '_ma_distance_restraints.asym_id_1'
+    _item_linked.parent_name      '_struct_asym.id'
+     save_
+
+save__ma_distance_restraints.asym_id_2
+    _item_description.description
+;          An asym/strand identifier for the second partner in the distance restraint. 
+           This data item is a pointer to _struct_asym.id in the
+           STRUCT_ASY category.
+;
+    _item.name                    '_ma_distance_restraints.asym_id_2'
+    _item.category_id             ma_distance_restraints
+    _item.mandatory_code          yes
+    _item_type.code               code
+    _item_linked.child_name       '_ma_distance_restraints.asym_id_2'
+    _item_linked.parent_name      '_struct_asym.id'
+     save_
+
+save__ma_distance_restraints.comp_id_1
+    _item_description.description
+;     The component identifier for the first partner in the distance restraint.
+      This data item is a pointer to _entity_poly_seq.mon_id in the ENTITY_POLY_SEQ category.
+;
+    _item.name                    '_ma_distance_restraints.comp_id_1'
+    _item.category_id             ma_distance_restraints
+    _item.mandatory_code          yes
+    _item_type.code               ucode
+    _item_linked.child_name       '_ma_distance_restraints.comp_id_1'
+    _item_linked.parent_name      '_entity_poly_seq.mon_id'
+     save_
+
+save__ma_distance_restraints.comp_id_2
+    _item_description.description
+;     The component identifier for the second partner in the distance restraint.
+      This data item is a pointer to _entity_poly_seq.mon_id in the ENTITY_POLY_SEQ category.
+;
+    _item.name                    '_ma_distance_restraints.comp_id_2'
+    _item.category_id             ma_distance_restraints
+    _item.mandatory_code          yes
+    _item_type.code               ucode
+    _item_linked.child_name       '_ma_distance_restraints.comp_id_2'
+    _item_linked.parent_name      '_entity_poly_seq.mon_id'
+     save_
+
+save__ma_distance_restraints.seq_id_1
+    _item_description.description
+;     The sequence index for the first partner in the distance restraint.
+      This data item is a pointer to _entity_poly_seq.num in the ENTITY_POLY_SEQ category.
+;
+    _item.name                    '_ma_distance_restraints.seq_id_1'
+    _item.category_id             ma_distance_restraints
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name       '_ma_distance_restraints.seq_id_1'
+    _item_linked.parent_name      '_entity_poly_seq.num'
+     save_
+
+save__ma_distance_restraints.seq_id_2
+    _item_description.description
+;     The sequence index for the second partner in the distance restraint. 
+      This data item is a pointer to _entity_poly_seq.num in the ENTITY_POLY_SEQ category.
+;
+    _item.name                    '_ma_distance_restraints.seq_id_2'
+    _item.category_id             ma_distance_restraints
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name       '_ma_distance_restraints.seq_id_2'
+    _item_linked.parent_name      '_entity_poly_seq.num'
+     save_
+
+save__ma_distance_restraints.atom_id_1
+    _item_description.description
+;     A atom identifier for the first partner in the distance restraint. 
+      This data item is a pointer to _chem_comp_atom.atom_id in the
+      CHEM_COMP_ATOM category.
+;
+    _item.name                    '_ma_distance_restraints.atom_id_1'
+    _item.category_id             ma_distance_restraints
+    _item.mandatory_code          no
+    _item_type.code               atcode
+    _item_linked.child_name       '_ma_distance_restraints.atom_id_1'
+    _item_linked.parent_name      '_chem_comp_atom.atom_id'
+     save_
+
+save__ma_distance_restraints.atom_id_2
+    _item_description.description
+;     A atom identifier for the second partner in the distance restraint. 
+      This data item is a pointer to _chem_comp_atom.atom_id in the
+      CHEM_COMP_ATOM category.
+;
+    _item.name                    '_ma_distance_restraints.atom_id_2'
+    _item.category_id             ma_distance_restraints
+    _item.mandatory_code          no
+    _item_type.code               atcode
+    _item_linked.child_name       '_ma_distance_restraints.atom_id_2'
+    _item_linked.parent_name      '_chem_comp_atom.atom_id'
+     save_
+
+save__ma_distance_restraints.lower_limit
+    _item_description.description
+;     The lower limit of the distance threshold.
+;
+    _item.name                    '_ma_distance_restraints.lower_limit'
+    _item.category_id             ma_distance_restraints
+    _item.mandatory_code          no
+    _item_type.code               float
+    _item_units.code              angstroms
+     save_
+
+save__ma_distance_restraints.upper_limit
+    _item_description.description
+;     The upper limit of the distance threshold.
+;   
+    _item.name                    '_ma_distance_restraints.upper_limit'
+    _item.category_id             ma_distance_restraints
+    _item.mandatory_code          no
+    _item_type.code               float
+    _item_units.code              angstroms
+     save_
+
+save__ma_distance_restraints.lower_limit_esd
+    _item_description.description
+;     The estimated standard deviation of the lower limit distance threshold applied to this distance restraint.
+;
+    _item.name                  '_ma_distance_restraints.lower_limit_esd'
+    _item.category_id             ma_distance_restraints
+    _item.mandatory_code          no
+    _item_type.code               float
+    _item_units.code              angstroms
+     save_
+
+save__ma_distance_restraints.upper_limit_esd
+    _item_description.description
+;     The estimated standard deviation of the upper limit distance threshold applied to this distance restraint. 
+;
+    _item.name                  '_ma_distance_restraints.upper_limit_esd'
+    _item.category_id             ma_distance_restraints
+    _item.mandatory_code          no
+    _item_type.code               float
+    _item_units.code              angstroms
+     save_
+
+save__ma_distance_restraints.probability
+    _item_description.description
+;      The real number that indicates the probability that the distance restraint
+       is correct. This number should fall between 0.0 and 1.0.
+;
+    _item.name                  '_ma_distance_restraints.probability'
+    _item.category_id             ma_distance_restraints
+    _item.mandatory_code          no
+    _item_type.code               float
+    loop_
+    _item_range.minimum
+    _item_range.maximum
+        0.0   0.0
+        0.0   1.0
+        1.0   1.0
+     save_
+
+save__ma_distance_restraints.restraint_type
+    _item_description.description
+;     The type of distance restraint applied. 
+;
+    _item.name                  '_ma_distance_restraints.restraint_type'
+    _item.category_id             ma_distance_restraints
+    _item.mandatory_code          yes
+    _item_type.code               line
+    loop_
+    _item_enumeration.value
+        'lower bound' 
+        'upper bound' 
+        'lower and upper bound' 
+     save_
+
+save__ma_distance_restraints.granularity
+    _item_description.description
+;     The granularity of the predicted contact as applied to the model.
+;
+    _item.name                  '_ma_distance_restraints.granularity'
+    _item.category_id             ma_distance_restraints
+    _item.mandatory_code          yes
+    _item_type.code               line
+    loop_
+    _item_enumeration.value
+    _item_enumeration.detail
+        'by-residue'    'Restraint applied to the specific residue represented by the alpha carbon atom'
+        'by-atom'       'Restraint applied to the specified atoms'
+     save_
+
+############################
+## MA_ANGLE_RESTRAINTS ##
+############################
+
+save_ma_angle_restraints
+    _category.description
+;              Data items in the MA_ANGLE_RESTRAINTS category captures the
+               details of angle restraints between atoms. Each angle is spanned
+               from atom one to atom three. Each atom defining the angle can be
+               part of any entity present and does not originate in the same
+               entity. 
+;
+    _category.id                  ma_angle_restraints
+    _category.mandatory_code      no
+     loop_
+    _category_key.name          '_ma_angle_restraints.ordinal_id'
+
+    loop_
+    _category_group.id           'inclusive_group'
+                                 'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 - 
+;
+;
+        loop_
+        _ma_angle_restraints.ordinal_id
+        _ma_angle_restraints.restraint_id
+        _ma_angle_restraints.entity_id_1
+        _ma_angle_restraints.asym_id_1
+        _ma_angle_restraints.seq_id_1
+        _ma_angle_restraints.comp_id_1
+        _ma_angle_restraints.atom_id_1
+        _ma_angle_restraints.entity_id_2
+        _ma_angle_restraints.asym_id_2
+        _ma_angle_restraints.seq_id_2
+        _ma_angle_restraints.comp_id_2
+        _ma_angle_restraints.atom_id_2
+        _ma_angle_restraints.entity_id_3
+        _ma_angle_restraints.asym_id_3
+        _ma_angle_restraints.seq_id_3
+        _ma_angle_restraints.comp_id_3
+        _ma_angle_restraints.atom_id_3
+        _ma_angle_restraints.lower_limit
+        _ma_angle_restraints.upper_limit
+        _ma_angle_restraints.restraint_type
+        _ma_angle_restraints.name
+        1  2  1 A 21 ALA N  1 A 21 ALA CA  1 A 21 ALA  C  1 -60.0 -40.0  'upper and lower bound' .
+        2  2  1 A 21 ALA C  1 A 22 THR  N  1 A 22 THR CA  1 -60.0 -40.0  'upper and lower bound' .
+        3  2  1 A 23 LYS C  1 A 24 ASP  N  1 A 24 ASP CA  1 -60.0 -40.0  'upper and lower bound' .
+        4  2  1 A 24 ASP N  1 A 24 ASP CA  1 A 24 ASP  C  1  90.0 120.0  'upper and lower bound' .
+        5  2  1 A 15 GLY C  1 A 16 ASN  N  1 A 16 ASN CA  1 -60.0 -40.0  'upper and lower bound' .
+        6  2  1 A 16 ASN N  1 A 16 ASN CA  1 A 16 ASN  C  1  90.0 120.0  'upper and lower bound' .
+        7  2  1 A 16 ASN N  1 A 16 ASN CA  1 A 16 ASN  C  1 140.0 170.0  'upper and lower bound' .
+        # ...  abbreviated ...
+;
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_angle_restraints
+     save_
+
+save__ma_angle_restraints.ordinal_id
+    _item_description.description
+;     A unique identifier for the angle restraint record.
+;
+    _item.name                  '_ma_angle_restraints.ordinal_id'
+    _item.category_id             ma_angle_restraints
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_angle_restraints.restraint_id
+    _item_description.description
+;     An identifier pointing to the _ma_restraints.restraint_id in the MA_RESTRAINTS category.
+;
+    _item.name                  '_ma_angle_restraints.restraint_id'
+    _item.category_id             ma_angle_restraints
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_angle_restraints.restraint_id'
+    _item_linked.parent_name    '_ma_restraints.restraint_id'
+     save_
+
+save__ma_angle_restraints.entity_id_1
+    _item_description.description
+;     The entity identifier for the first partner in the angle restraint. 
+      This data item is a pointer to _entity_poly_seq.entity_id in the ENTITY_POLY_SEQ category. 
+;
+    _item.name                    '_ma_angle_restraints.entity_id_1'
+    _item.category_id             ma_angle_restraints
+    _item.mandatory_code          yes
+    _item_type.code               code
+    _item_linked.child_name       '_ma_angle_restraints.entity_id_1'
+    _item_linked.parent_name      '_entity_poly_seq.entity_id'
+     save_
+
+save__ma_angle_restraints.entity_id_2
+    _item_description.description
+;     The entity identifier for the second partner in the angle restraint. 
+      This data item is a pointer to _entity_poly_seq.entity_id in the ENTITY_POLY_SEQ category. 
+;
+    _item.name                    '_ma_angle_restraints.entity_id_2'
+    _item.category_id             ma_angle_restraints
+    _item.mandatory_code          yes
+    _item_type.code               code
+    _item_linked.child_name       '_ma_angle_restraints.entity_id_2'
+    _item_linked.parent_name      '_entity_poly_seq.entity_id'
+     save_
+
+save__ma_angle_restraints.entity_id_3
+    _item_description.description
+;     The entity identifier for the third partner in the angle restraint.
+      This data item is a pointer to _entity_poly_seq.entity_id in the ENTITY_POLY_SEQ category.
+;
+    _item.name                    '_ma_angle_restraints.entity_id_3'
+    _item.category_id             ma_angle_restraints
+    _item.mandatory_code          yes
+    _item_type.code               code
+    _item_linked.child_name       '_ma_angle_restraints.entity_id_3'
+    _item_linked.parent_name      '_entity_poly_seq.entity_id'
+     save_
+
+save__ma_angle_restraints.asym_id_1
+    _item_description.description
+;              An asym/strand identifier for the first partner in the angle restraint. 
+               This data item is a pointer to _struct_asym.id in the
+               STRUCT_ASY category.
+;
+    _item.name                    '_ma_angle_restraints.asym_id_1'
+    _item.category_id             ma_angle_restraints
+    _item.mandatory_code          yes
+    _item_type.code               code
+    _item_linked.child_name       '_ma_angle_restraints.asym_id_1'
+    _item_linked.parent_name      '_struct_asym.id'
+     save_
+
+save__ma_angle_restraints.asym_id_2
+    _item_description.description
+;          An asym/strand identifier for the second partner in the angle restraint. 
+           This data item is a pointer to _struct_asym.id in the
+           STRUCT_ASY category.
+;
+    _item.name                    '_ma_angle_restraints.asym_id_2'
+    _item.category_id             ma_angle_restraints
+    _item.mandatory_code          yes
+    _item_type.code               code
+    _item_linked.child_name       '_ma_angle_restraints.asym_id_2'
+    _item_linked.parent_name      '_struct_asym.id'
+     save_
+
+save__ma_angle_restraints.asym_id_3
+    _item_description.description
+;          An asym/strand identifier for the third partner in the angle restraint.
+           This data item is a pointer to _struct_asym.id in the
+           STRUCT_ASY category.
+;
+    _item.name                    '_ma_angle_restraints.asym_id_3'
+    _item.category_id             ma_angle_restraints
+    _item.mandatory_code          yes
+    _item_type.code               code
+    _item_linked.child_name       '_ma_angle_restraints.asym_id_3'
+    _item_linked.parent_name      '_struct_asym.id'
+     save_
+
+save__ma_angle_restraints.comp_id_1
+    _item_description.description
+;     The component identifier for the first partner in the angle restraint.
+      This data item is a pointer to _entity_poly_seq.mon_id in the ENTITY_POLY_SEQ category.
+;
+    _item.name                    '_ma_angle_restraints.comp_id_1'
+    _item.category_id             ma_angle_restraints
+    _item.mandatory_code          yes
+    _item_type.code               ucode
+    _item_linked.child_name       '_ma_angle_restraints.comp_id_1'
+    _item_linked.parent_name      '_entity_poly_seq.mon_id'
+     save_
+
+save__ma_angle_restraints.comp_id_2
+    _item_description.description
+;     The component identifier for the second partner in the angle restraint.
+      This data item is a pointer to _entity_poly_seq.mon_id in the ENTITY_POLY_SEQ category.
+;
+    _item.name                    '_ma_angle_restraints.comp_id_2'
+    _item.category_id             ma_angle_restraints
+    _item.mandatory_code          yes
+    _item_type.code               ucode
+    _item_linked.child_name       '_ma_angle_restraints.comp_id_2'
+    _item_linked.parent_name      '_entity_poly_seq.mon_id'
+     save_
+
+save__ma_angle_restraints.comp_id_3
+    _item_description.description
+;     The component identifier for the third partner in the angle restraint.
+      This data item is a pointer to _entity_poly_seq.mon_id in the ENTITY_POLY_SEQ category.
+;
+    _item.name                    '_ma_angle_restraints.comp_id_3'
+    _item.category_id             ma_angle_restraints
+    _item.mandatory_code          yes
+    _item_type.code               ucode
+    _item_linked.child_name       '_ma_angle_restraints.comp_id_3'
+    _item_linked.parent_name      '_entity_poly_seq.mon_id'
+     save_
+
+save__ma_angle_restraints.seq_id_1
+    _item_description.description
+;     The sequence index for the first partner in the angle restraint.
+      This data item is a pointer to _entity_poly_seq.num in the ENTITY_POLY_SEQ category.
+;
+    _item.name                    '_ma_angle_restraints.seq_id_1'
+    _item.category_id             ma_angle_restraints
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name       '_ma_angle_restraints.seq_id_1'
+    _item_linked.parent_name      '_entity_poly_seq.num'
+     save_
+
+save__ma_angle_restraints.seq_id_2
+    _item_description.description
+;     The sequence index for the second partner in the angle restraint. 
+      This data item is a pointer to _entity_poly_seq.num in the ENTITY_POLY_SEQ category.
+;
+    _item.name                    '_ma_angle_restraints.seq_id_2'
+    _item.category_id             ma_angle_restraints
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name       '_ma_angle_restraints.seq_id_2'
+    _item_linked.parent_name      '_entity_poly_seq.num'
+     save_
+
+save__ma_angle_restraints.seq_id_3
+    _item_description.description
+;     The sequence index for the third partner in the angle restraint.
+      This data item is a pointer to _entity_poly_seq.num in the ENTITY_POLY_SEQ category.
+;
+    _item.name                    '_ma_angle_restraints.seq_id_3'
+    _item.category_id             ma_angle_restraints
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name       '_ma_angle_restraints.seq_id_3'
+    _item_linked.parent_name      '_entity_poly_seq.num'
+     save_
+
+save__ma_angle_restraints.atom_id_1
+    _item_description.description
+;     Atom identifier for the first partner in the angle restraint. 
+      This data item is a pointer to _chem_comp_atom.atom_id in the
+      CHEM_COMP_ATOM category.
+;
+    _item.name                    '_ma_angle_restraints.atom_id_1'
+    _item.category_id             ma_angle_restraints
+    _item.mandatory_code          yes
+    _item_type.code               atcode
+    _item_linked.child_name       '_ma_angle_restraints.atom_id_1'
+    _item_linked.parent_name      '_chem_comp_atom.atom_id'
+     save_
+
+save__ma_angle_restraints.atom_id_2
+    _item_description.description
+;     Atom identifier for the second partner in the angle restraint. 
+      This data item is a pointer to _chem_comp_atom.atom_id in the
+      CHEM_COMP_ATOM category.
+;
+    _item.name                    '_ma_angle_restraints.atom_id_2'
+    _item.category_id             ma_angle_restraints
+    _item.mandatory_code          yes
+    _item_type.code               atcode
+    _item_linked.child_name       '_ma_angle_restraints.atom_id_2'
+    _item_linked.parent_name      '_chem_comp_atom.atom_id'
+     save_
+
+save__ma_angle_restraints.atom_id_3
+    _item_description.description
+;     Atom identifier for the third partner in the angle restraint.
+      This data item is a pointer to _chem_comp_atom.atom_id in the
+      CHEM_COMP_ATOM category.
+;
+    _item.name                    '_ma_angle_restraints.atom_id_3'
+    _item.category_id             ma_angle_restraints
+    _item.mandatory_code          yes
+    _item_type.code               atcode
+    _item_linked.child_name       '_ma_angle_restraints.atom_id_3'
+    _item_linked.parent_name      '_chem_comp_atom.atom_id'
+     save_
+
+save__ma_angle_restraints.lower_limit
+    _item_description.description
+;     The lower limit of the angle threshold.
+;
+    _item.name                    '_ma_angle_restraints.lower_limit'
+    _item.category_id             ma_angle_restraints
+    _item.mandatory_code          no
+    _item_type.code               float
+    _item_units.code              degrees
+     save_
+
+save__ma_angle_restraints.upper_limit
+    _item_description.description
+;     The upper limit of the angle threshold.
+;   
+    _item.name                    '_ma_angle_restraints.upper_limit'
+    _item.category_id             ma_angle_restraints
+    _item.mandatory_code          no
+    _item_type.code               float
+    _item_units.code              degrees
+     save_
+
+save__ma_angle_restraints.lower_limit_esd
+    _item_description.description
+;     The estimated standard deviation of the lower limit applied to this angle restraint.
+;
+    _item.name                  '_ma_angle_restraints.lower_limit_esd'
+    _item.category_id             ma_angle_restraints
+    _item.mandatory_code          no
+    _item_type.code               float
+    _item_units.code              angstroms
+     save_
+
+save__ma_angle_restraints.upper_limit_esd
+    _item_description.description
+;     The estimated standard deviation of the upper limit applied to this angle restraint.
+;
+    _item.name                  '_ma_angle_restraints.upper_limit_esd'
+    _item.category_id             ma_angle_restraints
+    _item.mandatory_code          no
+    _item_type.code               float
+    _item_units.code              angstroms
+     save_
+
+save__ma_angle_restraints.probability
+    _item_description.description
+;      The real number that indicates the probability that the angle restraint
+       is correct. This number should fall between 0.0 and 1.0.
+;
+    _item.name                  '_ma_angle_restraints.probability'
+    _item.category_id             ma_angle_restraints
+    _item.mandatory_code          no
+    _item_type.code               float
+    loop_
+    _item_range.minimum
+    _item_range.maximum
+        0.0   0.0
+        0.0   1.0
+        1.0   1.0
+     save_
+
+save__ma_angle_restraints.restraint_type
+    _item_description.description
+;     The type of restraint applied. 
+;
+    _item.name                    '_ma_angle_restraints.restraint_type'
+    _item.category_id             ma_angle_restraints
+    _item.mandatory_code          yes
+    _item_type.code               line
+    loop_
+    _item_enumeration.value
+     'lower bound'
+     'upper bound'
+     'upper and lower bound'
+     save_
+
+save__ma_angle_restraints.name
+    _item_description.description
+;     The angle name, if applicable.
+;   
+    _item.name                    '_ma_angle_restraints.name'
+    _item.category_id             ma_angle_restraints
+    _item.mandatory_code          no
+    _item_type.code               code
+     save_
+     
+############################
+## MA_DIHEDRAL_RESTRAINTS ##
+############################
+
+save_ma_dihedral_restraints
+    _category.description
+;              Data items in the MA_DIHEDRAL_RESTRAINTS category captures the
+               details of dihedral restraints between atoms. A dihedral is spanned
+               sequentially from atom one to atom four.
+;
+    _category.id                  ma_dihedral_restraints
+    _category.mandatory_code      no
+     loop_
+    _category_key.name          '_ma_dihedral_restraints.ordinal_id'
+
+    loop_
+    _category_group.id           'inclusive_group'
+                                 'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 - 
+;
+;
+        loop_
+        _ma_dihedral_restraints.ordinal_id
+        _ma_dihedral_restraints.restraint_id
+        _ma_dihedral_restraints.entity_id_1
+        _ma_dihedral_restraints.asym_id_1
+        _ma_dihedral_restraints.seq_id_1
+        _ma_dihedral_restraints.comp_id_1
+        _ma_dihedral_restraints.atom_id_1
+        _ma_dihedral_restraints.entity_id_2
+        _ma_dihedral_restraints.asym_id_2
+        _ma_dihedral_restraints.seq_id_2
+        _ma_dihedral_restraints.comp_id_2
+        _ma_dihedral_restraints.atom_id_2
+        _ma_dihedral_restraints.entity_id_3
+        _ma_dihedral_restraints.asym_id_3
+        _ma_dihedral_restraints.seq_id_3
+        _ma_dihedral_restraints.comp_id_3
+        _ma_dihedral_restraints.atom_id_3
+        _ma_dihedral_restraints.entity_id_4
+        _ma_dihedral_restraints.asym_id_4
+        _ma_dihedral_restraints.seq_id_4
+        _ma_dihedral_restraints.comp_id_4
+        _ma_dihedral_restraints.atom_id_4
+        _ma_dihedral_restraints.lower_limit
+        _ma_dihedral_restraints.upper_limit
+        _ma_dihedral_restraints.restraint_type
+        _ma_dihedral_restraints.name
+        1  2  1 A 21 ALA N  1 A 21 ALA CA  1 A 21 ALA  C  1 A 22 THR N  -60.0 -40.0  'upper and lower bound' PSI
+        2  2  1 A 21 ALA C  1 A 22 THR  N  1 A 22 THR CA  1 A 22 THR C  -60.0 -40.0  'upper and lower bound' PHI
+        3  2  1 A 23 LYS C  1 A 24 ASP  N  1 A 24 ASP CA  1 A 24 ASP C  -60.0 -40.0  'upper and lower bound' PHI
+        4  2  1 A 24 ASP N  1 A 24 ASP CA  1 A 24 ASP  C  1 A 25 HIS N   90.0 120.0  'upper and lower bound' PSI
+        5  2  1 A 15 GLY C  1 A 16 ASN  N  1 A 16 ASN CA  1 A 16 ASN C  -60.0 -40.0  'upper and lower bound' PHI
+        6  2  1 A 16 ASN N  1 A 16 ASN CA  1 A 16 ASN  C  1 A 17 CYS N   90.0 120.0  'upper and lower bound' PSI
+        7  2  1 A 16 ASN N  1 A 16 ASN CA  1 A 16 ASN  C  1 A 17 CYS N  140.0 170.0  'upper and lower bound' PSI
+        # ...  abbreviated ...
+;
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_dihedral_restraints
+     save_
+
+save__ma_dihedral_restraints.ordinal_id
+    _item_description.description
+;     A unique identifier for the dihedral restraint record.
+;
+    _item.name                  '_ma_dihedral_restraints.ordinal_id'
+    _item.category_id             ma_dihedral_restraints
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_dihedral_restraints.restraint_id
+    _item_description.description
+;     An identifier pointing to the _ma_restraints.restraint_id in the MA_RESTRAINTS category.
+;
+    _item.name                  '_ma_dihedral_restraints.restraint_id'
+    _item.category_id             ma_dihedral_restraints
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_dihedral_restraints.restraint_id'
+    _item_linked.parent_name    '_ma_restraints.restraint_id'
+     save_
+
+save__ma_dihedral_restraints.entity_id_1
+    _item_description.description
+;     The entity identifier for the first partner in the dihedral restraint. 
+      This data item is a pointer to _entity_poly_seq.entity_id in the ENTITY_POLY_SEQ category. 
+;
+    _item.name                    '_ma_dihedral_restraints.entity_id_1'
+    _item.category_id             ma_dihedral_restraints
+    _item.mandatory_code          yes
+    _item_type.code               code
+    _item_linked.child_name       '_ma_dihedral_restraints.entity_id_1'
+    _item_linked.parent_name      '_entity_poly_seq.entity_id'
+     save_
+
+save__ma_dihedral_restraints.entity_id_2
+    _item_description.description
+;     The entity identifier for the second partner in the dihedral restraint. 
+      This data item is a pointer to _entity_poly_seq.entity_id in the ENTITY_POLY_SEQ category. 
+;
+    _item.name                    '_ma_dihedral_restraints.entity_id_2'
+    _item.category_id             ma_dihedral_restraints
+    _item.mandatory_code          yes
+    _item_type.code               code
+    _item_linked.child_name       '_ma_dihedral_restraints.entity_id_2'
+    _item_linked.parent_name      '_entity_poly_seq.entity_id'
+     save_
+
+save__ma_dihedral_restraints.entity_id_3
+    _item_description.description
+;     The entity identifier for the third partner in the dihedral restraint.
+      This data item is a pointer to _entity_poly_seq.entity_id in the ENTITY_POLY_SEQ category.
+;
+    _item.name                    '_ma_dihedral_restraints.entity_id_3'
+    _item.category_id             ma_dihedral_restraints
+    _item.mandatory_code          yes
+    _item_type.code               code
+    _item_linked.child_name       '_ma_dihedral_restraints.entity_id_3'
+    _item_linked.parent_name      '_entity_poly_seq.entity_id'
+     save_
+
+save__ma_dihedral_restraints.entity_id_4
+    _item_description.description
+;     The entity identifier for the fourth partner in the dihedral restraint.
+      This data item is a pointer to _entity_poly_seq.entity_id in the ENTITY_POLY_SEQ category.
+;
+    _item.name                    '_ma_dihedral_restraints.entity_id_4'
+    _item.category_id             ma_dihedral_restraints
+    _item.mandatory_code          yes
+    _item_type.code               code
+    _item_linked.child_name       '_ma_dihedral_restraints.entity_id_4'
+    _item_linked.parent_name      '_entity_poly_seq.entity_id'
+     save_
+
+save__ma_dihedral_restraints.asym_id_1
+    _item_description.description
+;              An asym/strand identifier for the first partner in the dihedral restraint. 
+               This data item is a pointer to _struct_asym.id in the
+               STRUCT_ASY category.
+;
+    _item.name                    '_ma_dihedral_restraints.asym_id_1'
+    _item.category_id             ma_dihedral_restraints
+    _item.mandatory_code          yes
+    _item_type.code               code
+    _item_linked.child_name       '_ma_dihedral_restraints.asym_id_1'
+    _item_linked.parent_name      '_struct_asym.id'
+     save_
+
+save__ma_dihedral_restraints.asym_id_2
+    _item_description.description
+;          An asym/strand identifier for the second partner in the dihedral restraint. 
+           This data item is a pointer to _struct_asym.id in the
+           STRUCT_ASY category.
+;
+    _item.name                    '_ma_dihedral_restraints.asym_id_2'
+    _item.category_id             ma_dihedral_restraints
+    _item.mandatory_code          yes
+    _item_type.code               code
+    _item_linked.child_name       '_ma_dihedral_restraints.asym_id_2'
+    _item_linked.parent_name      '_struct_asym.id'
+     save_
+
+save__ma_dihedral_restraints.asym_id_3
+    _item_description.description
+;          An asym/strand identifier for the third partner in the dihedral restraint.
+           This data item is a pointer to _struct_asym.id in the
+           STRUCT_ASY category.
+;
+    _item.name                    '_ma_dihedral_restraints.asym_id_3'
+    _item.category_id             ma_dihedral_restraints
+    _item.mandatory_code          yes
+    _item_type.code               code
+    _item_linked.child_name       '_ma_dihedral_restraints.asym_id_3'
+    _item_linked.parent_name      '_struct_asym.id'
+     save_
+
+save__ma_dihedral_restraints.asym_id_4
+    _item_description.description
+;          An asym/strand identifier for the fourth partner in the dihedral restraint.
+           This data item is a pointer to _struct_asym.id in the
+           STRUCT_ASY category.
+;
+    _item.name                    '_ma_dihedral_restraints.asym_id_4'
+    _item.category_id             ma_dihedral_restraints
+    _item.mandatory_code          yes
+    _item_type.code               code
+    _item_linked.child_name       '_ma_dihedral_restraints.asym_id_4'
+    _item_linked.parent_name      '_struct_asym.id'
+     save_
+
+save__ma_dihedral_restraints.comp_id_1
+    _item_description.description
+;     The component identifier for the first partner in the dihedral restraint.
+      This data item is a pointer to _entity_poly_seq.mon_id in the ENTITY_POLY_SEQ category.
+;
+    _item.name                    '_ma_dihedral_restraints.comp_id_1'
+    _item.category_id             ma_dihedral_restraints
+    _item.mandatory_code          yes
+    _item_type.code               ucode
+    _item_linked.child_name       '_ma_dihedral_restraints.comp_id_1'
+    _item_linked.parent_name      '_entity_poly_seq.mon_id'
+     save_
+
+save__ma_dihedral_restraints.comp_id_2
+    _item_description.description
+;     The component identifier for the second partner in the dihedral restraint.
+      This data item is a pointer to _entity_poly_seq.mon_id in the ENTITY_POLY_SEQ category.
+;
+    _item.name                    '_ma_dihedral_restraints.comp_id_2'
+    _item.category_id             ma_dihedral_restraints
+    _item.mandatory_code          yes
+    _item_type.code               ucode
+    _item_linked.child_name       '_ma_dihedral_restraints.comp_id_2'
+    _item_linked.parent_name      '_entity_poly_seq.mon_id'
+     save_
+
+save__ma_dihedral_restraints.comp_id_3
+    _item_description.description
+;     The component identifier for the third partner in the dihedral restraint.
+      This data item is a pointer to _entity_poly_seq.mon_id in the ENTITY_POLY_SEQ category.
+;
+    _item.name                    '_ma_dihedral_restraints.comp_id_3'
+    _item.category_id             ma_dihedral_restraints
+    _item.mandatory_code          yes
+    _item_type.code               ucode
+    _item_linked.child_name       '_ma_dihedral_restraints.comp_id_3'
+    _item_linked.parent_name      '_entity_poly_seq.mon_id'
+     save_
+
+save__ma_dihedral_restraints.comp_id_4
+    _item_description.description
+;     The component identifier for the fourth partner in the dihedral restraint.
+      This data item is a pointer to _entity_poly_seq.mon_id in the ENTITY_POLY_SEQ category.
+;
+    _item.name                    '_ma_dihedral_restraints.comp_id_4'
+    _item.category_id             ma_dihedral_restraints
+    _item.mandatory_code          yes
+    _item_type.code               ucode
+    _item_linked.child_name       '_ma_dihedral_restraints.comp_id_4'
+    _item_linked.parent_name      '_entity_poly_seq.mon_id'
+     save_
+
+save__ma_dihedral_restraints.seq_id_1
+    _item_description.description
+;     The sequence index for the first partner in the dihedral restraint.
+      This data item is a pointer to _entity_poly_seq.num in the ENTITY_POLY_SEQ category.
+;
+    _item.name                    '_ma_dihedral_restraints.seq_id_1'
+    _item.category_id             ma_dihedral_restraints
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name       '_ma_dihedral_restraints.seq_id_1'
+    _item_linked.parent_name      '_entity_poly_seq.num'
+     save_
+
+save__ma_dihedral_restraints.seq_id_2
+    _item_description.description
+;     The sequence index for the second partner in the dihedral restraint. 
+      This data item is a pointer to _entity_poly_seq.num in the ENTITY_POLY_SEQ category.
+;
+    _item.name                    '_ma_dihedral_restraints.seq_id_2'
+    _item.category_id             ma_dihedral_restraints
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name       '_ma_dihedral_restraints.seq_id_2'
+    _item_linked.parent_name      '_entity_poly_seq.num'
+     save_
+
+save__ma_dihedral_restraints.seq_id_3
+    _item_description.description
+;     The sequence index for the third partner in the dihedral restraint.
+      This data item is a pointer to _entity_poly_seq.num in the ENTITY_POLY_SEQ category.
+;
+    _item.name                    '_ma_dihedral_restraints.seq_id_3'
+    _item.category_id             ma_dihedral_restraints
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name       '_ma_dihedral_restraints.seq_id_3'
+    _item_linked.parent_name      '_entity_poly_seq.num'
+     save_
+
+save__ma_dihedral_restraints.seq_id_4
+    _item_description.description
+;     The sequence index for the fourth partner in the dihedral restraint.
+      This data item is a pointer to _entity_poly_seq.num in the ENTITY_POLY_SEQ category.
+;
+    _item.name                    '_ma_dihedral_restraints.seq_id_4'
+    _item.category_id             ma_dihedral_restraints
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name       '_ma_dihedral_restraints.seq_id_4'
+    _item_linked.parent_name      '_entity_poly_seq.num'
+     save_
+
+save__ma_dihedral_restraints.atom_id_1
+    _item_description.description
+;     Atom identifier for the first partner in the dihedral restraint. 
+      This data item is a pointer to _chem_comp_atom.atom_id in the
+      CHEM_COMP_ATOM category.
+;
+    _item.name                    '_ma_dihedral_restraints.atom_id_1'
+    _item.category_id             ma_dihedral_restraints
+    _item.mandatory_code          yes
+    _item_type.code               atcode
+    _item_linked.child_name       '_ma_dihedral_restraints.atom_id_1'
+    _item_linked.parent_name      '_chem_comp_atom.atom_id'
+     save_
+
+save__ma_dihedral_restraints.atom_id_2
+    _item_description.description
+;     Atom identifier for the second partner in the dihedral restraint. 
+      This data item is a pointer to _chem_comp_atom.atom_id in the
+      CHEM_COMP_ATOM category.
+;
+    _item.name                    '_ma_dihedral_restraints.atom_id_2'
+    _item.category_id             ma_dihedral_restraints
+    _item.mandatory_code          yes
+    _item_type.code               atcode
+    _item_linked.child_name       '_ma_dihedral_restraints.atom_id_2'
+    _item_linked.parent_name      '_chem_comp_atom.atom_id'
+     save_
+
+save__ma_dihedral_restraints.atom_id_3
+    _item_description.description
+;     Atom identifier for the third partner in the dihedral restraint.
+      This data item is a pointer to _chem_comp_atom.atom_id in the
+      CHEM_COMP_ATOM category.
+;
+    _item.name                    '_ma_dihedral_restraints.atom_id_3'
+    _item.category_id             ma_dihedral_restraints
+    _item.mandatory_code          yes
+    _item_type.code               atcode
+    _item_linked.child_name       '_ma_dihedral_restraints.atom_id_3'
+    _item_linked.parent_name      '_chem_comp_atom.atom_id'
+     save_
+
+save__ma_dihedral_restraints.atom_id_4
+    _item_description.description
+;     Atom identifier for the fourth partner in the dihedral restraint.
+      This data item is a pointer to _chem_comp_atom.atom_id in the
+      CHEM_COMP_ATOM category.
+;
+    _item.name                    '_ma_dihedral_restraints.atom_id_4'
+    _item.category_id             ma_dihedral_restraints
+    _item.mandatory_code          yes
+    _item_type.code               atcode
+    _item_linked.child_name       '_ma_dihedral_restraints.atom_id_4'
+    _item_linked.parent_name      '_chem_comp_atom.atom_id'
+     save_
+
+save__ma_dihedral_restraints.uncertainty
+    _item_description.description
+;     The uncertainty to the dihedral threshold.
+;
+    _item.name                    '_ma_dihedral_restraints.uncertainty'
+    _item.category_id             ma_dihedral_restraints
+    _item.mandatory_code          no
+    _item_type.code               float
+    _item_units.code              degrees
+     save_
+
+save__ma_dihedral_restraints.lower_limit
+    _item_description.description
+;     The lower limit of the dihedral threshold.
+;
+    _item.name                    '_ma_dihedral_restraints.lower_limit'
+    _item.category_id             ma_dihedral_restraints
+    _item.mandatory_code          no
+    _item_type.code               float
+    _item_units.code              degrees
+     save_
+
+save__ma_dihedral_restraints.upper_limit
+    _item_description.description
+;     The upper limit of the dihedral threshold.
+;   
+    _item.name                    '_ma_dihedral_restraints.upper_limit'
+    _item.category_id             ma_dihedral_restraints
+    _item.mandatory_code          no
+    _item_type.code               float
+    _item_units.code              degrees
+     save_
+
+save__ma_dihedral_restraints.lower_limit_esd
+    _item_description.description
+;     The estimated standard deviation of the lower limit applied to this dihedral restraint.
+;
+    _item.name                  '_ma_dihedral_restraints.lower_limit_esd'
+    _item.category_id             ma_dihedral_restraints
+    _item.mandatory_code          no   
+    _item_type.code               float
+    _item_units.code              angstroms
+     save_
+
+save__ma_dihedral_restraints.upper_limit_esd
+    _item_description.description
+;     The estimated standard deviation of the upper limit applied to this dihedral restraint.
+;
+    _item.name                  '_ma_dihedral_restraints.upper_limit_esd'
+    _item.category_id             ma_dihedral_restraints
+    _item.mandatory_code          no   
+    _item_type.code               float
+    _item_units.code              angstroms
+     save_
+
+save__ma_dihedral_restraints.probability
+    _item_description.description
+;      The real number that indicates the probability that the dihedral restraint
+       is correct. This number should fall between 0.0 and 1.0. 
+;
+    _item.name                  '_ma_dihedral_restraints.probability'
+    _item.category_id             ma_dihedral_restraints
+    _item.mandatory_code          no   
+    _item_type.code               float
+    loop_
+    _item_range.minimum
+    _item_range.maximum
+        0.0   0.0  
+        0.0   1.0  
+        1.0   1.0  
+     save_
+
+save__ma_dihedral_restraints.restraint_type
+    _item_description.description
+;     The type of restraint applied. 
+;
+    _item.name                    '_ma_dihedral_restraints.restraint_type'
+    _item.category_id             ma_dihedral_restraints
+    _item.mandatory_code          yes
+    _item_type.code               line
+    loop_
+    _item_enumeration.value
+     'lower bound'
+     'upper bound'
+     'upper and lower bound'
+     save_
+
+save__ma_dihedral_restraints.name
+    _item_description.description
+;     The dihedral angle name, if applicable.
+;   
+    _item.name                    '_ma_dihedral_restraints.name'
+    _item.category_id             ma_dihedral_restraints
+    _item.mandatory_code          no
+    _item_type.code               code
+    loop_
+    _item_examples.case
+    'PHI'
+    'PSI'
+     save_
+     
+##############################
+## MA_RESTRAINTS_GROUP      ##
+##############################
+
+save_ma_restraints_group
+    _category.description
+;              Data items in the MA_RESTRAINTS_GROUP category captures the
+               details of groups of restraints used in the modeling. 
+;
+    _category.id                  ma_restraints_group
+    _category.mandatory_code      yes
+     loop_
+    _category_key.name          '_ma_restraints_group.ordinal_id'
+
+    loop_
+    _category_group.id           'inclusive_group'
+                                 'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 - 
+;
+;
+        loop_
+        _ma_restraints_group.ordinal_id
+        _ma_restraints_group.group_id
+        _ma_restraints_group.restraint_id
+        0 1 2
+        1 1 3
+        2 1 4
+        3 2 3 
+        4 2 4
+        5 2 5 
+       # ...  abbreviated ...
+;
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_restraints_group
+     save_
+
+save__ma_restraints_group.ordinal_id
+    _item_description.description
+;    A unique identifier for a group of restraints.
+;
+    _item.name                  '_ma_restraints_group.ordinal_id'
+    _item.category_id             ma_restraints_group
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_restraints_group.group_id
+    _item_description.description
+;    An identifier for the group entry.
+;
+    _item.name                  '_ma_restraints_group.group_id'
+    _item.category_id             ma_restraints_group
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_restraints_group.restraint_id
+    _item_description.description
+;    The identifier for the set of restraints. 
+     This data item is a pointer to _ma_restraints.restraint_id
+     in the MA_RESTRAINTS category. 
+;
+    _item.name                  '_ma_restraints_group.restraint_id'
+    _item.category_id             ma_restraints_group
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_restraints_group.restraint_id'
+    _item_linked.parent_name    '_ma_restraints.restraint_id'    
+     save_
+
+##############################
+## MA_PROTOCOL_STEP         ##
+##############################
+
+save_ma_protocol_step
+    _category.description
+;              Data items in the MA_PROTOCOL_STEP category captures the
+               details of the modeling protocol and individial steps 
+               within each protocol. 
+;
+    _category.id                  ma_protocol_step
+    _category.mandatory_code      yes
+     loop_
+    _category_key.name          '_ma_protocol_step.ordinal_id'
+
+    loop_
+    _category_group.id           'inclusive_group'
+                                 'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 -
+;
+;
+  loop_
+  _ma_protocol_step.ordinal_id
+  _ma_protocol_step.protocol_id
+  _ma_protocol_step.step_id
+  _ma_protocol_step.method_type
+  _ma_protocol_step.step_name
+  _ma_protocol_step.software_id
+  _ma_protocol_step.input_data_group_id
+  _ma_protocol_step.output_data_group_id
+
+   0 0 0 "template search" . 2   1  5
+   1 0 1 "template search" . 2   2  6
+   2 0 2 "template search" . 2   3  7
+   3 0 3 "template search" . 2   4  8
+   4 1 0 "template selection" . 2  5  9
+   5 1 1 "template selection" . 2  6 10
+   6 1 2 "template selection" . 2  7 11
+   7 1 3 "template selection" . 2  8 12
+   8 2 0 "modeling" . 2   13   14
+   9 3 0 "model selection" . 2   14  15
+  # ... abbreviated ... #
+;
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_protocol_step
+     save_
+   
+save__ma_protocol_step.ordinal_id 
+    _item_description.description
+;   This is a counter keeping track of the protocol steps.
+;
+    _item.name                  '_ma_protocol_step.ordinal_id'
+    _item.category_id             ma_protocol_step
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_protocol_step.protocol_id
+    _item_description.description
+;   Unique identifier for the protocol.
+    This data item is a pointer to _ma_model_list.protocol_id in the
+    MA_MODEL_LIST category. 
+;
+    _item.name                  '_ma_protocol_step.protocol_id'
+    _item.category_id             ma_protocol_step
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_protocol_step.protocol_id'
+    _item_linked.parent_name    '_ma_model_list.protocol_id'
+     save_
+
+save__ma_protocol_step.step_id
+    _item_description.description
+;   Unique identifier for the protocol step. 
+;
+    _item.name                  '_ma_protocol_step.step_id'
+    _item.category_id             ma_protocol_step
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+   
+save__ma_protocol_step.method_type
+    _item_description.description
+;   The method type that was applied in this protocol step.
+;
+    _item.name                  '_ma_protocol_step.method_type'
+    _item.category_id             ma_protocol_step
+    _item.mandatory_code          yes
+    _item_type.code               line
+    loop_
+    _item_enumeration.value
+    'template search'
+    'template selection'
+    'target-template alignment'
+    'coevolution MSA'
+    'contact prediction'
+    'modeling'
+    'model selection'
+    'model refinement'
+    'other'
+     save_
+
+save__ma_protocol_step.method_type_other_details
+    _item_description.description
+;   Details for other method type.
+;
+    _item.name                  '_ma_protocol_step.method_type_other_details'
+    _item.category_id             ma_protocol_step
+    _item.mandatory_code          no
+    _item_type.code               text
+     save_
+
+save__ma_protocol_step.step_name
+    _item_description.description
+;   A name for the protocol step.
+;
+    _item.name                  '_ma_protocol_step.step_name'
+    _item.category_id             ma_protocol_step
+    _item.mandatory_code          no
+    _item_type.code               line
+     save_
+
+save__ma_protocol_step.software_id 
+    _item_description.description
+;   Identifier to the software used when applying the protocol step.
+    This data item is a pointer to the _software.pdbx_ordinal in the
+    SOFTWARE category.
+;
+    _item.name                  '_ma_protocol_step.software_id'
+    _item.category_id             ma_protocol_step
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name       '_ma_protocol_step.software_id'
+    _item_linked.parent_name      '_software.pdbx_ordinal'
+     save_
+
+save__ma_protocol_step.software_parameter_group_id
+    _item_description.description
+;   Identifier that denotes a set of parameters used with the software 
+    in the protocol step.
+    This data item is a pointer to _ma_software_parameter.group_id
+    in the MA_SOFTWARE_PARAMETER category. 
+;
+    _item.name                  '_ma_protocol_step.software_parameter_group_id'
+    _item.category_id             ma_protocol_step
+    _item.mandatory_code          no
+    _item_type.code               int
+    _item_linked.child_name     '_ma_protocol_step.software_parameter_group_id'
+    _item_linked.parent_name    '_ma_software_parameter.group_id'
+     save_
+
+save__ma_protocol_step.input_data_group_id
+    _item_description.description
+;   Identifier to the input data group id. 
+    This data item is a pointer to _ma_data_group.group_id in the 
+    MA_DATA_GROUP category.
+;
+    _item.name                  '_ma_protocol_step.input_data_group_id'
+    _item.category_id             ma_protocol_step
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name       '_ma_protocol_step.input_data_group_id'
+    _item_linked.parent_name      '_ma_data_group.group_id'
+     save_
+
+save__ma_protocol_step.output_data_group_id
+    _item_description.description
+;   Identifier to the output data group_id. 
+    This data item is a pointer to _ma_data_group.group_id in the 
+    MA_DATA_GROUP category.
+;
+    _item.name                  '_ma_protocol_step.output_data_group_id'
+    _item.category_id             ma_protocol_step
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name       '_ma_protocol_step.output_data_group_id'
+    _item_linked.parent_name      '_ma_data_group.group_id'
+     save_
+ 
+###########################
+## MA_SOFTWARE_PARAMETER ##
+###########################
+
+save_ma_software_parameter
+    _category.description
+;              Data items in the MA_SOFTWARE_PARAMETER category record the
+               details of the software parameters used in the modeling 
+               protocol steps.
+;
+    _category.id                  ma_software_parameter
+    _category.mandatory_code      no
+     loop_
+    _category_key.name          '_ma_software_parameter.parameter_id'
+
+    loop_
+    _category_group.id           'inclusive_group'
+                                 'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 -
+;
+;
+    loop_
+    _ma_software_parameter.parameter_id
+    _ma_software_parameter.group_id
+    _ma_software_parameter.type
+    _ma_software_parameter.name
+    _ma_software_parameter.value
+    1 1 integer "maximum gap size" 12
+    2 1 float   "gap opening penalty" 3.5
+    3 1 string  "modified residue translation" "MSE-MET"
+    4 1 boolean "iterative sequence search" yes
+
+   # ...  abbreviated ... 
+;
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_software_parameter
+     save_
+
+save__ma_software_parameter.parameter_id
+    _item_description.description
+;     A unique identifier for the parameter.
+;
+    _item.name                  '_ma_software_parameter.parameter_id'
+    _item.category_id             ma_software_parameter
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_software_parameter.group_id
+    _item_description.description
+;     An identifier to denote the set of parameters used by the software 
+      in the modeling protocol step. 
+      
+;
+    _item.name                  '_ma_software_parameter.group_id'
+    _item.category_id             ma_software_parameter
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_software_parameter.name
+    _item_description.description
+;     The name of the parameter as used in the software.
+;
+    _item.name                  '_ma_software_parameter.name'
+    _item.category_id             ma_software_parameter
+    _item.mandatory_code          yes
+    _item_type.code               line
+    loop_
+    _item_examples.case
+    'Maximum gap size'
+    'Gap opening penalty'
+     save_
+
+save__ma_software_parameter.value
+    _item_description.description
+;     The value of the parameter. 
+;
+    _item.name                  '_ma_software_parameter.value'
+    _item.category_id             ma_software_parameter
+    _item.mandatory_code          yes
+    _item_type.code               line
+     save_
+
+save__ma_software_parameter.type
+    _item_description.description
+;     The type of parameter. 
+;
+    _item.name                  '_ma_software_parameter.type'
+    _item.category_id             ma_software_parameter
+    _item.mandatory_code          yes
+    _item_type.code               code
+    loop_
+    _item_enumeration.value
+    'integer'    
+    'float'   
+    'string'
+    'boolean'             
+     save_
+
+###############
+## ATOM_SITE ##
+###############
+
+save__atom_site.ma_local_model_quality_score
+    _item_description.description
+;     The local model quality score for the atom. 
+;
+    _item.name                  '_atom_site.ma_local_model_quality_score'
+    _item.category_id             atom_site
+    _item.mandatory_code          no
+    _item_type.code               float
+     save_
+
+#########################
+## PDBX_ENTITY_NONPOLY ##
+#########################
+
+save__pdbx_entity_nonpoly.ma_model_mode
+    _item_description.description
+;     The data item provides information on whether the non-polymeric entity
+      was explicity modeled or implicitly derived from the template. 
+;
+    _item.name                  '_pdbx_entity_nonpoly.ma_model_mode'
+    _item.category_id             pdbx_entity_nonpoly
+    _item.mandatory_code          yes
+    _item_type.code               code
+    loop_
+    _item_enumeration.value
+    'explicit'
+    'implicit'
+     save_
+
