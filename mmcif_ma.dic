@@ -86,13 +86,13 @@ data_mmcif_ma.dic
   + Added MA_ALIGNMENT_INFO, MA_TARGET_ENTITY_INSTANCE
   + Revised MA_TEMPLATE_DETAILS, MA_TARGET_TEMPLATE_POLY_MAPPING, MA_ALIGNMENT_DETAILS
 ;
-;
   1.2.1   2018-07-18
 ;
   Changes (jh/bv/jw/gt/sb)
   + Added MA_POLY_TEMPLATE_LIBRARY_DETAILS, MA_POLY_TEMPLATE_LIBRARY_LIST
   + Added MA_POLY_TEMPLATE_LIBRARY_COMPONENTS
   + Updated _item_sub_category.id for matrices and vectors
+  + Updated MA_SOFTWARE_PARAMETERS
 ;
 
 #########################
@@ -4622,13 +4622,13 @@ save_ma_software_parameter
     loop_
     _ma_software_parameter.parameter_id
     _ma_software_parameter.group_id
-    _ma_software_parameter.type
+    _ma_software_parameter.data_type
     _ma_software_parameter.name
     _ma_software_parameter.value
     1 1 integer "maximum gap size" 12
     2 1 float   "gap opening penalty" 3.5
     3 1 string  "modified residue translation" "MSE-MET"
-    4 1 boolean "iterative sequence search" yes
+    4 1 boolean "iterative sequence search" true
 
    # ...  abbreviated ... 
 ;
@@ -4683,11 +4683,11 @@ save__ma_software_parameter.value
     _item_type.code               line
      save_
 
-save__ma_software_parameter.type
+save__ma_software_parameter.data_type
     _item_description.description
-;     The type of parameter. 
+;     The data type of the parameter. 
 ;
-    _item.name                  '_ma_software_parameter.type'
+    _item.name                  '_ma_software_parameter.data_type'
     _item.category_id             ma_software_parameter
     _item.mandatory_code          yes
     _item_type.code               code
@@ -4696,7 +4696,18 @@ save__ma_software_parameter.type
     'integer'    
     'float'   
     'string'
-    'boolean'             
+    'boolean' 
+    'other'            
+     save_
+
+save__ma_software_parameter.data_type_other_details
+    _item_description.description
+;     Details of other data types of software parameters.
+;
+    _item.name                  '_ma_software_parameter.data_type_other_details'
+    _item.category_id             ma_software_parameter
+    _item.mandatory_code          no
+    _item_type.code               text
      save_
 
 ######################################
@@ -4728,7 +4739,7 @@ save_ma_poly_template_library_details
     _ma_poly_template_library_details.data_id
     _ma_poly_template_library_details.software_id
     _ma_poly_template_library_details.software_parameter_group_id
-    _ma_poly_template_library_details.fragment_library_flag
+    _ma_poly_template_library_details.customized_fragment_library_flag
     _ma_poly_template_library_details.description
     1 . . . . . . 
     # ...  abbreviated ...
@@ -4763,12 +4774,12 @@ save__ma_poly_template_library_details.target_entity_id
     _item_linked.parent_name    '_ma_target_entity.entity_id'
      save_
 
-save__ma_poly_template_library_details.fragment_library_flag
+save__ma_poly_template_library_details.customized_fragment_library_flag
     _item_description.description
 ;    A flag that indicates whether the template library is used as a
      customized fragment library in a fragment assembly modeling method. 
 ;
-    _item.name                  '_ma_poly_template_library_details.fragment_library_flag'
+    _item.name                  '_ma_poly_template_library_details.customized_fragment_library_flag'
     _item.category_id             ma_poly_template_library_details
     _item.mandatory_code          yes
     _item_type.code               code
