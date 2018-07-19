@@ -46,10 +46,9 @@ _ma_coevolution_msa_details.target_sequence
 ;MWKTLHQLAIPPRLYQICGWFIPWLAIASVVVLTVGWIWGFGFAPADYQQGNSYRIIYLHVPAAIWSMGIYASMAVAAFIGLVWQMKMANLAVAAMAPIGAVFTFIALVTGSAWGKPMWGTWWVWDARLTSELVLLFLYVGVIALWHAFDDRRLAGRAAGILVLIGVVNLPIIHYSVEWWNTLHQGSTRMQQSIDPAMRSPLRWSIFGFLLLSATLTLMRMRNLILLMEKRRPWVSELILKRGRK
 ;
 _ma_coevolution_msa_details.data_id 2
-_ma_coevolution_msa_details.software_id ?
+_ma_coevolution_msa_details.software_group_id ?
 _ma_coevolution_msa_details.seq_clust_db UniRef90
 _ma_coevolution_msa_details.seq_clust_db_version 2015-02-02
-_ma_coevolution_msa_details.software_parameter_group_id ?
 ##
 loop_
 _ma_coevolution_seq_db_ref.seq_id
@@ -143,7 +142,7 @@ _ma_protocol_step.protocol_id
 _ma_protocol_step.step_id
 _ma_protocol_step.method_type
 _ma_protocol_step.step_name
-_ma_protocol_step.software_id
+_ma_protocol_step.software_group_id
 _ma_protocol_step.input_data_group_id
 _ma_protocol_step.output_data_group_id
 1 1 1 'coevolution MSA' . ? 1 2

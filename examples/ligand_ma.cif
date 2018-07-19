@@ -179,7 +179,7 @@ _ma_model_list.model_type 'Homology model'
 ##
 _ma_alignment_info.alignment_id
 _ma_alignment_info.data_id
-_ma_alignment_info.software_id
+_ma_alignment_info.software_group_id
 _ma_alignment_info.alignment_length
 _ma_alignment_info.alignment_type
 1 7 ? 141 "target-template pairwise alignment" 
@@ -282,7 +282,7 @@ _ma_protocol_step.protocol_id
 _ma_protocol_step.step_id
 _ma_protocol_step.method_type
 _ma_protocol_step.step_name
-_ma_protocol_step.software_id
+_ma_protocol_step.software_group_id
 _ma_protocol_step.input_data_group_id
 _ma_protocol_step.output_data_group_id
 1 1 1 'template search' ? 1 ?
