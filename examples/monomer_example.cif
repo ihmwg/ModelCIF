@@ -159,7 +159,7 @@ _ma_poly_template_library_details.customized_fragment_library_flag no
 _ma_poly_template_library_details.description .
 ##
 loop_
-_ma_poly_template_library_list.id
+_ma_poly_template_library_list.template_id
 _ma_poly_template_library_list.db_name
 _ma_poly_template_library_list.db_accession_code
 _ma_poly_template_library_list.asym_id
