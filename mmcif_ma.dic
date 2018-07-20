@@ -2,7 +2,7 @@
 ## MODELING EXTENSION DICTIONARY ##
 ###################################
 
-# Version 1.2.2 19th July 2018
+# Version 1.2.3 20th July 2018
 
 data_mmcif_ma.dic
 
@@ -19,7 +19,7 @@ data_mmcif_ma.dic
 
     _dictionary.title           mmcif_ma.dic
     _dictionary.datablock_id    mmcif_ma.dic
-    _dictionary.version         1.2.2
+    _dictionary.version         1.2.3
 #
      loop_
     _dictionary_history.version
@@ -96,6 +96,11 @@ data_mmcif_ma.dic
   Changes (jh/bv/jw/gt/sb)
   + Added MA_QA_METRIC, MA_QA_METRIC_GLOBAL, MA_QA_METRIC_LOCAL
   + Added MA_SOFTWARE_GROUP
+;
+  1.2.3   2018-07-20
+;
+  Changes (jh/bv/jw/gt/sb)
+  + Updated MA_POLY_TEMPLATE_LIBRARY_LIST, MA_POLY_TEMPLATE_LIBRARY_COMPONENTS
 ;
 
 #########################
@@ -4898,7 +4903,7 @@ save_ma_poly_template_library_list
 ;
     _category.id                  ma_poly_template_library_list
     _category.mandatory_code      no
-    _category_key.name            '_ma_poly_template_library_list.id'
+    _category_key.name            '_ma_poly_template_library_list.template_id'
     loop_
     _category_group.id            'inclusive_group'
                                   'ma_group'
@@ -4911,7 +4916,7 @@ save_ma_poly_template_library_list
 ;
 ;
     loop_
-    _ma_poly_template_library_list.id
+    _ma_poly_template_library_list.template_id
     _ma_poly_template_library_list.db_name
     _ma_poly_template_library_list.db_accession_code
     _ma_poly_template_library_list.asym_id
@@ -4928,11 +4933,11 @@ save_ma_poly_template_library_list
    _pdbx_category_context.category_id  ma_poly_template_library_list
      save_
 
-save__ma_poly_template_library_list.id
+save__ma_poly_template_library_list.template_id
     _item_description.description
 ;     A unique identifier for the template. 
 ;
-    _item.name                  '_ma_poly_template_library_list.id'
+    _item.name                  '_ma_poly_template_library_list.template_id'
     _item.category_id             ma_poly_template_library_list
     _item.mandatory_code          yes
     _item_type.code               int
@@ -5075,15 +5080,15 @@ save__ma_poly_template_library_components.ordinal_id
 save__ma_poly_template_library_components.template_id
     _item_description.description
 ;     An identifier for the template in the template library. 
-      This data item is a pointer to _ma_poly_template_library_list.id
-      in the MA_POLY_TEMPLATE_LIBRARY_REF_DB_DETAILS category. 
+      This data item is a pointer to _ma_poly_template_library_list.template_id
+      in the MA_POLY_TEMPLATE_LIBRARY_LIST category. 
 ;
     _item.name                  '_ma_poly_template_library_components.template_id'
     _item.category_id             ma_poly_template_library_components
     _item.mandatory_code          yes
     _item_type.code               int
     _item_linked.child_name     '_ma_poly_template_library_components.template_id'
-    _item_linked.parent_name    '_ma_poly_template_library_list.id'
+    _item_linked.parent_name    '_ma_poly_template_library_list.template_id'
      save_
 
 save__ma_poly_template_library_components.library_id
