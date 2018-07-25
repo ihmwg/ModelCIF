@@ -126,7 +126,7 @@ _software.os_version
 1 SWISS-MODEL 2018-07 . package https://swissmodel.expasy.org/ "model building" ? Other CentOS 7
 2 HHBlits 2.5 . program https://github.com/soedinglab/hh-suite "sequence search" ? "C++" CentOS 7
 3 BLAST+ 2.4 . program https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download "sequence search" ? "C++" CentOS 7
-4 QMEAN 2.6 . program https://git.scicore.unibas.ch/schwede/QMEAN "quality assessment" Python CentOS 7
+4 QMEAN 2.6 . program https://git.scicore.unibas.ch/schwede/QMEAN "quality assessment" ? Python CentOS 7
 ##
 loop_
 _ma_software_group.ordinal_id
