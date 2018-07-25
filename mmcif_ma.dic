@@ -2,7 +2,7 @@
 ## MODELING EXTENSION DICTIONARY ##
 ###################################
 
-# Version 1.2.3 20th July 2018
+# Version 1.2.4 25th July 2018
 
 data_mmcif_ma.dic
 
@@ -19,7 +19,7 @@ data_mmcif_ma.dic
 
     _dictionary.title           mmcif_ma.dic
     _dictionary.datablock_id    mmcif_ma.dic
-    _dictionary.version         1.2.3
+    _dictionary.version         1.2.4
 #
      loop_
     _dictionary_history.version
@@ -101,6 +101,11 @@ data_mmcif_ma.dic
 ;
   Changes (jh/bv/jw/gt/sb)
   + Updated MA_POLY_TEMPLATE_LIBRARY_LIST, MA_POLY_TEMPLATE_LIBRARY_COMPONENTS
+;
+  1.2.4   2018-07-25
+;
+  Changes (jh/bv/jw/gt/sb)
+  + Added _ma_template_non_poly.comp_id
 ;
 
 #########################
@@ -688,6 +693,19 @@ save__ma_template_non_poly.template_id
     _item_type.code               int
     _item_linked.child_name     '_ma_template_non_poly.template_id'
     _item_linked.parent_name    '_ma_template_details.template_id'
+     save_
+
+save__ma_template_non_poly.comp_id
+    _item_description.description
+;     The component identifier of the non-polymeric template, if available.
+      This data item is a pointer to _chem_comp.id in the CHEM_COMP category.
+;
+    _item.name                  '_ma_template_non_poly.comp_id'
+    _item.category_id             ma_template_non_poly
+    _item.mandatory_code          no
+    _item_type.code               ucode
+    _item_linked.child_name       '_ma_template_non_poly.comp_id'
+    _item_linked.parent_name      '_chem_comp.id'
      save_
 
 save__ma_template_non_poly.smiles
