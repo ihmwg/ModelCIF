@@ -2,7 +2,7 @@
 ## MODELING EXTENSION DICTIONARY ##
 ###################################
 
-# Version 1.2.4 25th July 2018
+# Version 1.2.4 27th July 2018
 
 data_mmcif_ma.dic
 
@@ -102,10 +102,11 @@ data_mmcif_ma.dic
   Changes (jh/bv/jw/gt/sb)
   + Updated MA_POLY_TEMPLATE_LIBRARY_LIST, MA_POLY_TEMPLATE_LIBRARY_COMPONENTS
 ;
-  1.2.4   2018-07-25
+  1.2.4   2018-07-27
 ;
   Changes (jh/bv/jw/gt/sb)
   + Added _ma_template_non_poly.comp_id
+  + Fixed syntax and typos
 ;
 
 #########################
@@ -482,7 +483,7 @@ save__ma_template_details.target_asym_id
     _item.name                  '_ma_template_details.target_asym_id'
     _item.category_id             ma_template_details
     _item.mandatory_code          yes
-    _item_type.code               int
+    _item_type.code               code
     _item_linked.child_name     '_ma_template_details.target_asym_id'
     _item_linked.parent_name    '_ma_target_entity_instance.asym_id'
      save_
@@ -1047,7 +1048,7 @@ save_ma_template_trans_matrix
 
     loop_
     _category_group.id           'inclusive_group'
-                                 'ihm_group'
+                                 'ma_group'
     loop_
     _category_examples.detail
     _category_examples.case
@@ -1423,7 +1424,7 @@ save__ma_target_ref_db_details.target_entity_id
     _item.name                  '_ma_target_ref_db_details.target_entity_id'
     _item.category_id             ma_target_ref_db_details
     _item.mandatory_code          yes
-    _item_type.code               int
+    _item_type.code               code
     _item_linked.child_name     '_ma_target_ref_db_details.target_entity_id'
     _item_linked.parent_name    '_ma_target_entity.entity_id'
      save_
@@ -2050,7 +2051,7 @@ save__ma_alignment_details.template_segment_id
     _item.mandatory_code          yes
     _item_type.code               int
     _item_linked.child_name     '_ma_alignment_details.template_segment_id'
-    _item_linked.parent_name    '_ma_template_poly_segment.id '
+    _item_linked.parent_name    '_ma_template_poly_segment.id'
      save_
 
 save__ma_alignment_details.target_asym_id
@@ -2061,7 +2062,7 @@ save__ma_alignment_details.target_asym_id
     _item.name                  '_ma_alignment_details.target_asym_id'
     _item.category_id             ma_alignment_details
     _item.mandatory_code          yes
-    _item_type.code               int
+    _item_type.code               code
     _item_linked.child_name     '_ma_alignment_details.target_asym_id'
     _item_linked.parent_name    '_ma_target_entity_instance.asym_id'
      save_
@@ -2992,7 +2993,7 @@ save__ma_coevolution_msa_details.target_entity_id
     _item.name                  '_ma_coevolution_msa_details.target_entity_id'
     _item.category_id             ma_coevolution_msa_details
     _item.mandatory_code          yes
-    _item_type.code               int
+    _item_type.code               code
     _item_linked.child_name     '_ma_coevolution_msa_details.target_entity_id'
     _item_linked.parent_name    '_ma_target_entity.entity_id'    
      save_
@@ -4470,15 +4471,11 @@ save__ma_protocol_step.ordinal_id
 save__ma_protocol_step.protocol_id
     _item_description.description
 ;   Unique identifier for the protocol.
-    This data item is a pointer to _ma_model_list.protocol_id in the
-    MA_MODEL_LIST category. 
 ;
     _item.name                  '_ma_protocol_step.protocol_id'
     _item.category_id             ma_protocol_step
     _item.mandatory_code          yes
     _item_type.code               int
-    _item_linked.child_name     '_ma_protocol_step.protocol_id'
-    _item_linked.parent_name    '_ma_model_list.protocol_id'
      save_
 
 save__ma_protocol_step.step_id
@@ -4853,7 +4850,7 @@ save__ma_poly_template_library_details.target_entity_id
     _item.name                  '_ma_poly_template_library_details.target_entity_id'
     _item.category_id             ma_poly_template_library_details
     _item.mandatory_code          yes
-    _item_type.code               int
+    _item_type.code               code
     _item_linked.child_name     '_ma_poly_template_library_details.target_entity_id'
     _item_linked.parent_name    '_ma_target_entity.entity_id'
      save_
@@ -4895,7 +4892,7 @@ save__ma_poly_template_library_details.software_group_id
     _item.name                  '_ma_poly_template_library_details.software_group_id'
     _item.category_id             ma_poly_template_library_details
     _item.mandatory_code          yes
-    _item_type.code               code
+    _item_type.code               int
     _item_linked.child_name     '_ma_poly_template_library_details.software_group_id'
     _item_linked.parent_name    '_ma_software_group.group_id'
      save_
@@ -5118,7 +5115,7 @@ save__ma_poly_template_library_components.library_id
     _item.name                  '_ma_poly_template_library_components.library_id'
     _item.category_id             ma_poly_template_library_components
     _item.mandatory_code          yes  
-    _item_type.code               code 
+    _item_type.code               int
     _item_linked.child_name     '_ma_poly_template_library_components.library_id'
     _item_linked.parent_name    '_ma_poly_template_library_details.library_id'
      save_
@@ -5186,7 +5183,7 @@ save__ma_qa_metric.description
     _item_description.description
 ;     Description of the QA metric.
 ;
-    _item.name                  '_ma_qa_metric.name'
+    _item.name                  '_ma_qa_metric.description'
     _item.category_id             ma_qa_metric
     _item.mandatory_code          no
     _item_type.code               text
