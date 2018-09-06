@@ -1035,7 +1035,7 @@ save__ma_template_customized.details
 save_ma_template_trans_matrix
     _category.description
 ;              Data items in the MA_TEMPLATE_TRANS_MATRIX category records the
-               details of the transormatrix matrix applied to the structural template
+               details of the transformation matrix applied to the structural template
                to generate the starting structure used in the current modeling. 
                The template can be a polymer or a non-polymer and can be either
                referenced from an existing database or can be a customized 
