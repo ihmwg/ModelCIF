@@ -2243,7 +2243,7 @@ save__ma_alignment.sequence
     _item_description.description
 ;     The target / template sequence in the multiple sequence alignment. 
       The sequence includes gaps and is reproduced as observed in the multiple sequence alignment. 
-      The sequence can span multiple lines and can be represented in FASTA format. 
+      The sequence can span multiple lines and can be expressed as a string of one-letter codes. 
 ;
     _item.name                  '_ma_alignment.sequence'
     _item.category_id             ma_alignment
