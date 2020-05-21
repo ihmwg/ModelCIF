@@ -2,7 +2,7 @@
 ## MODELING EXTENSION DICTIONARY ##
 ###################################
 
-# Version 1.2.4 27th July 2018
+# Version 1.2.5 21th May 2020
 
 data_mmcif_ma.dic
 
@@ -19,7 +19,7 @@ data_mmcif_ma.dic
 
     _dictionary.title           mmcif_ma.dic
     _dictionary.datablock_id    mmcif_ma.dic
-    _dictionary.version         1.2.4
+    _dictionary.version         1.2.5
 #
      loop_
     _dictionary_history.version
@@ -107,6 +107,11 @@ data_mmcif_ma.dic
   Changes (jh/bv/jw/gt/sb)
   + Added _ma_template_non_poly.comp_id
   + Fixed syntax and typos
+;
+  1.2.5   2020-05-21
+;
+  Changes (bv)
+  + Changed _category.mandatory_code to no for ma_restraints_group
 ;
 
 #########################
@@ -4339,7 +4344,7 @@ save_ma_restraints_group
                details of groups of restraints used in the modeling. 
 ;
     _category.id                  ma_restraints_group
-    _category.mandatory_code      yes
+    _category.mandatory_code      no
      loop_
     _category_key.name          '_ma_restraints_group.ordinal_id'
 
