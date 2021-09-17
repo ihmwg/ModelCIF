@@ -2,7 +2,7 @@
 ## MODELING EXTENSION DICTIONARY ##
 ###################################
 
-# Version 1.2.5 21th May 2020
+# Version 1.2.6 17th September 2021
 
 data_mmcif_ma.dic
 
@@ -19,7 +19,7 @@ data_mmcif_ma.dic
 
     _dictionary.title           mmcif_ma.dic
     _dictionary.datablock_id    mmcif_ma.dic
-    _dictionary.version         1.2.5
+    _dictionary.version         1.2.6
 #
      loop_
     _dictionary_history.version
@@ -112,6 +112,12 @@ data_mmcif_ma.dic
 ;
   Changes (bv)
   + Changed _category.mandatory_code to no for ma_restraints_group
+;
+  1.2.6   2021-09-17
+;
+  Changes (bv)
+  + Changed _ma_qa_metric_global.value to _ma_qa_metric_global.metric_value
+  + Changed _ma_qa_metric_local.value to _ma_qa_metric_local.metric_value
 ;
 
 #########################
@@ -5328,11 +5334,11 @@ save__ma_qa_metric_global.metric_id
     _item_linked.parent_name    '_ma_qa_metric.id'
      save_
 
-save__ma_qa_metric_global.value
+save__ma_qa_metric_global.metric_value
     _item_description.description
 ;     The value of the global QA metric. 
 ;
-    _item.name                  '_ma_qa_metric_global.value'
+    _item.name                  '_ma_qa_metric_global.metric_value'
     _item.category_id             ma_qa_metric_global
     _item.mandatory_code          yes
     _item_type.code               float
@@ -5463,11 +5469,11 @@ save__ma_qa_metric_local.metric_id
     _item_linked.parent_name    '_ma_qa_metric.id'
      save_
 
-save__ma_qa_metric_local.value
+save__ma_qa_metric_local.metric_value
     _item_description.description
 ;     The value of the local QA metric. 
 ;
-    _item.name                  '_ma_qa_metric_local.value'
+    _item.name                  '_ma_qa_metric_local.metric_value'
     _item.category_id             ma_qa_metric_local
     _item.mandatory_code          yes
     _item_type.code               float
