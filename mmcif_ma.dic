@@ -2,7 +2,7 @@
 ## MODELING EXTENSION DICTIONARY ##
 ###################################
 
-# Version 1.2.6 17th September 2021
+# Version 1.2.7 18th October 2021
 
 data_mmcif_ma.dic
 
@@ -19,7 +19,7 @@ data_mmcif_ma.dic
 
     _dictionary.title           mmcif_ma.dic
     _dictionary.datablock_id    mmcif_ma.dic
-    _dictionary.version         1.2.6
+    _dictionary.version         1.2.7
 #
      loop_
     _dictionary_history.version
@@ -119,6 +119,15 @@ data_mmcif_ma.dic
   + Changed _ma_qa_metric_global.value to _ma_qa_metric_global.metric_value
   + Changed _ma_qa_metric_local.value to _ma_qa_metric_local.metric_value
 ;
+  1.2.7   2021-10-18
+;
+  Changes (bv)
+  + Added _entry.ma_collection_id, _ma_target_ref_db_details.ncbi_taxonomy_id, _ma_target_ref_db_details.organism_scientific, ma_qa_metric_local_pairwise
+  + Updated _item.mandatory_code for _ma_protocol_step.input_data_group_id, _ma_protocol_step.output_data_group_id, _ma_protocol_step.software_group_id
+  + Updated enumerations for _ma_target_ref_db_details.db_name, _ma_qa_metric.type
+  + Changed _ma_protocol_step.method_type_other_details to _ma_protocol_step.details
+  + Updated _category_key.name for ma_target_ref_db_details
+;
 
 #########################
 ## CATEGORY_GROUP_LIST ##
@@ -200,6 +209,20 @@ data_mmcif_ma.dic
     _item_units_list.detail
      'angstroms'              'Angstroms   (metres * 10^(-10)^)'
      '8pi2_angstroms_squared' '8pi^2^ * Angstroms squared (metres * 10^(-10)^)^2^'
+
+###########
+## ENTRY ##
+###########
+
+save__entry.ma_collection_id
+    _item_description.description
+;    An identifier for the model collection associated with the entry. 
+;
+    _item.name                  '_entry.ma_collection_id'
+    _item.category_id             entry
+    _item.mandatory_code          no
+    _item_type.code               code
+     save_
 
 ###################
 ## MA_MODEL_LIST ##
@@ -1399,6 +1422,7 @@ save_ma_target_ref_db_details
     _category.id                  ma_target_ref_db_details
     _category.mandatory_code      no
     _category_key.name            '_ma_target_ref_db_details.target_entity_id'
+                                  '_ma_target_ref_db_details.db_name'
     loop_
     _category_group.id            'inclusive_group'
                                   'ma_group'
@@ -1454,6 +1478,7 @@ save__ma_target_ref_db_details.db_name
     _item_enumeration.detail
       'UNP'     'UniProtKB'
       'GB'      'Genbank'
+      'OrthoDB' 'OrthoDB'
       'Other'   'Other'
      save_
 
@@ -1538,6 +1563,32 @@ save__ma_target_ref_db_details.seq_db_align_end
     _item_type.code               code
      loop_
     _item_examples.case         '105' '245'
+     save_
+
+save__ma_target_ref_db_details.ncbi_taxonomy_id
+    _item_description.description
+;    Taxonomy identifier provided by NCBI. 
+;
+    _item.name                  '_ma_target_ref_db_details.ncbi_taxonomy_id'
+    _item.category_id             ma_target_ref_db_details
+    _item.mandatory_code          no
+    _item_type.code               code
+    loop_
+    _item_examples.case         
+    '1294385'
+     save_
+
+save__ma_target_ref_db_details.organism_scientific
+    _item_description.description
+;    Scientific name of the organism. 
+;
+    _item.name                  '_ma_target_ref_db_details.organism_scientific'
+    _item.category_id             ma_target_ref_db_details
+    _item.mandatory_code          no
+    _item_type.code               line
+    loop_
+    _item_examples.case         
+    'Saccharomyces cerevisiae YJM1573'
      save_
 
 #####################################
@@ -4520,11 +4571,11 @@ save__ma_protocol_step.method_type
     'other'
      save_
 
-save__ma_protocol_step.method_type_other_details
+save__ma_protocol_step.details
     _item_description.description
-;   Details for other method type.
+;   Details of the protocol step.
 ;
-    _item.name                  '_ma_protocol_step.method_type_other_details'
+    _item.name                  '_ma_protocol_step.details'
     _item.category_id             ma_protocol_step
     _item.mandatory_code          no
     _item_type.code               text
@@ -4548,7 +4599,7 @@ save__ma_protocol_step.software_group_id
 ;
     _item.name                  '_ma_protocol_step.software_group_id'
     _item.category_id             ma_protocol_step
-    _item.mandatory_code          yes
+    _item.mandatory_code          no
     _item_type.code               int
     _item_linked.child_name       '_ma_protocol_step.software_group_id'
     _item_linked.parent_name      '_ma_software_group.group_id'
@@ -4562,7 +4613,7 @@ save__ma_protocol_step.input_data_group_id
 ;
     _item.name                  '_ma_protocol_step.input_data_group_id'
     _item.category_id             ma_protocol_step
-    _item.mandatory_code          yes
+    _item.mandatory_code          no
     _item_type.code               int
     _item_linked.child_name       '_ma_protocol_step.input_data_group_id'
     _item_linked.parent_name      '_ma_data_group.group_id'
@@ -4576,7 +4627,7 @@ save__ma_protocol_step.output_data_group_id
 ;
     _item.name                  '_ma_protocol_step.output_data_group_id'
     _item.category_id             ma_protocol_step
-    _item.mandatory_code          yes
+    _item.mandatory_code          no
     _item_type.code               int
     _item_linked.child_name       '_ma_protocol_step.output_data_group_id'
     _item_linked.parent_name      '_ma_data_group.group_id'
@@ -5215,6 +5266,9 @@ save__ma_qa_metric.type
     'energy'    'the lower the energy, the better the quality'
     'distance'  'the lower the distance, the better the quality'
     'normalized score'  'normalized score ranging from 0 to 1'
+    'pLDDT' 'per-residue confidence score based on the Local Distance Difference Test'
+    'PAE'   'predicted aligned error'
+    'contact probability'   'the contact probability of a pairwise interaction'
     'other'     'other type of QA metric'
      save_
 
@@ -5478,6 +5532,190 @@ save__ma_qa_metric_local.metric_value
     _item.mandatory_code          yes
     _item_type.code               float
      save_
+
+#################################
+## MA_QA_METRIC_LOCAL_PAIRWISE ##
+#################################
+
+save_ma_qa_metric_local_pairwise
+    _category.description
+;              Data items in the MA_QA_METRIC_LOCAL_PAIRWISE category captures the
+               details of the local QA metrics, calculated at the pairwise residue level. 
+;
+    _category.id                  ma_qa_metric_local_pairwise
+    _category.mandatory_code      no
+     loop_
+    _category_key.name          '_ma_qa_metric_local_pairwise.ordinal_id'
+
+    loop_
+    _category_group.id           'inclusive_group'
+                                 'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 -
+;
+;
+    loop_
+    _ma_qa_metric_local_pairwise.ordinal_id
+    _ma_qa_metric_local_pairwise.model_id
+    _ma_qa_metric_local_pairwise.label_asym_id_1
+    _ma_qa_metric_local_pairwise.label_seq_id_1
+    _ma_qa_metric_local_pairwise.label_comp_id_1
+    _ma_qa_metric_local_pairwise.label_asym_id_2
+    _ma_qa_metric_local_pairwise.label_seq_id_2
+    _ma_qa_metric_local_pairwise.label_comp_id_2
+    _ma_qa_metric_local_pairwise.metric_id
+    _ma_qa_metric_local_pairwise.metric_value
+    1 1 A 20 LEU B 82 ILE 1 30.84
+    1 1 A 20 LEU B 82 ILE 2  0.40
+   # ...  abbreviated ... 
+;
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_qa_metric_local_pairwise
+     save_
+
+save__ma_qa_metric_local_pairwise.ordinal_id
+    _item_description.description
+;     A unique identifier for the category. 
+;
+    _item.name                  '_ma_qa_metric_local_pairwise.ordinal_id'
+    _item.category_id             ma_qa_metric_local_pairwise
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_qa_metric_local_pairwise.model_id
+    _item_description.description
+;     The identifier for the structural model, for which local QA metric is provided.
+      This data item is a pointer to _ma_model_list.model_id
+      in the MA_MODEL_LIST category.  
+;
+    _item.name                  '_ma_qa_metric_local_pairwise.model_id'
+    _item.category_id             ma_qa_metric_local_pairwise
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_qa_metric_local_pairwise.model_id'
+    _item_linked.parent_name    '_ma_model_list.model_id'
+     save_
+
+save__ma_qa_metric_local_pairwise.label_asym_id_1
+    _item_description.description
+;     The identifier for the asym id of the first residue in the 
+      pair, for which local QA metric is provided.
+      This data item is a pointer to _atom_site.label_asym_id
+      in the ATOM_SITE category.
+;
+    _item.name                  '_ma_qa_metric_local_pairwise.label_asym_id_1'
+    _item.category_id             ma_qa_metric_local_pairwise
+    _item.mandatory_code          yes
+    _item_type.code               code
+    _item_linked.child_name     '_ma_qa_metric_local_pairwise.label_asym_id_1'
+    _item_linked.parent_name    '_atom_site.label_asym_id'
+     save_
+
+save__ma_qa_metric_local_pairwise.label_seq_id_1
+    _item_description.description
+;     The identifier for the sequence index of the first residue 
+      in the pair, for which local QA metric is provided.
+      This data item is a pointer to _atom_site.label_seq_id
+      in the ATOM_SITE category.
+;     
+    _item.name                  '_ma_qa_metric_local_pairwise.label_seq_id_1'
+    _item.category_id             ma_qa_metric_local_pairwise
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_qa_metric_local_pairwise.label_seq_id_1'
+    _item_linked.parent_name    '_atom_site.label_seq_id'
+     save_
+
+save__ma_qa_metric_local_pairwise.label_comp_id_1
+    _item_description.description
+;     The component identifier for the first residue in the 
+      pair, for which local QA metric is provided.
+      This data item is a pointer to _atom_site.label_comp_id
+      in the ATOM_SITE category.
+;     
+    _item.name                  '_ma_qa_metric_local_pairwise.label_comp_id_1'
+    _item.category_id             ma_qa_metric_local_pairwise
+    _item.mandatory_code          yes
+    _item_type.code               ucode
+    _item_linked.child_name     '_ma_qa_metric_local_pairwise.label_comp_id_1'
+    _item_linked.parent_name    '_atom_site.label_comp_id'
+     save_
+
+save__ma_qa_metric_local_pairwise.label_asym_id_2
+    _item_description.description
+;     The identifier for the asym id of the second residue in the
+      pair, for which local QA metric is provided.
+      This data item is a pointer to _atom_site.label_asym_id
+      in the ATOM_SITE category.
+;
+    _item.name                  '_ma_qa_metric_local_pairwise.label_asym_id_2'
+    _item.category_id             ma_qa_metric_local_pairwise
+    _item.mandatory_code          yes
+    _item_type.code               code
+    _item_linked.child_name     '_ma_qa_metric_local_pairwise.label_asym_id_2'
+    _item_linked.parent_name    '_atom_site.label_asym_id'
+     save_
+
+save__ma_qa_metric_local_pairwise.label_seq_id_2
+    _item_description.description
+;     The identifier for the sequence index of the second residue
+      in the pair, for which local QA metric is provided.
+      This data item is a pointer to _atom_site.label_seq_id
+      in the ATOM_SITE category.
+;
+    _item.name                  '_ma_qa_metric_local_pairwise.label_seq_id_2'
+    _item.category_id             ma_qa_metric_local_pairwise
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_qa_metric_local_pairwise.label_seq_id_2'
+    _item_linked.parent_name    '_atom_site.label_seq_id'
+     save_
+
+save__ma_qa_metric_local_pairwise.label_comp_id_2
+    _item_description.description
+;     The component identifier for the second residue in the
+      pair, for which local QA metric is provided.
+      This data item is a pointer to _atom_site.label_comp_id
+      in the ATOM_SITE category.
+;
+    _item.name                  '_ma_qa_metric_local_pairwise.label_comp_id_2'
+    _item.category_id             ma_qa_metric_local_pairwise
+    _item.mandatory_code          yes
+    _item_type.code               ucode
+    _item_linked.child_name     '_ma_qa_metric_local_pairwise.label_comp_id_2'
+    _item_linked.parent_name    '_atom_site.label_comp_id'
+     save_
+
+save__ma_qa_metric_local_pairwise.metric_id
+    _item_description.description
+;     The identifier for the QA metric.
+      This data item is a pointer to _ma_qa_metric.id in the
+      MA_QA_METRIC category. 
+;
+    _item.name                  '_ma_qa_metric_local_pairwise.metric_id'
+    _item.category_id             ma_qa_metric_local_pairwise
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_qa_metric_local_pairwise.metric_id'
+    _item_linked.parent_name    '_ma_qa_metric.id'
+     save_
+
+save__ma_qa_metric_local_pairwise.metric_value
+    _item_description.description
+;     The value of the local QA metric. 
+;
+    _item.name                  '_ma_qa_metric_local_pairwise.metric_value'
+    _item.category_id             ma_qa_metric_local_pairwise
+    _item.mandatory_code          yes
+    _item_type.code               float
+     save_
+
 
 #########################
 ## PDBX_ENTITY_NONPOLY ##
