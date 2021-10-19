@@ -1421,6 +1421,7 @@ save_ma_target_ref_db_details
 ;
     _category.id                  ma_target_ref_db_details
     _category.mandatory_code      no
+    loop_
     _category_key.name            '_ma_target_ref_db_details.target_entity_id'
                                   '_ma_target_ref_db_details.db_name'
     loop_
