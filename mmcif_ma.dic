@@ -2,7 +2,7 @@
 ## MODELING EXTENSION DICTIONARY ##
 ###################################
 
-# Version 1.2.7 18th October 2021
+# Version 1.2.8 20th October 2021
 
 data_mmcif_ma.dic
 
@@ -19,7 +19,7 @@ data_mmcif_ma.dic
 
     _dictionary.title           mmcif_ma.dic
     _dictionary.datablock_id    mmcif_ma.dic
-    _dictionary.version         1.2.7
+    _dictionary.version         1.2.8
 #
      loop_
     _dictionary_history.version
@@ -127,6 +127,11 @@ data_mmcif_ma.dic
   + Updated enumerations for _ma_target_ref_db_details.db_name, _ma_qa_metric.type
   + Changed _ma_protocol_step.method_type_other_details to _ma_protocol_step.details
   + Updated _category_key.name for ma_target_ref_db_details
+;
+  1.2.8   2021-10-20
+;
+  Changes (bv)
+  + Updated enumerations for _ma_target_ref_db_details.db_name
 ;
 
 #########################
@@ -1480,6 +1485,7 @@ save__ma_target_ref_db_details.db_name
       'UNP'     'UniProtKB'
       'GB'      'Genbank'
       'OrthoDB' 'OrthoDB'
+      'NCBI'    'NCBI'
       'Other'   'Other'
      save_
 
