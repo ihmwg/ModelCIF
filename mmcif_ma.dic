@@ -1486,6 +1486,7 @@ save__ma_target_ref_db_details.db_name
       'GB'      'Genbank'
       'OrthoDB' 'OrthoDB'
       'NCBI'    'NCBI'
+      'JGI'     'JGI'
       'Other'   'Other'
      save_
 
