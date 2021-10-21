@@ -2,7 +2,7 @@
 ## MODELING EXTENSION DICTIONARY ##
 ###################################
 
-# Version 1.2.8 20th October 2021
+# Version 1.2.9 21st October 2021
 
 data_mmcif_ma.dic
 
@@ -19,7 +19,7 @@ data_mmcif_ma.dic
 
     _dictionary.title           mmcif_ma.dic
     _dictionary.datablock_id    mmcif_ma.dic
-    _dictionary.version         1.2.8
+    _dictionary.version         1.2.9
 #
      loop_
     _dictionary_history.version
@@ -132,6 +132,11 @@ data_mmcif_ma.dic
 ;
   Changes (bv)
   + Updated enumerations for _ma_target_ref_db_details.db_name
+;
+  1.2.9   2021-10-21
+;
+  Changes (bv)
+  + Updated enumerations for _ma_qa_metric.mode
 ;
 
 #########################
@@ -5303,6 +5308,7 @@ save__ma_qa_metric.mode
     _item_enumeration.detail
     'local'    'QA metric is calculated per-residue'
     'global'   'QA metric is calculated per-model'
+    'local-pairwise'    'QA metric is calculated per-residue-pair'
      save_
 
 save__ma_qa_metric.software_group_id
