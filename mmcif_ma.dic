@@ -2,7 +2,7 @@
 ## MODELING EXTENSION DICTIONARY ##
 ###################################
 
-# Version 1.2.9 21st October 2021
+# Version 1.3.0 22nd October 2021
 
 data_mmcif_ma.dic
 
@@ -19,7 +19,7 @@ data_mmcif_ma.dic
 
     _dictionary.title           mmcif_ma.dic
     _dictionary.datablock_id    mmcif_ma.dic
-    _dictionary.version         1.2.9
+    _dictionary.version         1.3.0
 #
      loop_
     _dictionary_history.version
@@ -137,6 +137,11 @@ data_mmcif_ma.dic
 ;
   Changes (bv)
   + Updated enumerations for _ma_qa_metric.mode
+;
+  1.3.0   2021-10-22
+;
+  Changes (bv)
+  + Added ma_entry_associated_files
 ;
 
 #########################
@@ -5748,5 +5753,143 @@ save__pdbx_entity_nonpoly.ma_model_mode
     _item_enumeration.value
     'explicit'
     'implicit'
+     save_
+
+###############################
+## MA_ENTRY_ASSOCIATED_FILES ##
+###############################
+
+save_ma_entry_associated_files
+    _category.description
+;              Data items in the MA_ENTRY_ASSOCIATED_FILES category record the
+               details of additional files associated with the entry. These may
+               be multiple sequence alignment files, restraint data files, files
+               containing quality assessment scores, or validation reports. 
+;
+    _category.id                  ma_entry_associated_files
+    _category.mandatory_code      no
+     loop_
+    _category_key.name          '_ma_entry_associated_files.id'
+
+    loop_
+    _category_group.id           'inclusive_group'
+                                 'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 -
+;
+;
+    loop_
+    _ma_entry_associated_files.id
+    _ma_entry_associated_files.entry_id
+    _ma_entry_associated_files.file_name
+    _ma_entry_associated_files.file_url
+    _ma_entry_associated_files.file_format
+    _ma_entry_associated_files.file_content
+    _ma_entry_associated_files.details
+    1 ma-jisol ma-jisol.zip ? zip/gzip 'multiple sequence aligments' ?
+   # ...  abbreviated ... 
+;
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_entry_associated_files
+     save_
+
+save__ma_entry_associated_files.id
+    _item_description.description
+;     An identifier for the associated file. 
+;
+    _item.name                  '_ma_entry_associated_files.id'
+    _item.category_id             ma_entry_associated_files
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_entry_associated_files.entry_id
+    _item_description.description
+;     An identifier for the entry.
+      This data item is a pointer to _entry.id
+      in the ENTRY category.
+;
+    _item.name                  '_ma_entry_associated_files.entry_id'
+    _item.category_id             ma_entry_associated_files
+    _item.mandatory_code          yes
+    _item_type.code               code
+    _item_linked.child_name     '_ma_entry_associated_files.entry_id'
+    _item_linked.parent_name    '_entry.id'
+     save_
+
+save__ma_entry_associated_files.file_name
+    _item_description.description
+;     Name of the associated file. 
+;
+    _item.name                  '_ma_entry_associated_files.file_name'
+    _item.category_id             ma_entry_associated_files
+    _item.mandatory_code          no
+    _item_type.code               code
+     save_
+
+save__ma_entry_associated_files.file_url
+    _item_description.description
+;     URL for the file.
+;
+    _item.name                  '_ma_entry_associated_files.file_url'
+    _item.category_id             ma_entry_associated_files
+    _item.mandatory_code          no
+    _item_type.code               code
+     save_
+
+save__ma_entry_associated_files.file_format
+    _item_description.description
+;     The format of the file. 
+;
+    _item.name                  '_ma_entry_associated_files.file_format'
+    _item.category_id             ma_entry_associated_files
+    _item.mandatory_code          no
+    _item_type.code               code
+    loop_
+    _item_enumeration.value
+    'zip/gzip'
+    'txt'
+    'cif'
+    'fasta'
+    'clustalw'
+    'pir/nbrf'
+    'a2m'
+    'a3m'
+    'csv'
+    'tsv'
+    'pdf'
+    'other'
+     save_
+
+save__ma_entry_associated_files.details
+    _item_description.description
+;     Additional details about the file. 
+;
+    _item.name                  '_ma_entry_associated_files.details'
+    _item.category_id             ma_entry_associated_files
+    _item.mandatory_code          no
+    _item_type.code               text
+     save_
+
+save__ma_entry_associated_files.file_content
+    _item_description.description
+;     Content of the file.
+;
+    _item.name                  '_ma_entry_associated_files.file_content'
+    _item.category_id             ma_entry_associated_files
+    _item.mandatory_code          no
+    _item_type.code               line
+    loop_
+    _item_enumeration.value
+    'multiple sequence alignments'    
+    'input restraints'   
+    'local pairwise QA scores'
+    'validation report'
+    'other'    
      save_
 
