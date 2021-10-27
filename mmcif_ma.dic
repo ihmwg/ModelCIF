@@ -2,7 +2,7 @@
 ## MODELING EXTENSION DICTIONARY ##
 ###################################
 
-# Version 1.3.1 25th October 2021
+# Version 1.3.2 27th October 2021
 
 data_mmcif_ma.dic
 
@@ -19,7 +19,7 @@ data_mmcif_ma.dic
 
     _dictionary.title           mmcif_ma.dic
     _dictionary.datablock_id    mmcif_ma.dic
-    _dictionary.version         1.3.1
+    _dictionary.version         1.3.2
 #
      loop_
     _dictionary_history.version
@@ -148,6 +148,13 @@ data_mmcif_ma.dic
 ;
   Changes (bv)
   + Added ma_associated_archive_file_details
+;
+
+  1.3.2   2021-10-27
+;
+  Changes (bv)
+  + Updated _item.mandatory_code for _ma_qa_metric.software_group_id
+  + Fixed typos
 ;
 
 #########################
@@ -1745,14 +1752,14 @@ save_ma_struct_assembly
     _ma_struct_assembly.seq_id_begin
     _ma_struct_assembly.seq_id_end
 
-         1   0   1  A  1   726 
-         2   0   2  B  1   744 
-         3   0   3  C  1  1037 
-         4   0   4  D  1  1157 
-         5   1   1  A  1   726
-         6   2   2  B  1   744
-         7   3   3  C  1  1037
-         8   4   4  D  1  1157 
+         1   1   1  A  1   726 
+         2   1   2  B  1   744 
+         3   1   3  C  1  1037 
+         4   1   4  D  1  1157 
+         5   2   1  A  1   726
+         6   3   2  B  1   744
+         7   4   3  C  1  1037
+         8   5   4  D  1  1157 
          #...abbreviated...
 ;
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2650,9 +2657,9 @@ save_ma_data
         _ma_data.id
         _ma_data.name
         _ma_data.content_type
-        0 "NMR NOE Distances" "spatial restraints" 
-        1 "Target Template Alignment" "target-template alignment"
-        2 "Coevolution Data" "coevolution MSA"
+        1 "NMR NOE Distances" "spatial restraints" 
+        2 "Target Template Alignment" "target-template alignment"
+        3 "Coevolution Data" "coevolution MSA"
          # ...  abbreviated ...
 ;
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2745,12 +2752,12 @@ save_ma_data_group
         _ma_data_group.ordinal_id
         _ma_data_group.group_id
         _ma_data_group.data_id
-        0 1 2
-        1 1 3
-        2 1 4
-        3 2 3 
-        4 2 4
-        5 2 5 
+        1 1 2
+        2 1 3
+        3 1 4
+        4 2 3 
+        5 2 4
+        6 2 5 
        # ...  abbreviated ...
 ;
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -4444,12 +4451,12 @@ save_ma_restraints_group
         _ma_restraints_group.ordinal_id
         _ma_restraints_group.group_id
         _ma_restraints_group.restraint_id
-        0 1 2
-        1 1 3
-        2 1 4
-        3 2 3 
-        4 2 4
-        5 2 5 
+        1 1 2
+        2 1 3
+        3 1 4
+        4 2 3 
+        5 2 4
+        6 2 5 
        # ...  abbreviated ...
 ;
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -4527,16 +4534,16 @@ save_ma_protocol_step
   _ma_protocol_step.input_data_group_id
   _ma_protocol_step.output_data_group_id
 
-   0 0 0 "template search" . 2   1  5
-   1 0 1 "template search" . 2   2  6
-   2 0 2 "template search" . 2   3  7
-   3 0 3 "template search" . 2   4  8
-   4 1 0 "template selection" . 2  5  9
-   5 1 1 "template selection" . 2  6 10
-   6 1 2 "template selection" . 2  7 11
-   7 1 3 "template selection" . 2  8 12
-   8 2 0 "modeling" . 2   13   14
-   9 3 0 "model selection" . 2   14  15
+   1 1 1 "template search" . 2   1  5
+   2 1 2 "template search" . 2   2  6
+   3 1 3 "template search" . 2   3  7
+   4 1 4 "template search" . 2   4  8
+   5 2 1 "template selection" . 2  5  9
+   6 2 2 "template selection" . 2  6 10
+   7 2 3 "template selection" . 2  7 11
+   8 2 4 "template selection" . 2  8 12
+   9 3 1 "modeling" . 2   13   14
+  10 4 1 "model selection" . 2   14  15
   # ... abbreviated ... #
 ;
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -5330,7 +5337,7 @@ save__ma_qa_metric.software_group_id
 ;
     _item.name                  '_ma_qa_metric.software_group_id'
     _item.category_id             ma_qa_metric
-    _item.mandatory_code          yes
+    _item.mandatory_code          no
     _item_type.code               int
     _item_linked.child_name       '_ma_qa_metric.software_group_id'
     _item_linked.parent_name      '_ma_software_group.group_id'
@@ -5367,7 +5374,7 @@ save_ma_qa_metric_global
     _ma_qa_metric_global.metric_id
     _ma_qa_metric_global.metric_value
     1 1 1 -0.32
-    1 1 2 -4.69
+    2 1 2 -4.69
    # ...  abbreviated ... 
 ;
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -5457,7 +5464,7 @@ save_ma_qa_metric_local
     _ma_qa_metric_local.metric_id
     _ma_qa_metric_local.metric_value
     1 1 A 20 LEU 1 -0.85
-    1 1 A 21 ARG 2 -2.71
+    2 1 A 21 ARG 2 -2.71
    # ...  abbreviated ... 
 ;
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -5595,7 +5602,7 @@ save_ma_qa_metric_local_pairwise
     _ma_qa_metric_local_pairwise.metric_id
     _ma_qa_metric_local_pairwise.metric_value
     1 1 A 20 LEU B 82 ILE 1 30.84
-    1 1 A 20 LEU B 82 ILE 2  0.40
+    2 1 A 20 LEU B 82 ILE 2  0.40
    # ...  abbreviated ... 
 ;
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
