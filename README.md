@@ -4,7 +4,7 @@
 The [MA-dictionary](mmcif_ma.dic) provides the data representation for describing 
 structural models of macromolecules derived from computational methods. 
 
-These structural models are archived in the [Model Archive](https://www.modelarchive.org).
+These structural models are archived in the [ModelArchive](https://www.modelarchive.org).
 These models may be derived from already existing structural templates (also known as 
 homology modeling or comparative modeling methods) or can be obtained from *ab initio* 
 modeling methods. 
