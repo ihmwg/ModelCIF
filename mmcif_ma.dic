@@ -2,7 +2,7 @@
 ## MODELING EXTENSION DICTIONARY ##
 ###################################
 
-# Version 1.3.2 27th October 2021
+# Version 1.3.3 22nd November 2021
 
 data_mmcif_ma.dic
 
@@ -19,7 +19,7 @@ data_mmcif_ma.dic
 
     _dictionary.title           mmcif_ma.dic
     _dictionary.datablock_id    mmcif_ma.dic
-    _dictionary.version         1.3.2
+    _dictionary.version         1.3.3
 #
      loop_
     _dictionary_history.version
@@ -155,6 +155,12 @@ data_mmcif_ma.dic
   Changes (bv)
   + Updated _item.mandatory_code for _ma_qa_metric.software_group_id
   + Fixed typos
+;
+
+  1.3.3   2021-11-22
+;
+  Changes (bv)
+  + Added _ma_target_ref_db_details.gene_name, _ma_target_ref_db_details.seq_db_sequence_checksum, _ma_target_ref_db_details.seq_db_sequence_version_date
 ;
 
 #########################
@@ -1620,6 +1626,39 @@ save__ma_target_ref_db_details.organism_scientific
     loop_
     _item_examples.case         
     'Saccharomyces cerevisiae YJM1573'
+     save_
+
+save__ma_target_ref_db_details.gene_name
+    _item_description.description
+;    Name of the gene corresponding to the target entity. 
+;
+    _item.name                  '_ma_target_ref_db_details.gene_name'
+    _item.category_id             ma_target_ref_db_details
+    _item.mandatory_code          no
+    _item_type.code               code
+    _item_examples.case           'bach1b'
+     save_
+
+save__ma_target_ref_db_details.seq_db_sequence_checksum
+    _item_description.description
+;    Checksum for the sequence in the reference sequence database. 
+;
+    _item.name                  '_ma_target_ref_db_details.seq_db_sequence_checksum'
+    _item.category_id             ma_target_ref_db_details
+    _item.mandatory_code          no
+    _item_type.code               code
+    _item_examples.case           'EAB5441A9AF8E49E'
+     save_
+
+save__ma_target_ref_db_details.seq_db_sequence_version_date
+    _item_description.description
+;    The version date of the sequence in the reference sequence database.                           
+;
+    _item.name                  '_ma_target_ref_db_details.seq_db_sequence_version_date'
+    _item.category_id             ma_target_ref_db_details
+    _item.mandatory_code          no
+    _item_type.code               yyyy-mm-dd
+    _item_examples.case           2014-07-09
      save_
 
 #####################################
