@@ -1641,7 +1641,7 @@ save__ma_target_ref_db_details.gene_name
 
 save__ma_target_ref_db_details.seq_db_sequence_checksum
     _item_description.description
-;    Checksum for the sequence in the reference sequence database. 
+;    Checksum (CRC64) for the sequence in the reference sequence database. 
 ;
     _item.name                  '_ma_target_ref_db_details.seq_db_sequence_checksum'
     _item.category_id             ma_target_ref_db_details
