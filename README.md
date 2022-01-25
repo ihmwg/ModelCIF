@@ -5,7 +5,7 @@
 structural models of macromolecules derived from computational methods. 
 
 ModelCIF data standards is used by the [ModelArchive](https://www.modelarchive.org) 
-and [MODBASE](https://modbase.compbio.ucsf.edu)repsitories. These models may be derived from already 
+and [MODBASE](https://modbase.compbio.ucsf.edu) repositories. These models may be derived from already 
 existing structural templates (also known as homology modeling or comparative modeling methods) 
 or can be obtained from *ab initio* modeling methods. 
 
