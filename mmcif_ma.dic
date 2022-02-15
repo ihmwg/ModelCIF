@@ -2,7 +2,7 @@
 ## MODELING EXTENSION DICTIONARY ##
 ###################################
 
-# Version 1.3.4 18th January 2022
+# Version 1.3.5 14th February 2022
 
 data_mmcif_ma.dic
 
@@ -12,14 +12,14 @@ data_mmcif_ma.dic
      This data block holds the extension dictionary for structural models obtained using
      computational methods. This extension is based on the PDBx/mmCIF dictionary (http://mmcif.wwpdb.org).
      This resource is actively developed and maintained in a github repository available at
-     https://github.com/ihmwg/MA-dictionary. 
-     Structural models that are compliant to this extension dictionary can be deposited
-     to the Model Archive at https://www.modelarchive.org.
+     https://github.com/ihmwg/ModelCIF. 
+     The ModelCIF data standards are used by the ModelArchive (https://www.modelarchive.org) 
+     and MODBASE (https://modbase.compbio.ucsf.edu/). 
 ;
 
     _dictionary.title           mmcif_ma.dic
     _dictionary.datablock_id    mmcif_ma.dic
-    _dictionary.version         1.3.4
+    _dictionary.version         1.3.5
 #
      loop_
     _dictionary_history.version
@@ -167,6 +167,13 @@ data_mmcif_ma.dic
 ;
   Changes (bv)
   + Updated _item.mandatory_code for ma_data_group, ma_software_group
+;
+
+  1.3.5   2022-02-14
+;
+  Changes (bv)
+  + Updated _datablock.description
+  + Updated enumerations for _ma_entry_associated_files.file_format
 ;
 
 #########################
@@ -5929,6 +5936,7 @@ save__ma_entry_associated_files.file_format
     'csv'
     'tsv'
     'pdf'
+    'json'
     'other'
      save_
 
