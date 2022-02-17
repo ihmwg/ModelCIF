@@ -537,7 +537,7 @@ save__ma_template_details.template_origin
     loop_
     _item_enumeration.value
     _item_enumeration.detail
-    'reference database'    'template is obtained from an exisiting structural database'
+    'reference database'    'template is obtained from an existing structural database'
     'customized'            'template is a customized one, provided by the user'
      save_
 
@@ -1378,7 +1378,7 @@ save__ma_target_entity.origin
     loop_
     _item_enumeration.value
     _item_enumeration.detail
-    'reference database'    'target is obtained from an exisiting reference database'
+    'reference database'    'target is obtained from an existing reference database'
     'designed'              'target is designed by the user'
      save_
 
