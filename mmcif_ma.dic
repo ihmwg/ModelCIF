@@ -2,7 +2,7 @@
 ## MODELING EXTENSION DICTIONARY ##
 ###################################
 
-# Version 1.3.5 14th February 2022
+# Version 1.3.6 4th March 2022
 
 data_mmcif_ma.dic
 
@@ -19,7 +19,7 @@ data_mmcif_ma.dic
 
     _dictionary.title           mmcif_ma.dic
     _dictionary.datablock_id    mmcif_ma.dic
-    _dictionary.version         1.3.5
+    _dictionary.version         1.3.6
 #
      loop_
     _dictionary_history.version
@@ -175,6 +175,16 @@ data_mmcif_ma.dic
   + Updated _datablock.description
   + Updated enumerations for _ma_entry_associated_files.file_format
 ;
+  1.3.6   2022-03-04
+;
+  Changes (bv)
+  + Updated enumerations for _ma_qa_metric.type
+  + Updated _category.mandatory_code for ma_model_list
+  + Updated _item.mandatory_code for _ma_model_list.assembly_id
+  + Updated parent-child relationships for item assembly_id in categories ma_model_list, ma_struct_assembly and ma_struct_assembly_details
+  + Updated _item.mandatory code for _ma_template_details.template_label_entity_id and _ma_template_details.template_label_asym_id
+  + Added _ma_template_details.template_auth_asym_id
+;
 
 #########################
 ## CATEGORY_GROUP_LIST ##
@@ -281,7 +291,7 @@ save_ma_model_list
                details of the models being deposited.
 ;
     _category.id                  ma_model_list
-    _category.mandatory_code      no
+    _category.mandatory_code      yes
      loop_
     _category_key.name          '_ma_model_list.ordinal_id'
 
@@ -400,8 +410,10 @@ save__ma_model_list.assembly_id
 ;
     _item.name                  '_ma_model_list.assembly_id'
     _item.category_id             ma_model_list
-    _item.mandatory_code          yes
+    _item.mandatory_code          no
     _item_type.code               int
+    _item_linked.child_name     '_ma_model_list.assembly_id'
+    _item_linked.parent_name    '_ma_struct_assembly_details.assembly_id'
      save_
 
 save__ma_model_list.model_type
@@ -569,13 +581,23 @@ save__ma_template_details.target_asym_id
     _item_linked.parent_name    '_ma_target_entity_instance.asym_id'
      save_
 
+save__ma_template_details.template_auth_asym_id
+    _item_description.description
+;     The author provided chain ID corresponding to the template.
+;  
+    _item.name                  '_ma_template_details.template_auth_asym_id'
+    _item.category_id             ma_template_details
+    _item.mandatory_code          yes   
+    _item_type.code               code 
+     save_
+
 save__ma_template_details.template_label_asym_id
     _item_description.description
-;     The asym ID corresponding to the template.
+;     The label asym ID corresponding to the template.
 ;  
     _item.name                  '_ma_template_details.template_label_asym_id'
     _item.category_id             ma_template_details
-    _item.mandatory_code          yes
+    _item.mandatory_code          no
     _item_type.code               code
      save_
 
@@ -585,7 +607,7 @@ save__ma_template_details.template_label_entity_id
 ; 
     _item.name                  '_ma_template_details.template_label_entity_id'
     _item.category_id             ma_template_details
-    _item.mandatory_code          yes
+    _item.mandatory_code          no
     _item_type.code               code
      save_
 
@@ -1842,7 +1864,7 @@ save__ma_struct_assembly.assembly_id
     _item.mandatory_code          yes
     _item_type.code               int
     _item_linked.child_name     '_ma_struct_assembly.assembly_id'
-    _item_linked.parent_name    '_ma_model_list.assembly_id'
+    _item_linked.parent_name    '_ma_struct_assembly_details.assembly_id'
      save_
 
 save__ma_struct_assembly.entity_description
@@ -1959,8 +1981,6 @@ save__ma_struct_assembly_details.assembly_id
     _item.category_id             ma_struct_assembly_details
     _item.mandatory_code          yes
     _item_type.code               int
-    _item_linked.child_name     '_ma_struct_assembly_details.assembly_id'
-    _item_linked.parent_name    '_ma_struct_assembly.assembly_id'
      save_
 
 save__ma_struct_assembly_details.assembly_name
@@ -5349,8 +5369,13 @@ save__ma_qa_metric.type
     'energy'    'the lower the energy, the better the quality'
     'distance'  'the lower the distance, the better the quality'
     'normalized score'  'normalized score ranging from 0 to 1'
-    'pLDDT' 'per-residue confidence score based on the Local Distance Difference Test'
-    'PAE'   'predicted aligned error'
+    'pLDDT' 'confidence score predicting accuracy according to the CA-only Local Distance Difference Test (lDDT-Cα) in [0,100]'
+    'pLDDT in [0,1]'    'confidence score predicting accuracy according to the CA-only Local Distance Difference Test (lDDT-Cα) in [0,1]'
+    'pLDDT all-atom'    'confidence score predicting accuracy according to the all-atom Local Distance Difference Test (lDDT) in [0,100]'
+    'pLDDT all-atom in [0,1]' 'confidence score predicting accuracy according to the all-atom Local Distance Difference Test (lDDT) in [0,1]'
+    'PAE'   'predicted aligned error (in Angstroms)'
+    'pTM'   'confidence score predicting accuracy according to the template modeling score in [0,1]'
+    'ipTM'  'confidence score of protein-protein interface based on the template modeling score in [0,1]'
     'contact probability'   'the contact probability of a pairwise interaction'
     'other'     'other type of QA metric'
      save_
