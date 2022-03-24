@@ -583,7 +583,10 @@ save__ma_template_details.target_asym_id
 
 save__ma_template_details.template_auth_asym_id
     _item_description.description
-;     The author provided chain ID corresponding to the template.
+;     The author provided chain ID corresponding to the template. This is the
+      author provided chain ID as found at the source of the template, e.g. the
+      external mmCIF file storing the template coordinates. If the external
+      source is a PDB formatted file, template_auth_asym_id is the chain ID.
 ;  
     _item.name                  '_ma_template_details.template_auth_asym_id'
     _item.category_id             ma_template_details
@@ -593,7 +596,9 @@ save__ma_template_details.template_auth_asym_id
 
 save__ma_template_details.template_label_asym_id
     _item_description.description
-;     The label asym ID corresponding to the template.
+;     The label asym ID corresponding to the template. This is the asym ID as
+      found at the source of the template, e.g. the external mmCIF file storing
+      the template coordinates.
 ;  
     _item.name                  '_ma_template_details.template_label_asym_id'
     _item.category_id             ma_template_details
@@ -603,7 +608,8 @@ save__ma_template_details.template_label_asym_id
 
 save__ma_template_details.template_label_entity_id
     _item_description.description
-;     The entity ID corresponding to the template.
+;     The entity ID corresponding to the template. Points to the template
+      entity that needs to be defined in the same data block/ ModelCIF file.
 ; 
     _item.name                  '_ma_template_details.template_label_entity_id'
     _item.category_id             ma_template_details
