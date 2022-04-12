@@ -2,7 +2,7 @@
 ## MODELING EXTENSION DICTIONARY ##
 ###################################
 
-# Version 1.3.6 4th March 2022
+# Version 1.3.7 11th April 2022
 
 data_mmcif_ma.dic
 
@@ -19,7 +19,7 @@ data_mmcif_ma.dic
 
     _dictionary.title           mmcif_ma.dic
     _dictionary.datablock_id    mmcif_ma.dic
-    _dictionary.version         1.3.6
+    _dictionary.version         1.3.7
 #
      loop_
     _dictionary_history.version
@@ -185,6 +185,13 @@ data_mmcif_ma.dic
   + Updated _item.mandatory code for _ma_template_details.template_label_entity_id and _ma_template_details.template_label_asym_id
   + Added _ma_template_details.template_auth_asym_id
 ;
+  1.3.7   2022-04-11
+;
+  Changes (bv)
+  + Updated enumerations for _ma_data.content_type and _ma_associated_archive_file_details.file_format
+  + Added ma_chem_comp_descriptor and _chem_comp.ma_provenance
+  + Updated _category_group_list.description
+;
 
 #########################
 ## CATEGORY_GROUP_LIST ##
@@ -200,7 +207,7 @@ data_mmcif_ma.dic
 ;
               'ma_group'
               'inclusive_group'
-;              Categories that describe the modeling extension dictionary.
+;              Categories that describe the ModelCIF extension dictionary.
 ;
 
 ####################
@@ -2759,14 +2766,16 @@ save__ma_data.content_type
     _item_type.code               line
     loop_
     _item_enumeration.value
-      'target'
-      'template structure'
-      'polymeric template library'
-      'spatial restraints'
-      'target-template alignment'
-      'coevolution MSA'
-      'model coordinates'
-      'other'
+    _item_enumeration.detail
+      'target'                      'target'
+      'template structure'          'template structure'
+      'polymeric template library'  'polymeric template library'
+      'spatial restraints'          'spatial restraints'
+      'target-template alignment'   'target-template alignment'
+      'coevolution MSA'             'coevolution MSA'
+      'model coordinates'           'model coordinates'
+      'input structure'             'input structure used in deep learning methods'
+      'other'                       'other'
      save_
 
 save__ma_data.content_type_other_details
@@ -6094,6 +6103,7 @@ save__ma_associated_archive_file_details.file_format
     'csv'
     'tsv'
     'pdf'
+    'bcif'
     'other'
      save_
 
@@ -6123,4 +6133,157 @@ save__ma_associated_archive_file_details.description
     _item.mandatory_code          no
     _item_type.code               text
      save_
+
+#############################
+## MA_CHEM_COMP_DESCRIPTOR ##
+#############################
+
+save_ma_chem_comp_descriptor
+    _category.description
+;              Data items in the MA_CHEM_COMP_DESCRIPTOR category record the
+               details of the chemical components that are defined locally
+               within the mmCIF file instance. 
+;
+    _category.id                  ma_chem_comp_descriptor
+    _category.mandatory_code      no
+     loop_
+    _category_key.name          '_ma_chem_comp_descriptor.ordinal_id'
+
+    loop_
+    _category_group.id           'inclusive_group'
+                                 'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 -
+;
+;
+    loop_
+    _ma_chem_comp_descriptor.ordinal_id
+    _ma_chem_comp_descriptor.chem_comp_id
+    _ma_chem_comp_descriptor.chem_comp_name
+    _ma_chem_comp_descriptor.type
+    _ma_chem_comp_descriptor.value
+    _ma_chem_comp_descriptor.software
+    _ma_chem_comp_descriptor.details
+    1 MA_UNL Delamanid 'InChI Key' XDAOLTSRNUSPPH-XMMPIXPASA-N ? ?
+   # ...  abbreviated ... 
+;
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_chem_comp_descriptor
+     save_
+
+save__ma_chem_comp_descriptor.ordinal_id
+    _item_description.description
+;     A unique identifier for the category.
+;
+    _item.name                  '_ma_chem_comp_descriptor.ordinal_id'
+    _item.category_id             ma_chem_comp_descriptor
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_chem_comp_descriptor.chem_comp_id
+    _item_description.description
+;     An identifier for the chemical component. 
+      This data item is a pointer to _chem_comp.id
+      in the CHEM_COMP category.
+;
+    _item.name                  '_ma_chem_comp_descriptor.chem_comp_id'
+    _item.category_id             ma_chem_comp_descriptor
+    _item.mandatory_code          yes
+    _item_type.code               ucode
+    _item_linked.child_name     '_ma_chem_comp_descriptor.chem_comp_id'
+    _item_linked.parent_name    '_chem_comp.id'
+     save_
+
+save__ma_chem_comp_descriptor.chem_comp_name
+    _item_description.description
+;     The name of the chemical component.
+;
+    _item.name                  '_ma_chem_comp_descriptor.chem_comp_name'
+    _item.category_id             ma_chem_comp_descriptor
+    _item.mandatory_code          no
+    _item_type.code               line
+     save_
+
+save__ma_chem_comp_descriptor.type
+    _item_description.description
+;     The type of descriptor for the chemical component.
+;
+    _item.name                  '_ma_chem_comp_descriptor.type'
+    _item.category_id             ma_chem_comp_descriptor
+    _item.mandatory_code          yes
+    _item_type.code               line
+    loop_
+    _item_enumeration.value
+    _item_enumeration.detail
+    'InChI'             'International Chemical Identifier (InChI) computed from chemical structure using the International Union of Pure and Applied Chemistry (IUPAC) standard'
+    'InChI Key'         'International Chemical Identifier hash (InChIKey) computed from chemical structure using the International Union of Pure and Applied Chemistry (IUPAC) standard'
+    'Canonical SMILES'  'Simplified Molecular-Input Line-Entry System (SMILES) computed from chemical structure devoid of isotopic and stereochemical information'
+    'Isomeric SMILES'   'Simplified Molecular-Input Line-Entry System (SMILES) computed from chemical structure containing isotopic and stereochemical information. SMILES written with isotopic and chiral specifications are collectively known as isomeric SMILES'
+    'IUPAC Name'        'Chemical name computed from chemical structure that uses International Union of Pure and Applied Chemistry (IUPAC) nomenclature standards'
+    'PubChem CID'       'PubChem Compound ID'
+     save_
+
+save__ma_chem_comp_descriptor.value
+    _item_description.description
+;     The value of the descriptor identified in _ma_chem_comp_descriptor.type. 
+;
+    _item.name                  '_ma_chem_comp_descriptor.value'
+    _item.category_id             ma_chem_comp_descriptor
+    _item.mandatory_code          yes
+    _item_type.code               line
+    loop_
+    _item_examples.case
+    'XDAOLTSRNUSPPH-XMMPIXPASA-N'
+     save_
+
+save__ma_chem_comp_descriptor.software_id
+    _item_description.description
+;     Identifier for the software used to generate the chemical descriptor defined in
+      _ma_chem_comp_descriptor.type and _ma_chem_comp_descriptor.value. 
+      This data item is a pointer to _software.pdbx_ordinal in the SOFTWARE category.
+;
+    _item.name                  '_ma_chem_comp_descriptor.software_id'
+    _item.category_id             ma_chem_comp_descriptor
+    _item.mandatory_code          no
+    _item_type.code               int
+    _item_linked.child_name     '_ma_chem_comp_descriptor.software_id'
+    _item_linked.parent_name    '_software.pdbx_ordinal'
+     save_
+
+save__ma_chem_comp_descriptor.details
+    _item_description.description
+;     Additional details about the chemical component descriptor.
+;
+    _item.name                  '_ma_chem_comp_descriptor.details'
+    _item.category_id             ma_chem_comp_descriptor
+    _item.mandatory_code          no
+    _item_type.code               text
+     save_
+
+###############
+## CHEM_COMP ##
+###############
+
+save__chem_comp.ma_provenance
+    _item_description.description
+;     The provenance information for the chemical component definition. 
+;
+    _item.name                  '_chem_comp.ma_provenance'
+    _item.category_id             chem_comp
+    _item.mandatory_code          no
+    _item_type.code               line
+    loop_
+    _item_enumeration.value
+    _item_enumeration.detail      
+    'CCD Core'   'The chemical component is defined in the core CCD maintained by the wwPDB'
+    'CCD MA'     'The chemical component is defined in the ModelArchive extension of the CCD'
+    'CCD local'  'The chemical component is defined locally within the mmCIF file instance'
+     save_
+
 
