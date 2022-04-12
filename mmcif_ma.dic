@@ -5842,7 +5842,7 @@ save__ma_qa_metric_local_pairwise.metric_value
 save__pdbx_entity_nonpoly.ma_model_mode
     _item_description.description
 ;     The data item provides information on whether the non-polymeric entity
-      was explicity modeled or implicitly derived from the template. 
+      was explicitly modeled or implicitly derived from the template.
 ;
     _item.name                  '_pdbx_entity_nonpoly.ma_model_mode'
     _item.category_id             pdbx_entity_nonpoly
