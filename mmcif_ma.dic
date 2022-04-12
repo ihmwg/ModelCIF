@@ -2,7 +2,7 @@
 ## MODELING EXTENSION DICTIONARY ##
 ###################################
 
-# Version 1.3.7 11th April 2022
+# Version 1.3.8 12th April 2022
 
 data_mmcif_ma.dic
 
@@ -19,7 +19,7 @@ data_mmcif_ma.dic
 
     _dictionary.title           mmcif_ma.dic
     _dictionary.datablock_id    mmcif_ma.dic
-    _dictionary.version         1.3.7
+    _dictionary.version         1.3.8
 #
      loop_
     _dictionary_history.version
@@ -191,6 +191,11 @@ data_mmcif_ma.dic
   + Updated enumerations for _ma_data.content_type and _ma_associated_archive_file_details.file_format
   + Added ma_chem_comp_descriptor and _chem_comp.ma_provenance
   + Updated _category_group_list.description
+;
+  1.3.8   2022-04-12
+;
+  Changes (bv)
+  + Added _ma_template_ref_db_details.db_version_date
 ;
 
 #########################
@@ -1074,6 +1079,17 @@ save__ma_template_ref_db_details.db_accession_code
     _item.category_id             ma_template_ref_db_details
     _item.mandatory_code          yes
     _item_type.code               line
+     save_
+
+save__ma_template_ref_db_details.db_version_date
+    _item_description.description
+;    The version date of the reference database entry.
+;
+    _item.name                  '_ma_template_ref_db_details.db_version_date'
+    _item.category_id             ma_template_ref_db_details
+    _item.mandatory_code          no
+    _item_type.code               yyyy-mm-dd
+    _item_examples.case           2014-07-09
      save_
 
 ############################
