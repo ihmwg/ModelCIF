@@ -183,10 +183,12 @@ mmcif_ma-core.dic  1.3.8   2022-04-12
   + Added _ma_template_ref_db_details.db_version_date
 ;
 
-mmcif_ma-core.dic  1.3.9   2022-04-12
+mmcif_ma-core.dic  1.3.9   2022-04-23
 ;
-  Changes (bv)
+  Changes (bv/sb)
   + Updated dictionary files organization
+  + Updated description for _ma_template_details.template_auth_asym_id, _ma_template_details.template_label_asym_id
+    and _ma_template_details.template_label_entity_id
 ;
 
 ###########
@@ -505,8 +507,11 @@ save__ma_template_details.target_asym_id
 
 save__ma_template_details.template_auth_asym_id
     _item_description.description
-;     The author provided chain ID corresponding to the template.
-;  
+;     The author provided chain ID corresponding to the template. This is the
+      author provided chain ID as found at the source of the template, e.g. the
+      external mmCIF file storing the template coordinates. If the external
+      source is a PDB formatted file, template_auth_asym_id is the chain ID.
+; 
     _item.name                  '_ma_template_details.template_auth_asym_id'
     _item.category_id             ma_template_details
     _item.mandatory_code          yes   
@@ -515,8 +520,10 @@ save__ma_template_details.template_auth_asym_id
 
 save__ma_template_details.template_label_asym_id
     _item_description.description
-;     The label asym ID corresponding to the template.
-;  
+;     The label asym ID corresponding to the template. This is the asym ID as
+      found at the source of the template, e.g. the external mmCIF file storing
+      the template coordinates.
+;   
     _item.name                  '_ma_template_details.template_label_asym_id'
     _item.category_id             ma_template_details
     _item.mandatory_code          no
@@ -525,8 +532,10 @@ save__ma_template_details.template_label_asym_id
 
 save__ma_template_details.template_label_entity_id
     _item_description.description
-;     The entity ID corresponding to the template.
-; 
+;     The entity ID corresponding to the template. This is the entity ID as
+      found at the source of the template, e.g. the external mmCIF file storing
+      the template coordinates.
+;  
     _item.name                  '_ma_template_details.template_label_entity_id'
     _item.category_id             ma_template_details
     _item.mandatory_code          no
