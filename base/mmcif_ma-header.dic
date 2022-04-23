@@ -1,0 +1,204 @@
+###################################
+## MODELING EXTENSION DICTIONARY ##
+###################################
+
+# Version 1.3.9 23rd April 2022
+
+data_mmcif_ma.dic
+
+    _datablock.id                          mmcif_ma.dic
+    _datablock.description
+;
+     This data block holds the extension dictionary for structural models obtained using
+     computational methods. This extension is based on the PDBx/mmCIF dictionary (http://mmcif.wwpdb.org).
+     This resource is actively developed and maintained in a github repository available at
+     https://github.com/ihmwg/ModelCIF. 
+;
+    _dictionary.title           mmcif_ma.dic
+    _dictionary.datablock_id    mmcif_ma.dic
+    _dictionary.version         1.3.9
+#
+     loop_
+    _dictionary_history.version
+    _dictionary_history.update
+    _dictionary_history.revision
+
+  1.1.1   2018-07-06
+;
+  Changes (jh/bv)
+  + Release as initial version 1.1.1
+;
+  1.1.2   2018-07-09
+;
+  Changes (jh/bv/jw/gt/sb)
+  + Updated MA_MODEL_LIST, MA_STRUCT_ASSEMBLY, MA_PROTCOL_STEP
+  + Removed MA_STEP_INPUT, MA_STEP_OUTPUT
+;
+  1.1.3   2018-07-10
+;
+  Changes (jh/bv/jw/gt/sb)
+  + Added MA_PDB_TEMPLATE, MA_TARGET_REF_DB_DETAILS, MA_DATA_GROUP
+;
+  1.1.4   2018-07-10
+;
+  Changes (jh/bv/jw/gt/sb)
+  + Added MA_TARGET_TEMPLATE_MAPPING, MA_PDB_TEMPLATE_TRANS_MATRIX, MA_TARGET_STRUCT
+  + Removed MA_STEP_CRITERIA
+;
+  1.1.5   2018-07-11
+;
+  Changes (jh/bv/jw/gt/sb)
+  + Revised MA_TARGET_TEMPLATE_MAPPING, MA_ALIGNMENT_DETAILS, MA_TEMPLATE_DETAILS 
+  + Revised MA_PDB_TEMPLATE, MA_TEMPLATE_COORD
+  + Added MA_TEMPLATE_POLY_SEGMENT
+;
+  1.1.6   2018-07-12
+;
+  Changes (jh/bv/jw/gt/sb)
+  + Revised MA_ALIGNMENT_DETAILS, MA_PROTOCOL_STEP, MA_TARGET_TEMPLATE_MAPPING
+  + Added MA_SOFTWARE_PARAMETER
+;
+  1.1.7   2018-07-13
+;
+  Changes (jh/bv/jw/gt/sb)
+  + Revised MA_TEMPLATE_DETAILS, MA_TEMPLATE_POLY_SEGMENT, MA_TEMPLATE_POLY, MA_TEMPLATE_POLY_SEGMENT
+  + Added MA_TEMPLATE_NON_POLY, MA_TEMPLATE_CUSTOMIZED
+;
+  1.1.8   2018-07-16
+;
+  Changes (jh/bv/jw/gt/sb)
+  + Addressed requirements for coevolution MSA and predicted contacts
+;
+  1.1.9   2018-07-16
+;
+  Changes (jh/bv/jw/gt/sb)
+  + Revised MA_TEMPLATE_POLY_SEGMENT, MA_TARGET_TEMPLATE_POLY_MAPPING, MA_ALIGNMENT_DETAILS
+;
+  1.2.0   2018-07-17
+;
+  Changes (jh/bv/jw/gt/sb)
+  + Added MA_ALIGNMENT_INFO, MA_TARGET_ENTITY_INSTANCE
+  + Revised MA_TEMPLATE_DETAILS, MA_TARGET_TEMPLATE_POLY_MAPPING, MA_ALIGNMENT_DETAILS
+;
+  1.2.1   2018-07-18
+;
+  Changes (jh/bv/jw/gt/sb)
+  + Added MA_POLY_TEMPLATE_LIBRARY_DETAILS, MA_POLY_TEMPLATE_LIBRARY_LIST
+  + Added MA_POLY_TEMPLATE_LIBRARY_COMPONENTS
+  + Updated _item_sub_category.id for matrices and vectors
+  + Updated MA_SOFTWARE_PARAMETER
+;
+  1.2.2   2018-07-19
+;
+  Changes (jh/bv/jw/gt/sb)
+  + Added MA_QA_METRIC, MA_QA_METRIC_GLOBAL, MA_QA_METRIC_LOCAL
+  + Added MA_SOFTWARE_GROUP
+;
+  1.2.3   2018-07-20
+;
+  Changes (jh/bv/jw/gt/sb)
+  + Updated MA_POLY_TEMPLATE_LIBRARY_LIST, MA_POLY_TEMPLATE_LIBRARY_COMPONENTS
+;
+  1.2.4   2018-07-27
+;
+  Changes (jh/bv/jw/gt/sb)
+  + Added _ma_template_non_poly.comp_id
+  + Fixed syntax and typos
+;
+  1.2.5   2020-05-21
+;
+  Changes (bv)
+  + Changed _category.mandatory_code to no for ma_restraints_group
+;
+  1.2.6   2021-09-17
+;
+  Changes (bv)
+  + Changed _ma_qa_metric_global.value to _ma_qa_metric_global.metric_value
+  + Changed _ma_qa_metric_local.value to _ma_qa_metric_local.metric_value
+;
+  1.2.7   2021-10-18
+;
+  Changes (bv)
+  + Added _entry.ma_collection_id, _ma_target_ref_db_details.ncbi_taxonomy_id, _ma_target_ref_db_details.organism_scientific, ma_qa_metric_local_pairwise
+  + Updated _item.mandatory_code for _ma_protocol_step.input_data_group_id, _ma_protocol_step.output_data_group_id, _ma_protocol_step.software_group_id
+  + Updated enumerations for _ma_target_ref_db_details.db_name, _ma_qa_metric.type
+  + Changed _ma_protocol_step.method_type_other_details to _ma_protocol_step.details
+  + Updated _category_key.name for ma_target_ref_db_details
+;
+  1.2.8   2021-10-20
+;
+  Changes (bv)
+  + Updated enumerations for _ma_target_ref_db_details.db_name
+;
+  1.2.9   2021-10-21
+;
+  Changes (bv)
+  + Updated enumerations for _ma_qa_metric.mode
+;
+  1.3.0   2021-10-22
+;
+  Changes (bv)
+  + Added ma_entry_associated_files
+;
+
+  1.3.1   2021-10-25
+;
+  Changes (bv)
+  + Added ma_associated_archive_file_details
+;
+
+  1.3.2   2021-10-27
+;
+  Changes (bv)
+  + Updated _item.mandatory_code for _ma_qa_metric.software_group_id
+  + Fixed typos
+;
+
+  1.3.3   2021-11-22
+;
+  Changes (bv)
+  + Added _ma_target_ref_db_details.gene_name, _ma_target_ref_db_details.seq_db_sequence_checksum, _ma_target_ref_db_details.seq_db_sequence_version_date
+;
+
+  1.3.4   2022-01-18
+;
+  Changes (bv)
+  + Updated _item.mandatory_code for ma_data_group, ma_software_group
+;
+
+  1.3.5   2022-02-14
+;
+  Changes (bv)
+  + Updated _datablock.description
+  + Updated enumerations for _ma_entry_associated_files.file_format
+;
+  1.3.6   2022-03-04
+;
+  Changes (bv)
+  + Updated enumerations for _ma_qa_metric.type
+  + Updated _category.mandatory_code for ma_model_list
+  + Updated _item.mandatory_code for _ma_model_list.assembly_id
+  + Updated parent-child relationships for item assembly_id in categories ma_model_list, ma_struct_assembly and ma_struct_assembly_details
+  + Updated _item.mandatory code for _ma_template_details.template_label_entity_id and _ma_template_details.template_label_asym_id
+  + Added _ma_template_details.template_auth_asym_id
+;
+  1.3.7   2022-04-11
+;
+  Changes (bv)
+  + Updated enumerations for _ma_data.content_type and _ma_associated_archive_file_details.file_format
+  + Added ma_chem_comp_descriptor and _chem_comp.ma_provenance
+  + Updated _category_group_list.description
+;
+  1.3.8   2022-04-12
+;
+  Changes (bv)
+  + Added _ma_template_ref_db_details.db_version_date
+;
+  1.3.9   2022-04-23
+;
+  Changes (bv/sb)
+  + Updated dictionary files organization
+  + Updated description for _ma_template_details.template_auth_asym_id, _ma_template_details.template_label_asym_id
+    and _ma_template_details.template_label_entity_id
+;
+
