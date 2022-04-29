@@ -3,7 +3,7 @@ data_mmcif_ma-core.dic
 _pdbx_dictionary_component.datablock_id   mmcif_ma-core.dic
 _pdbx_dictionary_component.dictionary_component_id  mmcif_ma-core.dic
 _pdbx_dictionary_component.title          "ModeCIF dictionary: mmcif_ma-core"
-_pdbx_dictionary_component.version        1.3.9
+_pdbx_dictionary_component.version        1.4.0
 
 loop_
 _pdbx_dictionary_component_history.dictionary_component_id
@@ -189,6 +189,12 @@ mmcif_ma-core.dic  1.3.9   2022-04-23
   + Updated dictionary files organization
   + Updated description for _ma_template_details.template_auth_asym_id, _ma_template_details.template_label_asym_id
     and _ma_template_details.template_label_entity_id
+;
+mmcif_ma-core.dic  1.4.0   2022-04-29
+;
+  Changes (bv)
+  + Updated enumerations for _ma_software_parameter.data_type and _ma_data.content_type
+  + Added ma_data_ref_db
 ;
 
 ###########
@@ -2710,6 +2716,7 @@ save__ma_data.content_type
       'coevolution MSA'             'coevolution MSA'
       'model coordinates'           'model coordinates'
       'input structure'             'input structure used in deep learning methods'
+      'reference database'          'reference database used'
       'other'                       'other'
      save_
 
@@ -2815,6 +2822,100 @@ save__ma_data_group.data_id
     _item_type.code               int
     _item_linked.child_name     '_ma_data_group.data_id'
     _item_linked.parent_name    '_ma_data.id'    
+     save_
+
+####################
+## MA_DATA_REF_DB ##
+####################
+
+save_ma_data_ref_db
+    _category.description
+;              Data items in the MA_DATA_REF_DB category capture the details regarding
+               reference databases used in the modeling. These include the 
+               sequence databases used for template search, alignments, etc. 
+;
+    _category.id                  ma_data_ref_db
+    _category.mandatory_code      no
+     loop_
+    _category_key.name          '_ma_data_ref_db.data_id'
+
+    loop_
+    _category_group.id           'inclusive_group'
+                                 'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 -
+;
+;
+        loop_
+        _ma_data_ref_db.id
+        _ma_data_ref_db.name
+        _ma_data_ref_db.location_url
+        _ma_data_ref_db.version
+        _ma_data_ref_db.release_date
+        1 . . . .
+         # ...  abbreviated ...
+;
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_data_ref_db
+     save_
+
+save__ma_data_ref_db.data_id
+    _item_description.description
+;    Identifier for the reference database.
+     This data item is a pointer to _ma_data.id
+     in the MA_DATA category.
+;
+    _item.name                  '_ma_data_ref_db.data_id'
+    _item.category_id             ma_data_ref_db
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_data_ref_db.data_id'
+    _item_linked.parent_name    '_ma_data.id'
+     save_
+
+save__ma_data_ref_db.name
+    _item_description.description
+;    Name of the reference database.
+;   
+    _item.name                  '_ma_data_ref_db.name'
+    _item.category_id             ma_data_ref_db
+    _item.mandatory_code          yes
+    _item_type.code               code
+     save_
+
+save__ma_data_ref_db.location_url
+    _item_description.description
+;    URL for the reference database.
+;
+    _item.name                  '_ma_data_ref_db.location_url'
+    _item.category_id             ma_data_ref_db
+    _item.mandatory_code          yes
+    _item_type.code               code
+     save_
+
+save__ma_data_ref_db.version
+    _item_description.description
+;    Version of the reference database.
+;
+    _item.name                  '_ma_data_ref_db.version'
+    _item.category_id             ma_data_ref_db
+    _item.mandatory_code          no
+    _item_type.code               code
+     save_
+
+save__ma_data_ref_db.release_date
+    _item_description.description
+;    Release date of the version specified in _ma_data_ref_db.version.
+;
+    _item.name                  '_ma_data_ref_db.release_date'
+    _item.category_id             ma_data_ref_db
+    _item.mandatory_code          no
+    _item_type.code               yyyy-mm-dd
      save_
 
 ###############################
@@ -4884,11 +4985,14 @@ save__ma_software_parameter.data_type
     _item_type.code               code
     loop_
     _item_enumeration.value
-    'integer'    
-    'float'   
-    'string'
-    'boolean' 
-    'other'            
+    _item_enumeration.detail
+    'integer'       'parameter is an integer'
+    'float'         'parameter is a float'
+    'string'        'parameter is a string'
+    'boolean'       'parameter is boolean'
+    'other'         'parameter is of other type not enumerated'
+    'integer-csv'   'parameter is list of integers expressed as a set of comma separated values; e.g., 3,4,5,1,2'
+    'float-csv'     'parameter is list of floating point numbers expressed as a set of comma separated values; e.g., 3.1,4.6,5.8,1.4,2.7'
      save_
 
 save__ma_software_parameter.data_type_other_details

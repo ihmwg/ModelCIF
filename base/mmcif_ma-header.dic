@@ -2,7 +2,7 @@
 ## MODELING EXTENSION DICTIONARY ##
 ###################################
 
-# Version 1.3.9 23rd April 2022
+# Version 1.4.0 29th April 2022
 
 data_mmcif_ma.dic
 
@@ -16,7 +16,7 @@ data_mmcif_ma.dic
 ;
     _dictionary.title           mmcif_ma.dic
     _dictionary.datablock_id    mmcif_ma.dic
-    _dictionary.version         1.3.9
+    _dictionary.version         1.4.0
 #
      loop_
     _dictionary_history.version
@@ -201,4 +201,9 @@ data_mmcif_ma.dic
   + Updated description for _ma_template_details.template_auth_asym_id, _ma_template_details.template_label_asym_id
     and _ma_template_details.template_label_entity_id
 ;
-
+  1.4.0   2022-04-29
+;
+  Changes (bv)
+  + Updated enumerations for _ma_software_parameter.data_type and _ma_data.content_type
+  + Added ma_data_ref_db
+;
