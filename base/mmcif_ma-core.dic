@@ -3,14 +3,13 @@ data_mmcif_ma-core.dic
 _pdbx_dictionary_component.datablock_id   mmcif_ma-core.dic
 _pdbx_dictionary_component.dictionary_component_id  mmcif_ma-core.dic
 _pdbx_dictionary_component.title          "ModeCIF dictionary: mmcif_ma-core"
-_pdbx_dictionary_component.version        1.4.0
+_pdbx_dictionary_component.version        1.4.1
 
 loop_
 _pdbx_dictionary_component_history.dictionary_component_id
 _pdbx_dictionary_component_history.version
 _pdbx_dictionary_component_history.update
 _pdbx_dictionary_component_history.revision
-
 mmcif_ma-core.dic  1.1.1   2018-07-06
 ;
   Changes (jh/bv)
@@ -195,6 +194,11 @@ mmcif_ma-core.dic  1.4.0   2022-04-29
   Changes (bv)
   + Updated enumerations for _ma_software_parameter.data_type and _ma_data.content_type
   + Added ma_data_ref_db
+;
+mmcif_ma-core.dic  1.4.1   2022-05-13
+;
+  Changes (bv)
+  + Updated enumerations for _ma_target_ref_db_details.db_name and _ma_template_ref_db_details.db_name
 ;
 
 ###########
@@ -980,10 +984,13 @@ save__ma_template_ref_db_details.db_name
     _item_type.code               code 
     loop_
     _item_enumeration.value
-    'PDB'       'Protein Data Bank'
-    'PDB-Dev'   'PDB-Dev'
-    'MA'        'Model Archive'
-    'Other'     'Other'
+    _item_enumeration.detail
+    'PDB'           'Protein Data Bank'
+    'PDB-Dev'       'PDB-Dev'
+    'MA'            'Model Archive'
+    'PubChem'       'PubChem'
+    'AlphaFoldDB'   'AlphaFoldDB'
+    'Other'         'Other'
      save_
 
 save__ma_template_ref_db_details.db_name_other_details
@@ -1494,12 +1501,13 @@ save__ma_target_ref_db_details.db_name
     loop_
     _item_enumeration.value
     _item_enumeration.detail
-      'UNP'     'UniProtKB'
-      'GB'      'Genbank'
-      'OrthoDB' 'OrthoDB'
-      'NCBI'    'NCBI'
-      'JGI'     'JGI'
-      'Other'   'Other'
+      'UNP'         'UniProtKB'
+      'GB'          'Genbank'
+      'OrthoDB'     'OrthoDB'
+      'NCBI'        'NCBI'
+      'JGI'         'JGI'
+      'Phytozyme'   'Phytozyme'
+      'Other'       'Other'
      save_
 
 save__ma_target_ref_db_details.db_name_other_details
