@@ -3,7 +3,7 @@ data_mmcif_ma-core.dic
 _pdbx_dictionary_component.datablock_id   mmcif_ma-core.dic
 _pdbx_dictionary_component.dictionary_component_id  mmcif_ma-core.dic
 _pdbx_dictionary_component.title          "ModeCIF dictionary: mmcif_ma-core"
-_pdbx_dictionary_component.version        1.4.1
+_pdbx_dictionary_component.version        1.4.2
 
 loop_
 _pdbx_dictionary_component_history.dictionary_component_id
@@ -199,6 +199,11 @@ mmcif_ma-core.dic  1.4.1   2022-05-13
 ;
   Changes (bv)
   + Updated enumerations for _ma_target_ref_db_details.db_name and _ma_template_ref_db_details.db_name
+;
+mmcif_ma-core.dic  1.4.2   2022-08-09
+;
+  Changes (bv)
+  + Updated _item_type.code for _ma_data_ref_db.name
 ;
 
 ###########
@@ -2893,7 +2898,7 @@ save__ma_data_ref_db.name
     _item.name                  '_ma_data_ref_db.name'
     _item.category_id             ma_data_ref_db
     _item.mandatory_code          yes
-    _item_type.code               code
+    _item_type.code               line
      save_
 
 save__ma_data_ref_db.location_url
