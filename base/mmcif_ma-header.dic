@@ -2,7 +2,7 @@
 ## MODELING EXTENSION DICTIONARY ##
 ###################################
 
-# Version 1.4.2 9th August 2022
+# Version 1.4.3 13th September 2022
 
 data_mmcif_ma.dic
 
@@ -16,7 +16,7 @@ data_mmcif_ma.dic
 ;
     _dictionary.title           mmcif_ma.dic
     _dictionary.datablock_id    mmcif_ma.dic
-    _dictionary.version         1.4.2
+    _dictionary.version         1.4.3
 #
      loop_
     _dictionary_history.version
@@ -216,4 +216,11 @@ data_mmcif_ma.dic
 ;
   Changes (bv)
   + Updated _item_type.code for _ma_data_ref_db.name
+;
+  1.4.3   2022-09-13
+;
+  Changes (bv)
+  + Updated mmcif_pdbx_v50.dic to version 5.361
+  + Updated _item_units_list.detail for kelvins in mmcif_ma-data
+  + Updated _item_type.code for _ma_entry_associated_files.file_url in mmcif_ma-core
 ;

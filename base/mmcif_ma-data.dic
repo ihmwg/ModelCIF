@@ -3,7 +3,7 @@ data_mmcif_ma-data.dic
 _pdbx_dictionary_component.datablock_id   mmcif_ma-data.dic
 _pdbx_dictionary_component.dictionary_component_id  mmcif_ma-data.dic
 _pdbx_dictionary_component.title          "ModeCIF dictionary: mmcif_ma-data"
-_pdbx_dictionary_component.version        1.0.0
+_pdbx_dictionary_component.version        1.0.1
 
 loop_
 _pdbx_dictionary_component_history.dictionary_component_id
@@ -11,6 +11,11 @@ _pdbx_dictionary_component_history.version
 _pdbx_dictionary_component_history.update
 _pdbx_dictionary_component_history.revision
 
+mmcif_ma-data.dic  1.0.1   2022-09-13
+;
+  Changes (bv)
+  + Updated _item_units_list.detail for kelvins following mmcif_pdbx_v50.dic
+;
 mmcif_ma-data.dic  1.0.0   2022-04-12
 ;
   Changes (bv)
@@ -641,7 +646,7 @@ mmcif_ma-data.dic  1.0.0   2022-04-12
      'degrees_per_minute'     'degrees (of arc) per minute'
 #
      'celsius'                'degrees (of temperature) Celsius'
-     'kelvins'                'temperature in kelvins'
+     'kelvins'                'temperature in Kelvin'
 #
      'electrons'              'electrons'
 #
