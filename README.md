@@ -15,3 +15,4 @@ dictionary. The [PDBx/mmCIF](http://mmcif.wwpdb.org) dictionary is used by the [
 archive structural models of macromolecules determined using X-ray crystallography, NMR spectroscory
 and three-dimensional Electron Microscopy.
 
+The primary publication about ModelCIF is currently under review. The bioRxiv preprint is available at https://doi.org/10.1101/2022.12.06.518550.  
