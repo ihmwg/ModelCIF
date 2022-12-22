@@ -16,7 +16,7 @@ data_mmcif_ma.dic
 ;
     _dictionary.title           mmcif_ma.dic
     _dictionary.datablock_id    mmcif_ma.dic
-    _dictionary.version         1.4.3
+    _dictionary.version         1.4.4
 #
      loop_
     _dictionary_history.version
@@ -223,4 +223,9 @@ data_mmcif_ma.dic
   + Updated mmcif_pdbx_v50.dic to version 5.361
   + Updated _item_units_list.detail for kelvins in mmcif_ma-data
   + Updated _item_type.code for _ma_entry_associated_files.file_url in mmcif_ma-core
+;
+  1.4.4   2022-12-21
+;
+  Changes (bv)
+  + Added _ma_associated_archive_file_details.data_id and _ma_entry_associated_files.data_id
 ;

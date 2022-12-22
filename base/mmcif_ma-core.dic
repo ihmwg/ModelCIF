@@ -3,7 +3,7 @@ data_mmcif_ma-core.dic
 _pdbx_dictionary_component.datablock_id   mmcif_ma-core.dic
 _pdbx_dictionary_component.dictionary_component_id  mmcif_ma-core.dic
 _pdbx_dictionary_component.title          "ModeCIF dictionary: mmcif_ma-core"
-_pdbx_dictionary_component.version        1.4.3
+_pdbx_dictionary_component.version        1.4.4
 
 loop_
 _pdbx_dictionary_component_history.dictionary_component_id
@@ -209,6 +209,11 @@ mmcif_ma-core.dic  1.4.3   2022-09-13
 ;
   Changes (bv)
   + Updated _item_type.code for _ma_entry_associated_files.file_url
+;
+mmcif_ma-core.dic  1.4.4   2022-12-21
+;
+  Changes (bv)
+  + Added _ma_associated_archive_file_details.data_id and _ma_entry_associated_files.data_id
 ;
 
 ###########
@@ -6059,6 +6064,19 @@ save__ma_entry_associated_files.file_content
     'other'    
      save_
 
+save__ma_entry_associated_files.data_id
+    _item_description.description
+;     The data_id identifier corresponding to the entry associated file, if available. 
+      This data item is a pointer to _ma_data.id in the MA_DATA category.
+;
+    _item.name                  '_ma_entry_associated_files.data_id'
+    _item.category_id             ma_entry_associated_files
+    _item.mandatory_code          no
+    _item_type.code               int
+    _item_linked.child_name     '_ma_entry_associated_files.data_id'
+    _item_linked.parent_name    '_ma_data.id'
+     save_
+
 ########################################
 ## MA_ASSOCIATED_ARCHIVE_FILE_DETAILS ##
 ########################################
@@ -6189,6 +6207,19 @@ save__ma_associated_archive_file_details.description
     _item.category_id             ma_associated_archive_file_details
     _item.mandatory_code          no
     _item_type.code               text
+     save_
+
+save__ma_associated_archive_file_details.data_id
+    _item_description.description
+;     The data_id identifier corresponding to the associated archive file, if availble. 
+      This data item is a pointer to _ma_data.id in the MA_DATA category.
+;
+    _item.name                  '_ma_associated_archive_file_details.data_id'
+    _item.category_id             ma_associated_archive_file_details
+    _item.mandatory_code          no
+    _item_type.code               int
+    _item_linked.child_name     '_ma_associated_archive_file_details.data_id'
+    _item_linked.parent_name    '_ma_data.id'
      save_
 
 #############################
