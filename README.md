@@ -19,4 +19,4 @@ ModelCIF dictionary is distributed in two forms:
  - ModelCIF dictionary combined with definitions in the parent PDBx/mmCIF dictionary (available at **dist/mmcif_ma.dic**) and 
  - ModelCIF extension separately without the definitions in the parent PDBx/mmCIF dictionary (available at **dist/mmcif_ma_ext.dic**) 
 
-The primary publication about ModelCIF is currently under review. The bioRxiv preprint is available at https://doi.org/10.1101/2022.12.06.518550.  
+The primary publication about ModelCIF is available at https://doi.org/10.1016/j.jmb.2023.168021.  
