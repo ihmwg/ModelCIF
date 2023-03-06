@@ -9,5 +9,5 @@ _pdbx_include_dictionary.dictionary_namespace_prefix_replace
 #
 mmcif_ma_ext-header.dic  mmcif_ma_ext-header.dic    extend . .
 mmcif_ma-data.dic    mmcif_ma-data.dic      extend . .
-#mmcif_pdbx_v50.dic  mmcif_pdbx_v50.dic    extend . .
+mmcif_pdbx_conditionals.dic  ../mmcif_pdbx/base/mmcif_pdbx-conditionals.dic  extend . .
 mmcif_ma-core.dic    mmcif_ma-core.dic      extend . .

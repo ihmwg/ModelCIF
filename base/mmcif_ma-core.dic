@@ -3,7 +3,7 @@ data_mmcif_ma-core.dic
 _pdbx_dictionary_component.datablock_id   mmcif_ma-core.dic
 _pdbx_dictionary_component.dictionary_component_id  mmcif_ma-core.dic
 _pdbx_dictionary_component.title          "ModeCIF dictionary: mmcif_ma-core"
-_pdbx_dictionary_component.version        1.4.4
+_pdbx_dictionary_component.version        1.4.5
 
 loop_
 _pdbx_dictionary_component_history.dictionary_component_id
@@ -214,6 +214,11 @@ mmcif_ma-core.dic  1.4.4   2022-12-21
 ;
   Changes (bv)
   + Added _ma_associated_archive_file_details.data_id and _ma_entry_associated_files.data_id
+;
+mmcif_ma-core.dic  1.4.5   2023-03-06
+; 
+  Changes (bv)
+  + Add enumerations to _ma_associated_archive_file_details.file_format
 ;
 
 ###########
@@ -6168,18 +6173,24 @@ save__ma_associated_archive_file_details.file_format
     _item_type.code               code
     loop_
     _item_enumeration.value
-    'txt'
-    'cif'
-    'fasta'
-    'clustalw'
-    'pir/nbrf'
-    'a2m'
-    'a3m'
-    'csv'
-    'tsv'
-    'pdf'
-    'bcif'
-    'other'
+    _item_enumeration.detail
+    'txt'           'Text'
+    'cif'           'CIF'
+    'fasta'         'Fasta'
+    'clustalw'      'Clustalw'
+    'pir/nbrf'      'PIR/NBRF'
+    'a2m'           'A2M'
+    'a3m'           'A3M'
+    'csv'           'CSV'
+    'tsv'           'TSV'
+    'pdf'           'PDF'
+    'bcif'          'Binary cif'
+    'json'          'JSON'
+    'pkl'           'Python pickle'
+    'pt'            'PyTorch'
+    'npy'           'NumPy array'
+    'npz'           'NumPy arrays'
+    'other'         'Other format'
      save_
 
 save__ma_associated_archive_file_details.file_content

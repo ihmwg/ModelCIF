@@ -12,7 +12,7 @@ _datablock.description
 #
 _dictionary.title         mmcif_ma_ext.dic
 _dictionary.datablock_id  mmcif_ma_ext.dic
-_dictionary.version       1.4.4
+_dictionary.version       1.4.5
 #
 loop_
 _dictionary_history.version
@@ -253,20 +253,33 @@ _dictionary_history.revision
   + Added _ma_associated_archive_file_details.data_id and _ma_entry_associated_files.data_id
 ;
   
+1.4.5  2023-03-06  
+;
+  Changes (bv)
+  + Add enumerations to _ma_associated_archive_file_details.file_format
+;
+  
 #
 loop_
 _pdbx_dictionary_component.datablock_id
 _pdbx_dictionary_component.dictionary_component_id
 _pdbx_dictionary_component.title
 _pdbx_dictionary_component.version
-mmcif_ma-data.dic  mmcif_ma-data.dic  "ModeCIF dictionary: mmcif_ma-data"  1.0.1  
-mmcif_ma-core.dic  mmcif_ma-core.dic  "ModeCIF dictionary: mmcif_ma-core"  1.4.4  
+mmcif_ma-data.dic  mmcif_ma-data.dic  "ModeCIF dictionary: mmcif_ma-data"  1.0.2  
+mmcif_ma-core.dic  mmcif_ma-core.dic  "ModeCIF dictionary: mmcif_ma-core"  1.4.5  
 #
 loop_
 _pdbx_dictionary_component_history.dictionary_component_id
 _pdbx_dictionary_component_history.version
 _pdbx_dictionary_component_history.update
 _pdbx_dictionary_component_history.revision
+mmcif_ma-data.dic  1.0.2  2022-03-06  
+;
+  Changes (bv)
+  + Add uchar5 to item_type_list
+  + Moved conditionals to mmcif_pdbx-conditionals.dic
+;
+  
 mmcif_ma-data.dic  1.0.1  2022-09-13  
 ;
   Changes (bv)
@@ -512,6 +525,12 @@ mmcif_ma-core.dic  1.4.4  2022-12-21
   + Added _ma_associated_archive_file_details.data_id and _ma_entry_associated_files.data_id
 ;
   
+mmcif_ma-core.dic  1.4.5  2023-03-06  
+; 
+  Changes (bv)
+  + Add enumerations to _ma_associated_archive_file_details.file_format
+;
+  
 #
 loop_
 _sub_category.id
@@ -736,6 +755,11 @@ yyyy-mm-dd:hh:mm-flex     char   "[0-9][0-9][0-9][0-9](-[0-9]?[0-9])?(-[0-9][0-9
 uchar3                    uchar  "[+]?[A-Za-z0-9][A-Za-z0-9]?[A-Za-z0-9]?"  
 ;
                data item for 3 character codes
+;
+  
+uchar5                    uchar  "[+]?[A-Za-z0-9][A-Za-z0-9]?[A-Za-z0-9]?[A-Za-z0-9]?[A-Za-z0-9]?"  
+;
+               data item for 5 character codes
 ;
   
 uchar1                    uchar  "[+]?[A-Za-z0-9]"  
@@ -7976,18 +8000,24 @@ save__ma_associated_archive_file_details.file_format
    #
    loop_
    _item_enumeration.value
-     txt       
-     cif       
-     fasta     
-     clustalw  
-     pir/nbrf  
-     a2m       
-     a3m       
-     csv       
-     tsv       
-     pdf       
-     bcif      
-     other     
+   _item_enumeration.detail
+     txt       Text  
+     cif       CIF  
+     fasta     Fasta  
+     clustalw  Clustalw  
+     pir/nbrf  PIR/NBRF  
+     a2m       A2M  
+     a3m       A3M  
+     csv       CSV  
+     tsv       TSV  
+     pdf       PDF  
+     bcif      "Binary cif"  
+     json      JSON  
+     pkl       "Python pickle"  
+     pt        PyTorch  
+     npy       "NumPy array"  
+     npz       "NumPy arrays"  
+     other     "Other format"  
    #
 save_
 #

@@ -3,14 +3,19 @@ data_mmcif_ma-data.dic
 _pdbx_dictionary_component.datablock_id   mmcif_ma-data.dic
 _pdbx_dictionary_component.dictionary_component_id  mmcif_ma-data.dic
 _pdbx_dictionary_component.title          "ModeCIF dictionary: mmcif_ma-data"
-_pdbx_dictionary_component.version        1.0.1
+_pdbx_dictionary_component.version        1.0.2
 
 loop_
 _pdbx_dictionary_component_history.dictionary_component_id
 _pdbx_dictionary_component_history.version
 _pdbx_dictionary_component_history.update
 _pdbx_dictionary_component_history.revision
-
+mmcif_ma-data.dic  1.0.2   2022-03-06
+;
+  Changes (bv)
+  + Add uchar5 to item_type_list
+  + Moved conditionals to mmcif_pdbx-conditionals.dic
+;
 mmcif_ma-data.dic  1.0.1   2022-09-13
 ;
   Changes (bv)
@@ -452,6 +457,11 @@ mmcif_ma-data.dic  1.0.0   2022-04-12
 ;
                data item for 3 character codes
 ;
+               uchar5    uchar
+              '[+]?[A-Za-z0-9][A-Za-z0-9]?[A-Za-z0-9]?[A-Za-z0-9]?[A-Za-z0-9]?'
+;
+               data item for 5 character codes
+;
                uchar1    uchar
               '[+]?[A-Za-z0-9]'
 ;
@@ -839,30 +849,3 @@ mmcif_ma-data.dic  1.0.0   2022-04-12
      'electrons_per_picometres_cubed'
      'electrons_per_angstroms_cubed'                       '*'   1.0E-06
 ###
-
-##################
-## Conditionals ##
-##################
-loop_
-_pdbx_comparison_operator_list.code
-_pdbx_comparison_operator_list.description
-                                    =       Equal
-                                    >=      "greater or equal"
-                                    !=      "Not equal"
-                                    <       "Less than"
-                                    not_set "If not set"
-                                    true    "Always true"
-
-loop_
-_pdbx_conditional_context_list.ordinal_id
-_pdbx_conditional_context_list.context_id
-_pdbx_conditional_context_list.target_item_name
-_pdbx_conditional_context_list.target_item_value
-_pdbx_conditional_context_list.cmp_op
-_pdbx_conditional_context_list.log_op
-1 WWPDB_NOT_ACCEPT_GDPR_20210924 '_pdbx_database_status.date_accepted_terms_and_conditions' ?                                    not_set ?
-2 WWPDB_NOT_ACCEPT_GDPR_20210924 '_pdbx_database_status.date_accepted_terms_and_conditions' 2021-09-24                           <       or
-3 WWPDB_NOT_PI                   '_pdbx_contact_author.role'                                ?                                    not_set ?
-4 WWPDB_NOT_PI                   '_pdbx_contact_author.role'                               'principal investigator/group leader' !=      or
-5 WWPDB_ALWAYS_SUPPRESS          '_pdbx_contact_author.role'                                ?                                    true    ?
-##
