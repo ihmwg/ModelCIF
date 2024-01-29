@@ -2,7 +2,7 @@
 ## MODELING EXTENSION DICTIONARY ##
 ###################################
 
-# Version 1.4.5 6th March 2023
+# Version 1.4.6 29th January 2024
 
 data_mmcif_ma.dic
 
@@ -16,7 +16,7 @@ data_mmcif_ma.dic
 ;
     _dictionary.title           mmcif_ma.dic
     _dictionary.datablock_id    mmcif_ma.dic
-    _dictionary.version         1.4.5
+    _dictionary.version         1.4.6
 #
      loop_
     _dictionary_history.version
@@ -233,4 +233,9 @@ data_mmcif_ma.dic
 ;
   Changes (bv)
   + Add enumerations to _ma_associated_archive_file_details.file_format
+;
+  1.4.6   2024-01-29
+;
+  Changes (bv)
+  + Update _item_type.code for _ma_target_ref_db_details.gene_name
 ;

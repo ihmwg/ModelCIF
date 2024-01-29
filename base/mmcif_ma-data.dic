@@ -3,13 +3,18 @@ data_mmcif_ma-data.dic
 _pdbx_dictionary_component.datablock_id   mmcif_ma-data.dic
 _pdbx_dictionary_component.dictionary_component_id  mmcif_ma-data.dic
 _pdbx_dictionary_component.title          "ModeCIF dictionary: mmcif_ma-data"
-_pdbx_dictionary_component.version        1.0.2
+_pdbx_dictionary_component.version        1.0.3
 
 loop_
 _pdbx_dictionary_component_history.dictionary_component_id
 _pdbx_dictionary_component_history.version
 _pdbx_dictionary_component_history.update
 _pdbx_dictionary_component_history.revision
+mmcif_ma-data.dic  1.0.3   2024-01-29
+;
+  Changes (bv)
+  + Add pdb_id_u to item_type_list
+;
 mmcif_ma-data.dic  1.0.2   2022-03-06
 ;
   Changes (bv)
@@ -587,6 +592,7 @@ mmcif_ma-data.dic  1.0.0   2022-04-12
    positive_int        numb '[1-9][0-9]*'       'Positive integers (1,2,3,..)'
    emd_id              char 'EMD-[0-9]{4,}'     'EMDB code'
    pdb_id              char '([1-9][A-Z0-9]{3}|PDB_[A-Z0-9]{8})' 'PDB code (upper cases)'
+   pdb_id_u            uchar '([1-9][A-Za-z0-9]{3}|[Pp][Dd][Bb]_[A-Za-z0-9]{8})' 'PDB code (case insensitive)'
    point_group         char '(C[1-9][0-9]*|D[2-9]|D[1-9][0-9]+|O|T|I)' 'Point group symmetry in Schoenflies notation'
    point_group_helical char '[CD][1-9][0-9]*' 'Point group symmetry for helices in Schoenflies notation'
    boolean char 'YES|NO' 'Boolean type'
