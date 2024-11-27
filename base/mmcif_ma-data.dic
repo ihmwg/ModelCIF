@@ -3,13 +3,18 @@ data_mmcif_ma-data.dic
 _pdbx_dictionary_component.datablock_id   mmcif_ma-data.dic
 _pdbx_dictionary_component.dictionary_component_id  mmcif_ma-data.dic
 _pdbx_dictionary_component.title          "ModeCIF dictionary: mmcif_ma-data"
-_pdbx_dictionary_component.version        1.0.3
+_pdbx_dictionary_component.version        1.0.4
 
 loop_
 _pdbx_dictionary_component_history.dictionary_component_id
 _pdbx_dictionary_component_history.version
 _pdbx_dictionary_component_history.update
 _pdbx_dictionary_component_history.revision
+mmcif_ma-data.dic  1.0.4   2024-11-27
+;
+  Changes (bv)
+  + Update author in item_type_list
+;
 mmcif_ma-data.dic  1.0.3   2024-01-29
 ;
   Changes (bv)
@@ -597,7 +602,8 @@ mmcif_ma-data.dic  1.0.0   2022-04-12
    point_group_helical char '[CD][1-9][0-9]*' 'Point group symmetry for helices in Schoenflies notation'
    boolean char 'YES|NO' 'Boolean type'
    #author char "[A-Za-z '\-]+,\s+([A-Z\-]+\.)+$" 'Author name in PDB format: Taylor, C.A.'
-   author char "[A-Za-z0-9_]+(( |-|'|\. )[A-Za-z0-9_]+)*( Jr.| III)?, [A-Za-z0-9_]\.(-?[A-Za-z0-9_]+\.)*$" 'Author name in PDB format: Taylor, C.A.'
+   #author char "[A-Za-z0-9_]+(( |-|'|\. )[A-Za-z0-9_]+)*( Jr.| III)?, [A-Za-z0-9_]\.(-?[A-Za-z0-9_]+\.)*$" 'Author name in PDB format: Taylor, C.A.'
+   author char "(([A-Za-z0-9_]+(( |-|'|\. )[A-Za-z0-9_]+)*( Jr.| III)?, [A-Za-z0-9_]\.(-?[A-Za-z0-9_]+\.)*)|(Seattle Structural Genomics Center for Infectious Disease.*)|(Structural Genomics Consortium.*)|(QCRG Structural Biology Consortium.*)|(Center for Structural Genomics of Infectious Diseases.*)|(Center for Structural Biology of Infectious Diseases.*))" 'Author name in PDB format: Taylor, C.A.'
    orcid_id char "[0-9]{4}-[0-9]{4}-[0-9]{4}-([0-9]{3}X|[0-9]{4})"  'ORCID pattern - dddd-dddd-dddd-dddd|dddX'
    symmetry_operation char '[-+0-9XxYyZ/ ]+,[-+0-9XxYyZ/ ]+,[-+0-9XxYyZ/ ]+' 'Allowed characters for use in symmetry operation such as 1/2-x,y,1/2-z'
    sequence_dep        char '[a-zA-Z0-9\t \r\n\v\f\(\)]+$'  'Deposition specific one letter code'

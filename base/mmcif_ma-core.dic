@@ -3,7 +3,7 @@ data_mmcif_ma-core.dic
 _pdbx_dictionary_component.datablock_id   mmcif_ma-core.dic
 _pdbx_dictionary_component.dictionary_component_id  mmcif_ma-core.dic
 _pdbx_dictionary_component.title          "ModeCIF dictionary: mmcif_ma-core"
-_pdbx_dictionary_component.version        1.4.6
+_pdbx_dictionary_component.version        1.4.7
 
 loop_
 _pdbx_dictionary_component_history.dictionary_component_id
@@ -225,6 +225,18 @@ mmcif_ma-core.dic  1.4.6   2024-01-29
   Changes (bv)
   + Update _item_type.code for _ma_target_ref_db_details.gene_name
 ;
+mmcif_ma-core.dic  1.4.7   2024-11-27
+;
+  Changes (bv)
+  + Update enumerations for _ma_associated_archive_file_details.file_format and _ma_template_details.template_entity_type
+  + Add ma_template_branched category and _ma_target_ref_db_details.is_primary data item
+  + Add _ma_target_ref_db_details.db_accession to the primary key of _ma_target_ref_db_details
+  + Update the category description of ma_qa_metric_local_pairwise
+  + Deprecate _ma_model_list.model_id in favor of _ma_model_list.ordinal_id and make _ma_model_list.model_id not mandatory 
+  + Update parent-child relationships of all child data items pointing to _ma_model_list.model_id to point to _ma_model_list.ordinal_id
+  + Deprecate _ma_model_list.model_group_id and _ma_model_list.model_group_name
+  + Add ma_model_group, ma_model_group_link, ma_model_representative
+;
 
 ###########
 ## ENTRY ##
@@ -267,24 +279,16 @@ save_ma_model_list
 ;
     loop_
     _ma_model_list.ordinal_id
-    _ma_model_list.model_id
-    _ma_model_list.model_group_id
     _ma_model_list.model_name
-    _ma_model_list.model_group_name
     _ma_model_list.assembly_id
     _ma_model_list.data_id
     _ma_model_list.model_type
 
-    1    1      1    'Best scoring model'        'cluster1'     1    1   'Homology model'
-    2    2      1    '2nd Best scoring model'    'cluster1'     1    2   'Homology model'
-    3    3      1    '3rd Best scoring model'    'cluster1'     1    3   'Homology model'
-    4    4      1    '4th Best scoring model'    'cluster1'     1    4   'Homology model'
-    5    5      1    '5th Best scoring model'    'cluster1'     1    5   'Homology model'
-    6    6      2    'Best scoring model'        'cluster2'     1    6   'Homology model'
-    7    7      2    '2nd Best scoring model'    'cluster2'     1    7   'Homology model'
-    8    8      2    '3rd Best scoring model'    'cluster2'     1    8   'Homology model'
-    9    9      2    '4th Best scoring model'    'cluster2'     1    9   'Homology model'
-   10   10      2    '5th Best scoring model'    'cluster2'     1   10   'Homology model'
+    1    'Best scoring model'        1    1   'Homology model'
+    2    '2nd Best scoring model'    1    2   'Homology model'
+    3    '3rd Best scoring model'    1    3   'Homology model'
+    4    '4th Best scoring model'    1    4   'Homology model'
+    5    '5th Best scoring model'    1    5   'Homology model'
    # ...  abbreviated ... 
 ;
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -294,39 +298,33 @@ save_ma_model_list
 
 save__ma_model_list.ordinal_id
     _item_description.description
-;     A unique identifier for the model / model group combination.
+;     A unique identifier for the structural model being deposited.
 ;
     _item.name                  '_ma_model_list.ordinal_id'
     _item.category_id             ma_model_list
     _item.mandatory_code          yes
     _item_type.code               int
+    _item_linked.parent_name    '_ma_model_list.ordinal_id'
+    _item_linked.child_name     '_atom_site.pdbx_PDB_model_num'
      save_
 
 save__ma_model_list.model_id
     _item_description.description
 ;     A unique identifier for the structural model being deposited.
+      This data item was practically a duplicate of _ma_model_list.ordinal_id
+      and has been deprecated with dictionary version 1.4.7.
 ;
     _item.name                  '_ma_model_list.model_id'
     _item.category_id             ma_model_list
-    _item.mandatory_code          yes
+    _item.mandatory_code          no
     _item_type.code               int
-    _item_linked.parent_name    '_ma_model_list.model_id'
-    _item_linked.child_name     '_atom_site.pdbx_PDB_model_num'
      save_
 
 save__ma_model_list.model_group_id
     _item_description.description
 ;     An identifier to group structural models into collections or sets.
-      A cluster of models and its representative can either be grouped together 
-      or can be separate groups in the ma_model_list table. The choice between 
-      the two options should be decided based on how the modeling was carried out 
-      and how the representative was chosen. If the representative is a member of 
-      the ensemble (i.e., best scoring model), then it is recommended that the 
-      representative and the ensemble belong to the same model group. If the 
-      representative is calculated from the ensemble (i.e., centroid), then it is 
-      recommended that the representative be separated into a different group. 
-      If the models do not need to be grouped into collections, then the
-      _ma_model_list.model_group_id is the same as _ma_model_list.model_id.
+      This data item has been deprecated with dictionary version 1.4.7. 
+      See ma_model_group category. 
 ;
     _item.name                  '_ma_model_list.model_group_id'
     _item.category_id             ma_model_list
@@ -352,6 +350,8 @@ save__ma_model_list.model_name
 save__ma_model_list.model_group_name
     _item_description.description
 ;     A decsriptive name for the model group. 
+      This data item has been deprecated with dictionary version 1.4.7. 
+      See ma_model_group category.
 ;
     _item.name                  '_ma_model_list.model_group_name'
     _item.category_id             ma_model_list
@@ -412,6 +412,256 @@ save__ma_model_list.data_id
     _item_type.code               int
     _item_linked.child_name     '_ma_model_list.data_id'
     _item_linked.parent_name    '_ma_data.id'
+     save_
+
+#####################
+## MA_MODEL_GROUP ##
+#####################
+
+save_ma_model_group
+    _category.description
+;              MA_MODEL_GROUP category defines collections or groups of
+               structure models.
+;
+    _category.id                  ma_model_group
+    _category.mandatory_code      no   
+     loop_
+    _category_key.name          '_ma_model_group.id'
+
+    loop_
+    _category_group.id           'inclusive_group'
+                                 'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 -
+;
+;
+    loop_
+    _ma_model_group.id
+    _ma_model_group.name
+    _ma_model_group.details
+    # ...  abbreviated ...
+;
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_model_group
+     save_
+
+save__ma_model_group.id
+    _item_description.description
+;     A unique identifier for a collection or group of structural models. 
+      This data item can be used to group models into structural clusters
+      or using other criteria. 
+      A cluster of models and its representative can either be grouped together
+      or can be separate groups. The choice between the two options should be 
+      decided based on how the modeling was carried out and how the representative 
+      was chosen. If the representative is a member of the ensemble 
+      (i.e., best scoring model), then it is recommended that the
+      representative and the ensemble belong to the same model group. If the
+      representative is calculated from the ensemble (i.e., centroid), then it is
+      recommended that the representative be separated into a different group.
+;
+    _item.name                  '_ma_model_group.id'
+    _item.category_id             ma_model_group
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_model_group.name
+    _item_description.description
+;     A name for the collection of models. 
+;
+    _item.name                  '_ma_model_group.name'
+    _item.category_id             ma_model_group
+    _item.mandatory_code          no
+    _item_type.code               line
+    loop_
+    _item_examples.case
+    'cluster1'
+    'cluster2'
+     save_
+
+save__ma_model_group.details
+    _item_description.description
+;     Additional details about the collection of models.
+;
+    _item.name                  '_ma_model_group.details'
+    _item.category_id             ma_model_group
+    _item.mandatory_code          no
+    _item_type.code               text
+     save_
+
+##########################
+## MA_MODEL_GROUP_LINK ##
+##########################
+
+save_ma_model_group_link
+    _category.description
+;              MA_MODEL_GROUP_LINK category provides the list of structure models present in 
+               a particular structure model group. 
+;
+    _category.id                  ma_model_group_link
+    _category.mandatory_code      no
+     loop_
+    _category_key.name          '_ma_model_group_link.model_id'
+                                '_ma_model_group_link.group_id'
+
+    loop_
+    _category_group.id           'inclusive_group'
+                                 'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1
+;
+;
+    loop_
+    _ma_model_group_link.model_id
+    _ma_model_group_link.group_id
+
+    1  1
+    2  1
+    1  2
+    2  2
+    3  2
+    4  3
+    5  3
+;
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_model_group_link
+     save_
+
+save__ma_model_group_link.model_id
+    _item_description.description
+;     An identifier for the structure model.
+      This data item is a pointer to _ma_model_list.ordinal_id in the
+      MA_MODEL_LIST category. 
+;
+    _item.name                  '_ma_model_group_link.model_id'
+    _item.category_id             ma_model_group_link
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_model_group_link.model_id'
+    _item_linked.parent_name    '_ma_model_list.ordinal_id'
+     save_
+
+save__ma_model_group_link.group_id
+    _item_description.description
+;     An identifier for the structure model group.
+      This data item is a pointer to _ma_model_group.id in the
+      MA_MODEL_GROUP category. 
+;              
+    _item.name                  '_ma_model_group_link.group_id'
+    _item.category_id             ma_model_group_link
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_model_group_link.group_id'
+    _item_linked.parent_name    '_ma_model_group.id'
+     save_
+
+##############################
+## MA_MODEL_REPRESENTATIVE ##
+##############################
+
+save_ma_model_representative
+    _category.description
+;              Data items in the MA_MODEL_REPRESENTATIVE category record the
+               details of the representative structure model when multiple models are submitted. 
+;
+    _category.id                  ma_model_representative
+    _category.mandatory_code      no
+     loop_
+    _category_key.name          '_ma_model_representative.id'
+
+    loop_
+    _category_group.id           'inclusive_group'
+                                 'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 -
+;
+;
+    loop_
+    _ma_model_representative.id
+    _ma_model_representative.model_group_id
+    _ma_model_representative.model_id
+    _ma_model_representative.selection_criteria
+     1  1  1  'best scoring model'
+     2  1  2  'medioid'
+     #...abbreviated...#
+;
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_model_representative
+     save_
+
+save__ma_model_representative.id
+    _item_description.description
+;     A unique identifier for the representative model in a model group.
+;
+    _item.name                  '_ma_model_representative.id'
+    _item.category_id             ma_model_representative
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_model_representative.model_group_id
+    _item_description.description
+;     The model group identifier corresponding to the representative model. 
+      This data item is a pointer to _ma_model_group.id in the
+      MA_MODEL_GROUP category. 
+;
+    _item.name                  '_ma_model_representative.model_group_id'
+    _item.category_id             ma_model_representative
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_model_representative.model_group_id'
+    _item_linked.parent_name    '_ma_model_group.id'
+     save_
+
+save__ma_model_representative.model_id
+    _item_description.description
+;     The model identifier corresponding to the representative model. 
+      This data item is a pointer to _ma_model_list.ordinal_id in the
+      MA_MODEL_LIST category. 
+;
+    _item.name                  '_ma_model_representative.model_id'
+    _item.category_id             ma_model_representative
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_model_representative.model_id'
+    _item_linked.parent_name    '_ma_model_list.ordinal_id'
+     save_
+
+save__ma_model_representative.selection_criteria
+    _item_description.description
+;     The selection criteria based on which the representative is chosen. 
+;
+    _item.name                  '_ma_model_representative.selection_criteria'
+    _item.category_id             ma_model_representative
+    _item.mandatory_code          yes
+    _item_type.code               line
+    loop_
+    _item_enumeration.value
+    _item_enumeration.detail
+       'medoid'                       'most similar to other models'
+       'closest to the average'       .
+       'lowest energy'                .
+       'target function'              .
+       'fewest violations'            .
+       'minimized average structure'  .
+       'best scoring model'           .
+       'centroid'                     'centroid of a cluster'
+       'other selction criteria'      .
      save_
 
 #########################
@@ -493,6 +743,7 @@ save__ma_template_details.template_entity_type
     _item_enumeration.value
     'polymer'
     'non-polymer'
+    'branched'
     'water'
     'macrolide'
      save_
@@ -824,6 +1075,147 @@ save__ma_template_non_poly.details
 ;
     _item.name                  '_ma_template_non_poly.details'
     _item.category_id             ma_template_non_poly
+    _item.mandatory_code          no
+    _item_type.code               text
+     save_
+
+##########################
+## MA_TEMPLATE_BRANCHED ##
+##########################
+
+save_ma_template_branched
+    _category.description
+;              Data items in the MA_TEMPLATE_BRANCHED category record details about
+               the structural templates for branched polymers used in the 
+               homology/comparative modeling.
+;
+    _category.id                  ma_template_branched
+    _category.mandatory_code      no
+    _category_key.name            '_ma_template_branched.ordinal_id'
+    loop_
+    _category_group.id            'inclusive_group'
+                                  'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 -
+;
+;
+    loop_
+    _ma_template_branched.ordinal_id
+    _ma_template_branched.template_id
+    _ma_template_branched.name
+    _ma_template_branched.descriptor_type
+    _ma_template_branched.descriptor_value
+    _ma_template_branched.descriptor_software_id
+    _ma_template_branched.type
+    _ma_template_branched.details
+    # ...  abbreviated ...
+;
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_template_branched
+     save_
+
+save__ma_template_branched.ordinal_id
+    _item_description.description 
+;    A unique identifier for the category.
+;    
+    _item.name                  '_ma_template_branched.ordinal_id'
+    _item.category_id             ma_template_branched
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_template_branched.template_id
+    _item_description.description
+;     Identifier for the template.
+      This data item is a pointer to _ma_template_details.template_id
+      in the MA_TEMPLATE_DETAILS caategory. 
+;
+    _item.name                  '_ma_template_branched.template_id'
+    _item.category_id             ma_template_branched
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_template_branched.template_id'
+    _item_linked.parent_name    '_ma_template_details.template_id'
+     save_
+
+save__ma_template_branched.name
+    _item_description.description
+;     Name of the branched polymer. 
+;
+    _item.name                  '_ma_template_branched.name'
+    _item.category_id             ma_template_branched
+    _item.mandatory_code          yes
+    _item_type.code               line
+     save_
+
+save__ma_template_branched.descriptor_type
+    _item_description.description
+;     Descriptor type for the branched polymer.
+;
+    _item.name                  '_ma_template_branched.descriptor_type'
+    _item.category_id             ma_template_branched
+    _item.mandatory_code          yes
+    _item_type.code               line
+    loop_
+    _item_enumeration.value
+    _item_enumeration.detail
+     'Glycam Condensed Core Sequence'   'Linear Notation for Unique description of oligosaccharide core structure'
+     'Glycam Condensed Sequence'        'Linear Notation for unique description of an oligosaccharide entity'
+     'LINUCS'                           'Linear Notation for unique description of an oligosaccharide entity'
+     'WURCS'                            'Linear Notation for Web3 Unique Representation of Carbohydrate Structures'
+     save_
+
+save__ma_template_branched.descriptor_value
+    _item_description.description
+;     Descriptor value for the branched polymer provided in 
+      _ma_template_branched.descriptor_type.
+;
+    _item.name                  '_ma_template_branched.descriptor_value'
+    _item.category_id             ma_template_branched
+    _item.mandatory_code          yes
+    _item_type.code               text
+     save_
+
+save__ma_template_branched.descriptor_software_id
+    _item_description.description
+;     Identifier for the software used to compute the descriptor provided in
+      _ma_template_branched.descriptor_value.
+      This data item is a pointer to _software.pdbx_ordinal
+      in the SOFTWARE category.
+;
+    _item.name                  '_ma_template_branched.descriptor_software_id'
+    _item.category_id             ma_template_branched
+    _item.mandatory_code          no
+    _item_type.code               int
+    _item_linked.child_name     '_ma_template_branched.descriptor_software_id'
+    _item_linked.parent_name    '_software.pdbx_ordinal'
+     save_
+
+save__ma_template_branched.type
+    _item_description.description
+;     Type of branched polymer used as template.
+;
+    _item.name                  '_ma_template_branched.type'
+    _item.category_id             ma_template_branched
+    _item.mandatory_code          yes
+    _item_type.code               code
+    loop_
+    _item_enumeration.value
+     'oligosaccharide'
+     'other'
+     save_
+
+save__ma_template_branched.details
+    _item_description.description
+;     Additional details about the branched template.
+;
+    _item.name                  '_ma_template_branched.details'
+    _item.category_id             ma_template_branched
     _item.mandatory_code          no
     _item_type.code               text
      save_
@@ -1473,6 +1865,7 @@ save_ma_target_ref_db_details
     loop_
     _category_key.name            '_ma_target_ref_db_details.target_entity_id'
                                   '_ma_target_ref_db_details.db_name'
+                                  '_ma_target_ref_db_details.db_accession'
     loop_
     _category_group.id            'inclusive_group'
                                   'ma_group'
@@ -1675,6 +2068,20 @@ save__ma_target_ref_db_details.seq_db_sequence_version_date
     _item.mandatory_code          no
     _item_type.code               yyyy-mm-dd
     _item_examples.case           2014-07-09
+     save_
+
+save__ma_target_ref_db_details.is_primary
+    _item_description.description
+;              Flag to identify the main input used in the modeling. 
+;
+    _item.name                  '_ma_target_ref_db_details.is_primary'
+    _item.category_id             ma_target_ref_db_details
+    _item.mandatory_code          no
+    _item_type.code               ucode
+    loop_
+    _item_enumeration.value
+      'yes' 
+      'no' 
      save_
 
 #####################################
@@ -5553,7 +5960,7 @@ save__ma_qa_metric_global.ordinal_id
 save__ma_qa_metric_global.model_id
     _item_description.description
 ;     The identifier for the structural model, for which global QA metric is provided.
-      This data item is a pointer to _ma_model_list.model_id
+      This data item is a pointer to _ma_model_list.ordinal_id
       in the MA_MODEL_LIST category.  
 ;
     _item.name                  '_ma_qa_metric_global.model_id'
@@ -5561,7 +5968,7 @@ save__ma_qa_metric_global.model_id
     _item.mandatory_code          yes
     _item_type.code               int
     _item_linked.child_name     '_ma_qa_metric_global.model_id'
-    _item_linked.parent_name    '_ma_model_list.model_id'
+    _item_linked.parent_name    '_ma_model_list.ordinal_id'
      save_
 
 save__ma_qa_metric_global.metric_id
@@ -5643,7 +6050,7 @@ save__ma_qa_metric_local.ordinal_id
 save__ma_qa_metric_local.model_id
     _item_description.description
 ;     The identifier for the structural model, for which local QA metric is provided.
-      This data item is a pointer to _ma_model_list.model_id
+      This data item is a pointer to _ma_model_list.ordinal_id
       in the MA_MODEL_LIST category.  
 ;
     _item.name                  '_ma_qa_metric_local.model_id'
@@ -5651,7 +6058,7 @@ save__ma_qa_metric_local.model_id
     _item.mandatory_code          yes
     _item_type.code               int
     _item_linked.child_name     '_ma_qa_metric_local.model_id'
-    _item_linked.parent_name    '_ma_model_list.model_id'
+    _item_linked.parent_name    '_ma_model_list.ordinal_id'
      save_
 
 save__ma_qa_metric_local.label_asym_id
@@ -5731,6 +6138,15 @@ save_ma_qa_metric_local_pairwise
     _category.description
 ;              Data items in the MA_QA_METRIC_LOCAL_PAIRWISE category captures the
                details of the local QA metrics, calculated at the pairwise residue level. 
+               In cases where the metric is symmetric, it is enough to store just one value per pair. 
+               For asymmetric metrics, the order of residues is expected to be meaningful 
+               (e.g. PAE where PAE_ij is defined by aligning residue i (label_*_1) and measuring 
+               the error on residue j (label_*_2)). 
+               In all cases, it is perfectly valid to only provide values for a subset of residue pairs.
+               Data in this category is expected to be very large and can hence be extracted into a 
+               separate file which is linked to the main file using the categories 
+               ma_associated_archive_file_details or ma_entry_associated_files with file_content 
+               set to "local pairwise QA scores".
 ;
     _category.id                  ma_qa_metric_local_pairwise
     _category.mandatory_code      no
@@ -5781,7 +6197,7 @@ save__ma_qa_metric_local_pairwise.ordinal_id
 save__ma_qa_metric_local_pairwise.model_id
     _item_description.description
 ;     The identifier for the structural model, for which local QA metric is provided.
-      This data item is a pointer to _ma_model_list.model_id
+      This data item is a pointer to _ma_model_list.ordinal_id
       in the MA_MODEL_LIST category.  
 ;
     _item.name                  '_ma_qa_metric_local_pairwise.model_id'
@@ -5789,7 +6205,7 @@ save__ma_qa_metric_local_pairwise.model_id
     _item.mandatory_code          yes
     _item_type.code               int
     _item_linked.child_name     '_ma_qa_metric_local_pairwise.model_id'
-    _item_linked.parent_name    '_ma_model_list.model_id'
+    _item_linked.parent_name    '_ma_model_list.ordinal_id'
      save_
 
 save__ma_qa_metric_local_pairwise.label_asym_id_1
@@ -6043,6 +6459,8 @@ save__ma_entry_associated_files.file_format
     'tsv'
     'pdf'
     'json'
+    'png'
+    'jpg'
     'other'
      save_
 
