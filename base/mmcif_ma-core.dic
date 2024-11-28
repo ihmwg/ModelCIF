@@ -6011,6 +6011,10 @@ save_ma_qa_metric_local
     _category.description
 ;              Data items in the MA_QA_METRIC_LOCAL category captures the
                details of the local QA metrics, calculated at the residue-level. 
+               Data in this category can be extracted into a separate file which
+               is linked to the main file using the categories
+               ma_associated_archive_file_details or ma_entry_associated_files
+               with file_content set to "QA metrics".
 ;
     _category.id                  ma_qa_metric_local
     _category.mandatory_code      no
@@ -6151,10 +6155,10 @@ save_ma_qa_metric_local_pairwise
                (e.g. PAE where PAE_ij is defined by aligning residue i (label_*_1) and measuring 
                the error on residue j (label_*_2)). 
                In all cases, it is perfectly valid to only provide values for a subset of residue pairs.
-               Data in this category is expected to be very large and can hence be extracted into a 
+               Data in this category is expected to be very large and can be extracted into a 
                separate file which is linked to the main file using the categories 
                ma_associated_archive_file_details or ma_entry_associated_files with file_content 
-               set to "local pairwise QA scores".
+               set to "QA metrics".
 ;
     _category.id                  ma_qa_metric_local_pairwise
     _category.mandatory_code      no
@@ -6701,7 +6705,7 @@ save_ma_qa_metric_feature
                Data in this category can be extracted into a separate file which 
                is linked to the main file using the categories 
                ma_associated_archive_file_details or ma_entry_associated_files 
-               with file_content set to "feature-based QA scores".
+               with file_content set to "QA metrics".
 ;
     _category.id                  ma_qa_metric_feature
     _category.mandatory_code      no
@@ -6805,10 +6809,10 @@ save_ma_qa_metric_feature_pairwise
 ;              Data items in the MA_QA_METRIC_FEATURE_PAIRWISE category captures the
                QA metrics calculated per pair of features as defined in ma_feature_list. 
                It is valid to only provide values for a subset of feature pairs.
-               Data in this category is expected to be very large and can hence be extracted into a 
+               Data in this category is expected to be very large and can be extracted into a 
                separate file which is linked to the main file using the categories 
                ma_associated_archive_file_details or ma_entry_associated_files with file_content 
-               set to "feature-based QA scores".
+               set to "QA metrics".
 ;
     _category.id                  ma_qa_metric_feature_pairwise
     _category.mandatory_code      no
@@ -7072,6 +7076,8 @@ save__ma_entry_associated_files.details
 save__ma_entry_associated_files.file_content
     _item_description.description
 ;     Content of the file.
+      Note: The option "local pairwise QA scores" is deprecated in favor of 
+      "QA metrics" with dictionary version 1.4.7. 
 ;
     _item.name                  '_ma_entry_associated_files.file_content'
     _item.category_id             ma_entry_associated_files
@@ -7083,7 +7089,7 @@ save__ma_entry_associated_files.file_content
     'multiple sequence alignments'    
     'input restraints'   
     'local pairwise QA scores'
-    'feature-based QA scores'
+    'QA metrics'
     'validation report'
     'other'    
      save_
@@ -7215,6 +7221,8 @@ save__ma_associated_archive_file_details.file_format
 save__ma_associated_archive_file_details.file_content
     _item_description.description
 ;     Content of the file.
+      Note: The option "local pairwise QA scores" is deprecated in favor of 
+      "QA metrics" with dictionary version 1.4.7.
 ;
     _item.name                  '_ma_associated_archive_file_details.file_content'
     _item.category_id             ma_associated_archive_file_details
@@ -7225,7 +7233,7 @@ save__ma_associated_archive_file_details.file_content
     'multiple sequence alignments'
     'input restraints'
     'local pairwise QA scores'
-    'feature-based QA scores'
+    'QA metrics'
     'validation report'
     'other'
      save_
