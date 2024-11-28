@@ -278,6 +278,10 @@ _dictionary_history.revision
   + Update parent-child relationships of all child data items pointing to _ma_model_list.model_id to point to _ma_model_list.ordinal_id
   + Deprecate _ma_model_list.model_group_id and _ma_model_list.model_group_name
   + Add ma_model_group, ma_model_group_link, ma_model_representative
+  + Update enumerations for _ma_qa_metric.mode and _ma_qa_metric.type
+  + Update enumerations for _ma_associated_archive_file_details.file_content and _ma_entry_associated_files.file_content
+  + Add ma_feature_list, ma_atom_feature, ma_poly_residue_feature, ma_entity_instance_feature
+  + Add ma_qa_metric_feature, ma_qa_metric_feature_pairwise
 ;
   
 #
@@ -581,6 +585,10 @@ mmcif_ma-core.dic  1.4.7  2024-11-27
   + Update parent-child relationships of all child data items pointing to _ma_model_list.model_id to point to _ma_model_list.ordinal_id
   + Deprecate _ma_model_list.model_group_id and _ma_model_list.model_group_name
   + Add ma_model_group, ma_model_group_link, ma_model_representative
+  + Update enumerations for _ma_qa_metric.mode and _ma_qa_metric.type
+  + Update enumerations for _ma_associated_archive_file_details.file_content and _ma_entry_associated_files.file_content
+  + Add ma_feature_list, ma_atom_feature, ma_poly_residue_feature, ma_entity_instance_feature
+  + Add ma_qa_metric_feature, ma_qa_metric_feature_pairwise
 ;
   
 #
@@ -7669,10 +7677,15 @@ save__ma_qa_metric.type
      "pLDDT in [0,1]"           "confidence score predicting accuracy according to the CA-only Local Distance Difference Test (lDDT-CA) in [0,1]"  
      "pLDDT all-atom"           "confidence score predicting accuracy according to the all-atom Local Distance Difference Test (lDDT) in [0,100]"  
      "pLDDT all-atom in [0,1]"  "confidence score predicting accuracy according to the all-atom Local Distance Difference Test (lDDT) in [0,1]"  
+     "pLDDT to polymer"         "confidence score predicting accuracy according to lDDT with distances from each atom to CA or C1"  
+     of                         nearby  
+     polymer                    residues  
+     in                         "[0,100]'"  
      PAE                        "predicted aligned error (in Angstroms)"  
      pTM                        "confidence score predicting accuracy according to the template modeling score in [0,1]"  
      ipTM                       "confidence score of protein-protein interface based on the template modeling score in [0,1]"  
      "contact probability"      "the contact probability of a pairwise interaction"  
+     boolean                    "0 or 1 depending on whether a check passed (1) or not (0)"  
      other                      "other type of QA metric"  
    #
 save_
@@ -7700,9 +7713,11 @@ save__ma_qa_metric.mode
    loop_
    _item_enumeration.value
    _item_enumeration.detail
-     local           "QA metric is calculated per-residue"  
-     global          "QA metric is calculated per-model"  
-     local-pairwise  "QA metric is calculated per-residue-pair"  
+     local             "QA metric is calculated per-residue"  
+     global            "QA metric is calculated per-model"  
+     local-pairwise    "QA metric is calculated per-residue-pair"  
+     per-feature       "QA metric is calculated per-feature"  
+     per-feature-pair  "QA metric is calculated per-feature-pair"  
    #
 save_
 #
@@ -8220,6 +8235,681 @@ save__ma_qa_metric_local_pairwise.metric_value
    #
 save_
 #
+save_ma_feature_list
+   _category.description     
+;              MA_FEATURE_LIST is the high level category that provides defintions
+               to select atoms, polymeric residues, and entity instances (asym_ids)
+               from all types of entities.
+;
+
+   _category.id              ma_feature_list
+   _category.mandatory_code  no
+   #
+   _category_key.name  "_ma_feature_list.feature_id"
+   #
+   loop_
+   _category_group.id
+     inclusive_group  
+     ma_group         
+   #
+   _category_examples.detail  
+;
+    Example 1 -
+;
+
+   _category_examples.case    
+;
+        loop_
+        _ma_feature_list.feature_id
+        _ma_feature_list.feature_type
+        _ma_feature_list.entity_type
+          1  atom     polymer
+          2  residue  polymer
+          3  atom     non-polymer
+         # ...  abbreviated ...
+;
+
+   #
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_feature_list
+   #
+save_
+#
+save__ma_feature_list.feature_id
+   _item_description.description  "     A unique identifier for the feature."
+   #
+   _item.name            "_ma_feature_list.feature_id"
+   _item.category_id     ma_feature_list
+   _item.mandatory_code  yes
+   #
+   _item_type.code  int
+   #
+save_
+#
+save__ma_feature_list.feature_type
+   _item_description.description  "     The type of feature."
+   #
+   _item.name            "_ma_feature_list.feature_type"
+   _item.category_id     ma_feature_list
+   _item.mandatory_code  yes
+   #
+   _item_type.code  line
+   #
+   loop_
+   _item_enumeration.value
+   _item_enumeration.detail
+     atom               "feature is an atom or a set of atoms from any entity type"  
+     residue            "feature is a residue or a set of residues from a polymeric entity"  
+     "entity instance"  "feature is an instance of a moleculat entity of any type, represented by asym_id"  
+   #
+save_
+#
+save__ma_feature_list.entity_type
+   _item_description.description  "     The type of entity."
+   #
+   _item.name            "_ma_feature_list.entity_type"
+   _item.category_id     ma_feature_list
+   _item.mandatory_code  yes
+   #
+   _item_type.code  line
+   #
+   loop_
+   _item_enumeration.value
+     polymer      
+     non-polymer  
+     branched     
+     water        
+     other        
+   #
+save_
+#
+save__ma_feature_list.details
+   _item_description.description  "     Additional details regarding the feature."
+   #
+   _item.name            "_ma_feature_list.details"
+   _item.category_id     ma_feature_list
+   _item.mandatory_code  no
+   #
+   _item_type.code  text
+   #
+save_
+#
+save_ma_atom_feature
+   _category.description     
+;              Data items in the MA_ATOM_FEATURE category provides the defintions
+               required to select specific atoms independent of entity type.
+;
+
+   _category.id              ma_atom_feature
+   _category.mandatory_code  no
+   #
+   _category_key.name  "_ma_atom_feature.ordinal_id"
+   #
+   loop_
+   _category_group.id
+     inclusive_group  
+     ma_group         
+   #
+   _category_examples.detail  
+;
+    Example 1 -
+;
+
+   _category_examples.case    
+;
+        loop_
+        _ma_atom_feature.ordinal_id
+        _ma_atom_feature.feature_id
+        _ma_atom_feature.atom_id
+          1  1  10  
+          2  1  22  
+          3  2  57  
+         # ...  abbreviated ...
+;
+
+   #
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_atom_feature
+   #
+save_
+#
+save__ma_atom_feature.ordinal_id
+   _item_description.description  "     A unique identifier for the category."
+   #
+   _item.name            "_ma_atom_feature.ordinal_id"
+   _item.category_id     ma_atom_feature
+   _item.mandatory_code  yes
+   #
+   _item_type.code  int
+   #
+save_
+#
+save__ma_atom_feature.feature_id
+   _item_description.description  
+;     An identifier for the selected atom feature.
+      This data item is a pointer to _ma_feature_list.feature_id in the
+      MA_FEATURE_LIST category.
+;
+
+   #
+   _item.name            "_ma_atom_feature.feature_id"
+   _item.category_id     ma_atom_feature
+   _item.mandatory_code  yes
+   #
+   _item_type.code  int
+   #
+   _item_linked.child_name   "_ma_atom_feature.feature_id"
+   _item_linked.parent_name  "_ma_feature_list.feature_id"
+   #
+save_
+#
+save__ma_atom_feature.atom_id
+   _item_description.description  
+;     The identifier of the atom. 
+      This data item is a pointer to _atom_site.id in the ATOM_SITE category.
+;
+
+   #
+   _item.name            "_ma_atom_feature.atom_id"
+   _item.category_id     ma_atom_feature
+   _item.mandatory_code  yes
+   #
+   _item_type.code  code
+   #
+   _item_linked.child_name   "_ma_atom_feature.atom_id"
+   _item_linked.parent_name  "_atom_site.id"
+   #
+save_
+#
+save_ma_poly_residue_feature
+   _category.description     
+;              Data items in the MA_POLY_RESIDUE_FEATURE category provides the defintions
+               required to select a specific polymer residues.
+;
+
+   _category.id              ma_poly_residue_feature
+   _category.mandatory_code  no
+   #
+   _category_key.name  "_ma_poly_residue_feature.ordinal_id"
+   #
+   loop_
+   _category_group.id
+     inclusive_group  
+     ma_group         
+   #
+   _category_examples.detail  
+;
+    Example 1 -
+;
+
+   _category_examples.case    
+;
+        loop_
+        _ma_poly_residue_feature.ordinal_id
+        _ma_poly_residue_feature.feature_id
+        _ma_poly_residue_feature.label_asym_id
+        _ma_poly_residue_feature.label_seq_id
+        _ma_poly_residue_feature.label_comp_id
+          1  1  A   17  LYS   
+          2  2  A  206  LYS  
+          3  3  B   38  THR   
+          4  4  B  400  LEU  
+          5  5  C  429  GLN  
+          6  6  C  461  LEU  
+          7  7  C  735  ASP  
+          8  8  C  865  SER  
+         # ...  abbreviated ...
+;
+
+   #
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_poly_residue_feature
+   #
+save_
+#
+save__ma_poly_residue_feature.ordinal_id
+   _item_description.description  "     A unique identifier for the category."
+   #
+   _item.name            "_ma_poly_residue_feature.ordinal_id"
+   _item.category_id     ma_poly_residue_feature
+   _item.mandatory_code  yes
+   #
+   _item_type.code  int
+   #
+save_
+#
+save__ma_poly_residue_feature.feature_id
+   _item_description.description  
+;     An identifier for the selected residue feature.
+      This data item is a pointer to _ma_feature_list.feature_id in the
+      MA_FEATURE_LIST category.
+;
+
+   #
+   _item.name            "_ma_poly_residue_feature.feature_id"
+   _item.category_id     ma_poly_residue_feature
+   _item.mandatory_code  yes
+   #
+   _item_type.code  int
+   #
+   _item_linked.child_name   "_ma_poly_residue_feature.feature_id"
+   _item_linked.parent_name  "_ma_feature_list.feature_id"
+   #
+save_
+#
+save__ma_poly_residue_feature.label_asym_id
+   _item_description.description  
+;              An asym/strand identifier for the residue feature.
+               This data item is a pointer to _atom_site.label_asym_id in the
+               ATOM_SITE category.
+;
+
+   #
+   _item.name            "_ma_poly_residue_feature.label_asym_id"
+   _item.category_id     ma_poly_residue_feature
+   _item.mandatory_code  yes
+   #
+   _item_type.code  code
+   #
+   _item_linked.child_name   "_ma_poly_residue_feature.label_asym_id"
+   _item_linked.parent_name  "_atom_site.label_asym_id"
+   #
+save_
+#
+save__ma_poly_residue_feature.label_comp_id
+   _item_description.description  
+;     The component identifier for the residue feature.
+      This data item is a pointer to _atom_site.label_comp_id in the 
+      ATOM_SITE category.
+;
+
+   #
+   _item.name            "_ma_poly_residue_feature.label_comp_id"
+   _item.category_id     ma_poly_residue_feature
+   _item.mandatory_code  yes
+   #
+   _item_type.code  ucode
+   #
+   _item_linked.child_name   "_ma_poly_residue_feature.label_comp_id"
+   _item_linked.parent_name  "_atom_site.label_comp_id"
+   #
+save_
+#
+save__ma_poly_residue_feature.label_seq_id
+   _item_description.description  
+;     The sequence index of the residue feature.
+      This data item is a pointer to _atom_site.label_seq_id in the 
+      ATOM_SITE category.
+;
+
+   #
+   _item.name            "_ma_poly_residue_feature.label_seq_id"
+   _item.category_id     ma_poly_residue_feature
+   _item.mandatory_code  yes
+   #
+   _item_type.code  int
+   #
+   _item_linked.child_name   "_ma_poly_residue_feature.label_seq_id"
+   _item_linked.parent_name  "_atom_site.label_seq_id"
+   #
+save_
+#
+save_ma_entity_instance_feature
+   _category.description     
+;              Data items in the MA_ENTITY_INSTANCE_FEATURE category provides the defintions
+               required to select an entity instance (asym_id) feature.
+;
+
+   _category.id              ma_entity_instance_feature
+   _category.mandatory_code  no
+   #
+   _category_key.name  "_ma_entity_instance_feature.ordinal_id"
+   #
+   loop_
+   _category_group.id
+     inclusive_group  
+     ma_group         
+   #
+   _category_examples.detail  
+;
+    Example 1 -
+;
+
+   _category_examples.case    
+;
+        loop_
+        _ma_entity_instance_feature.ordinal_id
+        _ma_entity_instance_feature.feature_id
+        _ma_entity_instance_feature.label_asym_id
+          1  1  A
+          2  2  B
+          3  3  C
+          4  4  D
+         # ...  abbreviated ...
+;
+
+   #
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_entity_instance_feature
+   #
+save_
+#
+save__ma_entity_instance_feature.ordinal_id
+   _item_description.description  "     A unique identifier for the category."
+   #
+   _item.name            "_ma_entity_instance_feature.ordinal_id"
+   _item.category_id     ma_entity_instance_feature
+   _item.mandatory_code  yes
+   #
+   _item_type.code  int
+   #
+save_
+#
+save__ma_entity_instance_feature.feature_id
+   _item_description.description  
+;     An identifier for the selected entity instance feature.
+      This data item is a pointer to _ma_feature_list.feature_id in the
+      MA_FEATURE_LIST category.
+;
+
+   #
+   _item.name            "_ma_entity_instance_feature.feature_id"
+   _item.category_id     ma_entity_instance_feature
+   _item.mandatory_code  yes
+   #
+   _item_type.code  int
+   #
+   _item_linked.child_name   "_ma_entity_instance_feature.feature_id"
+   _item_linked.parent_name  "_ma_feature_list.feature_id"
+   #
+save_
+#
+save__ma_entity_instance_feature.label_asym_id
+   _item_description.description  
+;              An asym/strand identifier of the entity instance feature. 
+               This data item is a pointer to _atom_site.label_asym_id in the
+               ATOM_SITE category.
+;
+
+   #
+   _item.name            "_ma_entity_instance_feature.label_asym_id"
+   _item.category_id     ma_entity_instance_feature
+   _item.mandatory_code  yes
+   #
+   _item_type.code  code
+   #
+   _item_linked.child_name   "_ma_entity_instance_feature.label_asym_id"
+   _item_linked.parent_name  "_atom_site.label_asym_id"
+   #
+save_
+#
+save_ma_qa_metric_feature
+   _category.description     
+;              Data items in the MA_QA_METRIC_FEATURE category captures the
+               QA metrics calculated per feature as defined in ma_feature_list. 
+               Data in this category can be extracted into a separate file which 
+               is linked to the main file using the categories 
+               ma_associated_archive_file_details or ma_entry_associated_files 
+               with file_content set to "feature-based QA scores".
+;
+
+   _category.id              ma_qa_metric_feature
+   _category.mandatory_code  no
+   #
+   _category_key.name  "_ma_qa_metric_feature.ordinal_id"
+   #
+   loop_
+   _category_group.id
+     inclusive_group  
+     ma_group         
+   #
+   _category_examples.detail  
+;
+    Example 1 -
+;
+
+   _category_examples.case    
+;
+    loop_
+    _ma_qa_metric_feature.ordinal_id
+    _ma_qa_metric_feature.model_id
+    _ma_qa_metric_feature.feature_id
+    _ma_qa_metric_feature.metric_id
+    _ma_qa_metric_feature.metric_value
+    1 1 1 1 -0.85
+    2 1 1 2 -2.71
+   # ...  abbreviated ...
+;
+
+   #
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_qa_metric_feature
+   #
+save_
+#
+save__ma_qa_metric_feature.ordinal_id
+   _item_description.description  "     A unique identifier for the category."
+   #
+   _item.name            "_ma_qa_metric_feature.ordinal_id"
+   _item.category_id     ma_qa_metric_feature
+   _item.mandatory_code  yes
+   #
+   _item_type.code  int
+   #
+save_
+#
+save__ma_qa_metric_feature.model_id
+   _item_description.description  
+;     The identifier for the structural model, for which feature-based QA metric is provided.
+      This data item is a pointer to _ma_model_list.ordinal_id
+      in the MA_MODEL_LIST category.
+;
+
+   #
+   _item.name            "_ma_qa_metric_feature.model_id"
+   _item.category_id     ma_qa_metric_feature
+   _item.mandatory_code  yes
+   #
+   _item_type.code  int
+   #
+   _item_linked.child_name   "_ma_qa_metric_feature.model_id"
+   _item_linked.parent_name  "_ma_model_list.ordinal_id"
+   #
+save_
+#
+save__ma_qa_metric_feature.feature_id
+   _item_description.description  
+;     The identifier for the feature for which QA metric is provided. 
+      This data item is a pointer to _ma_feature_list.feature_id
+      in the MA_FEATURE_LIST category.
+;
+
+   #
+   _item.name            "_ma_qa_metric_feature.feature_id"
+   _item.category_id     ma_qa_metric_feature
+   _item.mandatory_code  yes
+   #
+   _item_type.code  int
+   #
+   _item_linked.child_name   "_ma_qa_metric_feature.feature_id"
+   _item_linked.parent_name  "_ma_feature_list.feature_id"
+   #
+save_
+#
+save__ma_qa_metric_feature.metric_id
+   _item_description.description  
+;     The identifier for the QA metric.
+      This data item is a pointer to _ma_qa_metric.id in the
+      MA_QA_METRIC category.
+;
+
+   #
+   _item.name            "_ma_qa_metric_feature.metric_id"
+   _item.category_id     ma_qa_metric_feature
+   _item.mandatory_code  yes
+   #
+   _item_type.code  int
+   #
+   _item_linked.child_name   "_ma_qa_metric_feature.metric_id"
+   _item_linked.parent_name  "_ma_qa_metric.id"
+   #
+save_
+#
+save__ma_qa_metric_feature.metric_value
+   _item_description.description  "     The value of the QA metric."
+   #
+   _item.name            "_ma_qa_metric_feature.metric_value"
+   _item.category_id     ma_qa_metric_feature
+   _item.mandatory_code  yes
+   #
+   _item_type.code  float
+   #
+save_
+#
+save_ma_qa_metric_feature_pairwise
+   _category.description     
+;              Data items in the MA_QA_METRIC_FEATURE_PAIRWISE category captures the
+               QA metrics calculated per pair of features as defined in ma_feature_list. 
+               It is valid to only provide values for a subset of feature pairs.
+               Data in this category is expected to be very large and can hence be extracted into a 
+               separate file which is linked to the main file using the categories 
+               ma_associated_archive_file_details or ma_entry_associated_files with file_content 
+               set to "feature-based QA scores".
+;
+
+   _category.id              ma_qa_metric_feature_pairwise
+   _category.mandatory_code  no
+   #
+   _category_key.name  "_ma_qa_metric_feature_pairwise.ordinal_id"
+   #
+   loop_
+   _category_group.id
+     inclusive_group  
+     ma_group         
+   #
+   _category_examples.detail  
+;
+    Example 1 -
+;
+
+   _category_examples.case    
+;
+    loop_
+    _ma_qa_metric_feature_pairwise.ordinal_id
+    _ma_qa_metric_feature_pairwise.model_id
+    _ma_qa_metric_feature_pairwise.feature_id_1
+    _ma_qa_metric_feature_pairwise.feature_id_2
+    _ma_qa_metric_feature_pairwise.metric_id
+    _ma_qa_metric_feature_pairwise.metric_value
+    1 1 1 2 1 30.84
+    2 1 3 4 2  0.40
+   # ...  abbreviated ...
+;
+
+   #
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_qa_metric_feature_pairwise
+   #
+save_
+#
+save__ma_qa_metric_feature_pairwise.ordinal_id
+   _item_description.description  "     A unique identifier for the category."
+   #
+   _item.name            "_ma_qa_metric_feature_pairwise.ordinal_id"
+   _item.category_id     ma_qa_metric_feature_pairwise
+   _item.mandatory_code  yes
+   #
+   _item_type.code  int
+   #
+save_
+#
+save__ma_qa_metric_feature_pairwise.model_id
+   _item_description.description  
+;     The identifier for the structural model for which feature-based QA metric is provided.
+      This data item is a pointer to _ma_model_list.ordinal_id
+      in the MA_MODEL_LIST category.
+;
+
+   #
+   _item.name            "_ma_qa_metric_feature_pairwise.model_id"
+   _item.category_id     ma_qa_metric_feature_pairwise
+   _item.mandatory_code  yes
+   #
+   _item_type.code  int
+   #
+   _item_linked.child_name   "_ma_qa_metric_feature_pairwise.model_id"
+   _item_linked.parent_name  "_ma_model_list.ordinal_id"
+   #
+save_
+#
+save__ma_qa_metric_feature_pairwise.feature_id_1
+   _item_description.description  
+;     The identifier for the first feature in the pair, for which QA metric is provided.
+      This data item is a pointer to _ma_feature_list.feature_id in the MA_FEATURE_LIST
+      category.
+;
+
+   #
+   _item.name            "_ma_qa_metric_feature_pairwise.feature_id_1"
+   _item.category_id     ma_qa_metric_feature_pairwise
+   _item.mandatory_code  yes
+   #
+   _item_type.code  int
+   #
+   _item_linked.child_name   "_ma_qa_metric_feature_pairwise.feature_id_1"
+   _item_linked.parent_name  "_ma_feature_list.feature_id"
+   #
+save_
+#
+save__ma_qa_metric_feature_pairwise.feature_id_2
+   _item_description.description  
+;     The identifier for the second feature in the pair, for which QA metric is provided.
+      This data item is a pointer to _ma_feature_list.feature_id in the MA_FEATURE_LIST
+      category.
+;
+
+   #
+   _item.name            "_ma_qa_metric_feature_pairwise.feature_id_2"
+   _item.category_id     ma_qa_metric_feature_pairwise
+   _item.mandatory_code  yes
+   #
+   _item_type.code  int
+   #
+   _item_linked.child_name   "_ma_qa_metric_feature_pairwise.feature_id_2"
+   _item_linked.parent_name  "_ma_feature_list.feature_id"
+   #
+save_
+#
+save__ma_qa_metric_feature_pairwise.metric_id
+   _item_description.description  
+;     The identifier for the QA metric.
+      This data item is a pointer to _ma_qa_metric.id in the
+      MA_QA_METRIC category.
+;
+
+   #
+   _item.name            "_ma_qa_metric_feature_pairwise.metric_id"
+   _item.category_id     ma_qa_metric_feature_pairwise
+   _item.mandatory_code  yes
+   #
+   _item_type.code  int
+   #
+   _item_linked.child_name   "_ma_qa_metric_feature_pairwise.metric_id"
+   _item_linked.parent_name  "_ma_qa_metric.id"
+   #
+save_
+#
+save__ma_qa_metric_feature_pairwise.metric_value
+   _item_description.description  "     The value of the QA metric."
+   #
+   _item.name            "_ma_qa_metric_feature_pairwise.metric_value"
+   _item.category_id     ma_qa_metric_feature_pairwise
+   _item.mandatory_code  yes
+   #
+   _item_type.code  float
+   #
+save_
+#
 save__pdbx_entity_nonpoly.ma_model_mode
    _item_description.description  
 ;     The data item provides information on whether the non-polymeric entity
@@ -8399,6 +9089,7 @@ save__ma_entry_associated_files.file_content
      "multiple sequence alignments"  
      "input restraints"  
      "local pairwise QA scores"  
+     "feature-based QA scores"  
      "validation report"  
      other  
    #
@@ -8557,6 +9248,7 @@ save__ma_associated_archive_file_details.file_content
      "multiple sequence alignments"  
      "input restraints"  
      "local pairwise QA scores"  
+     "feature-based QA scores"  
      "validation report"  
      other  
    #

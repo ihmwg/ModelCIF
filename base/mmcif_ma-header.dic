@@ -252,4 +252,8 @@ data_mmcif_ma.dic
   + Update parent-child relationships of all child data items pointing to _ma_model_list.model_id to point to _ma_model_list.ordinal_id
   + Deprecate _ma_model_list.model_group_id and _ma_model_list.model_group_name
   + Add ma_model_group, ma_model_group_link, ma_model_representative
+  + Update enumerations for _ma_qa_metric.mode and _ma_qa_metric.type
+  + Update enumerations for _ma_associated_archive_file_details.file_content and _ma_entry_associated_files.file_content
+  + Add ma_feature_list, ma_atom_feature, ma_poly_residue_feature, ma_entity_instance_feature
+  + Add ma_qa_metric_feature, ma_qa_metric_feature_pairwise
 ;
