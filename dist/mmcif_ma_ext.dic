@@ -272,7 +272,7 @@ _dictionary_history.revision
   + Update mmcif_ma-data.dic
   + Update enumerations for _ma_associated_archive_file_details.file_format and _ma_template_details.template_entity_type
   + Add ma_template_branched category and _ma_target_ref_db_details.is_primary data item
-  + Add _ma_target_ref_db_details.db_accession to the primary key of _ma_target_ref_db_details
+  + Add _ma_target_ref_db_details.db_accession to the primary key of ma_target_ref_db_details
   + Update the category description of ma_qa_metric_local_pairwise
   + Deprecate _ma_model_list.model_id in favor of _ma_model_list.ordinal_id and make _ma_model_list.model_id not mandatory
   + Update parent-child relationships of all child data items pointing to _ma_model_list.model_id to point to _ma_model_list.ordinal_id
@@ -579,7 +579,7 @@ mmcif_ma-core.dic  1.4.7  2024-11-27
   Changes (bv)
   + Update enumerations for _ma_associated_archive_file_details.file_format and _ma_template_details.template_entity_type
   + Add ma_template_branched category and _ma_target_ref_db_details.is_primary data item
-  + Add _ma_target_ref_db_details.db_accession to the primary key of _ma_target_ref_db_details
+  + Add _ma_target_ref_db_details.db_accession to the primary key of ma_target_ref_db_details
   + Update the category description of ma_qa_metric_local_pairwise
   + Deprecate _ma_model_list.model_id in favor of _ma_model_list.ordinal_id and make _ma_model_list.model_id not mandatory 
   + Update parent-child relationships of all child data items pointing to _ma_model_list.model_id to point to _ma_model_list.ordinal_id
