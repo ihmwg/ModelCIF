@@ -265,7 +265,7 @@ _dictionary_history.revision
   + Update _item_type.code for _ma_target_ref_db_details.gene_name
 ;
   
-1.4.7  2024-11-27  
+1.4.7  2024-12-10  
 ;
   Changes (bv)
   + Include entity_branch-extension.dic
@@ -574,7 +574,7 @@ mmcif_ma-core.dic  1.4.6  2024-01-29
   + Update _item_type.code for _ma_target_ref_db_details.gene_name
 ;
   
-mmcif_ma-core.dic  1.4.7  2024-11-27  
+mmcif_ma-core.dic  1.4.7  2024-12-10  
 ;
   Changes (bv)
   + Update enumerations for _ma_associated_archive_file_details.file_format and _ma_template_details.template_entity_type
@@ -1166,15 +1166,14 @@ save_ma_model_list
     loop_
     _ma_model_list.ordinal_id
     _ma_model_list.model_name
-    _ma_model_list.assembly_id
     _ma_model_list.data_id
     _ma_model_list.model_type
 
-    1    'Best scoring model'        1    1   'Homology model'
-    2    '2nd Best scoring model'    1    2   'Homology model'
-    3    '3rd Best scoring model'    1    3   'Homology model'
-    4    '4th Best scoring model'    1    4   'Homology model'
-    5    '5th Best scoring model'    1    5   'Homology model'
+    1    'Best scoring model'        1   'Homology model'
+    2    '2nd Best scoring model'    2   'Homology model'
+    3    '3rd Best scoring model'    3   'Homology model'
+    4    '4th Best scoring model'    4   'Homology model'
+    5    '5th Best scoring model'    5   'Homology model'
    # ...  abbreviated ...
 ;
 
@@ -1356,6 +1355,8 @@ save_ma_model_group
     _ma_model_group.id
     _ma_model_group.name
     _ma_model_group.details
+    1 'Open state'  'Ensemble of open state models'
+    2 'Closed state' 'Ensemble of closed state models'
     # ...  abbreviated ...
 ;
 
@@ -1528,7 +1529,7 @@ save_ma_model_representative
     _ma_model_representative.model_id
     _ma_model_representative.selection_criteria
      1  1  1  'best scoring model'
-     2  1  2  'medioid'
+     2  1  2  'medoid'
      #...abbreviated...#
 ;
 
@@ -1588,7 +1589,12 @@ save__ma_model_representative.model_id
 save_
 #
 save__ma_model_representative.selection_criteria
-   _item_description.description  "     The selection criteria based on which the representative is chosen."
+   _item_description.description  
+;     The selection criteria based on which the representative is chosen. 
+      Details about the selection procedure should be described in the 
+      "model selection" step in ma_protocol_step.
+;
+
    #
    _item.name            "_ma_model_representative.selection_criteria"
    _item.category_id     ma_model_representative
@@ -1607,7 +1613,7 @@ save__ma_model_representative.selection_criteria
      "minimized average structure"  .  
      "best scoring model"           .  
      centroid                       "centroid of a cluster"  
-     "other selction criteria"      .  
+     "other selection criteria"     .  
    #
 save_
 #
@@ -1741,7 +1747,7 @@ save__ma_template_details.target_asym_id
 ;     A unique identifier for the target instance for which the 
       structural template is used.
       This data item is a pointer to _ma_target_entity_instance.asym_id
-      in the MA_TARGET_ENTITY_INSTANCE caategory.
+      in the MA_TARGET_ENTITY_INSTANCE category.
 ;
 
    #
@@ -1912,7 +1918,7 @@ save__ma_template_poly.template_id
    _item_description.description  
 ;     A unique identifier for the template.
       This data item is a pointer to _ma_template_details.template_id
-      in the MA_TEMPLATE_DETAILS caategory.
+      in the MA_TEMPLATE_DETAILS category.
 ;
 
    #
@@ -2009,7 +2015,7 @@ save__ma_template_non_poly.template_id
    _item_description.description  
 ;     A unique identifier for the template.
       This data item is a pointer to _ma_template_details.template_id
-      in the MA_TEMPLATE_DETAILS caategory.
+      in the MA_TEMPLATE_DETAILS category.
 ;
 
    #
@@ -2102,6 +2108,9 @@ save_ma_template_branched
 ;              Data items in the MA_TEMPLATE_BRANCHED category record details about
                the structural templates for branched polymers used in the 
                homology/comparative modeling.
+               The table can be populated using values from PDBx/mmCIF tables
+               _pdbx_entity_branch_descriptor and _pdbx_entity_branch for the template, 
+               if available.
 ;
 
    _category.id              ma_template_branched
@@ -2154,7 +2163,7 @@ save__ma_template_branched.template_id
    _item_description.description  
 ;     Identifier for the template.
       This data item is a pointer to _ma_template_details.template_id
-      in the MA_TEMPLATE_DETAILS caategory.
+      in the MA_TEMPLATE_DETAILS category.
 ;
 
    #
@@ -2174,7 +2183,7 @@ save__ma_template_branched.name
    #
    _item.name            "_ma_template_branched.name"
    _item.category_id     ma_template_branched
-   _item.mandatory_code  yes
+   _item.mandatory_code  no
    #
    _item_type.code  line
    #
@@ -7677,10 +7686,7 @@ save__ma_qa_metric.type
      "pLDDT in [0,1]"           "confidence score predicting accuracy according to the CA-only Local Distance Difference Test (lDDT-CA) in [0,1]"  
      "pLDDT all-atom"           "confidence score predicting accuracy according to the all-atom Local Distance Difference Test (lDDT) in [0,100]"  
      "pLDDT all-atom in [0,1]"  "confidence score predicting accuracy according to the all-atom Local Distance Difference Test (lDDT) in [0,1]"  
-     "pLDDT to polymer"         "confidence score predicting accuracy according to lDDT with distances from each atom to CA or C1"  
-     of                         nearby  
-     polymer                    residues  
-     in                         "[0,100]'"  
+     "pLDDT to polymer"         "confidence score predicting accuracy according to lDDT with distances from each atom to CA or C1' of nearby polymer residues in [0,100]"  
      PAE                        "predicted aligned error (in Angstroms)"  
      pTM                        "confidence score predicting accuracy according to the template modeling score in [0,1]"  
      ipTM                       "confidence score of protein-protein interface based on the template modeling score in [0,1]"  
@@ -8241,7 +8247,7 @@ save_
 #
 save_ma_feature_list
    _category.description     
-;              MA_FEATURE_LIST is the high level category that provides defintions
+;              MA_FEATURE_LIST is the high level category that provides definitions
                to select atoms, polymeric residues, and entity instances (asym_ids)
                from all types of entities.
 ;
@@ -8304,7 +8310,7 @@ save__ma_feature_list.feature_type
    _item_enumeration.detail
      atom               "feature is an atom or a set of atoms from any entity type"  
      residue            "feature is a residue or a set of residues from a polymeric entity"  
-     "entity instance"  "feature is an instance of a moleculat entity of any type, represented by asym_id"  
+     "entity instance"  "feature is an instance of a molecular entity of any type, represented by asym_id"  
    #
 save_
 #
@@ -8340,7 +8346,7 @@ save_
 #
 save_ma_atom_feature
    _category.description     
-;              Data items in the MA_ATOM_FEATURE category provides the defintions
+;              Data items in the MA_ATOM_FEATURE category provides the definitions
                required to select specific atoms independent of entity type.
 ;
 
@@ -8427,8 +8433,8 @@ save_
 #
 save_ma_poly_residue_feature
    _category.description     
-;              Data items in the MA_POLY_RESIDUE_FEATURE category provides the defintions
-               required to select a specific polymer residues.
+;              Data items in the MA_POLY_RESIDUE_FEATURE category provides the definitions
+               required to select specific polymer residues.
 ;
 
    _category.id              ma_poly_residue_feature
@@ -8560,7 +8566,7 @@ save_
 #
 save_ma_entity_instance_feature
    _category.description     
-;              Data items in the MA_ENTITY_INSTANCE_FEATURE category provides the defintions
+;              Data items in the MA_ENTITY_INSTANCE_FEATURE category provides the definitions
                required to select an entity instance (asym_id) feature.
 ;
 
@@ -8774,6 +8780,10 @@ save_ma_qa_metric_feature_pairwise
    _category.description     
 ;              Data items in the MA_QA_METRIC_FEATURE_PAIRWISE category captures the
                QA metrics calculated per pair of features as defined in ma_feature_list. 
+               In cases where the metric is symmetric, it is enough to store just one value per pair. 
+               For asymmetric metrics, the order of features is expected to be meaningful 
+               (e.g. PAE where PAE_ij is defined by aligning token i (feature_id_1) and measuring 
+               the error on token j (feature_id_2)).
                It is valid to only provide values for a subset of feature pairs.
                Data in this category is expected to be very large and can be extracted into a 
                separate file which is linked to the main file using the categories 
@@ -9048,22 +9058,28 @@ save__ma_entry_associated_files.file_format
    #
    loop_
    _item_enumeration.value
-     zip       
-     gzip      
-     txt       
-     cif       
-     fasta     
-     clustalw  
-     pir/nbrf  
-     a2m       
-     a3m       
-     csv       
-     tsv       
-     pdf       
-     json      
-     png       
-     jpg       
-     other     
+   _item_enumeration.detail
+     zip       zip  
+     gzip      gzip  
+     txt       Text  
+     cif       CIF  
+     fasta     Fasta  
+     clustalw  Clustalw  
+     pir/nbrf  PIR/NBRF  
+     a2m       A2M  
+     a3m       A3M  
+     csv       CSV  
+     tsv       TSV  
+     pdf       PDF  
+     bcif      "Binary cif"  
+     json      JSON  
+     png       png  
+     jpg       jpg  
+     pkl       "Python pickle"  
+     pt        PyTorch  
+     npy       "NumPy array"  
+     npz       "NumPy arrays"  
+     other     "Other format"  
    #
 save_
 #
@@ -9223,6 +9239,8 @@ save__ma_associated_archive_file_details.file_format
    loop_
    _item_enumeration.value
    _item_enumeration.detail
+     zip       zip  
+     gzip      gzip  
      txt       Text  
      cif       CIF  
      fasta     Fasta  
@@ -9235,6 +9253,8 @@ save__ma_associated_archive_file_details.file_format
      pdf       PDF  
      bcif      "Binary cif"  
      json      JSON  
+     png       png  
+     jpg       jpg  
      pkl       "Python pickle"  
      pt        PyTorch  
      npy       "NumPy array"  

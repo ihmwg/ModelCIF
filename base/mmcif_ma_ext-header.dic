@@ -239,7 +239,7 @@ data_mmcif_ma_ext.dic
   Changes (bv)
   + Update _item_type.code for _ma_target_ref_db_details.gene_name
 ;
-  1.4.7   2024-11-27
+  1.4.7   2024-12-10
 ;
   Changes (bv)
   + Include entity_branch-extension.dic
