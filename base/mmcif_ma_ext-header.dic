@@ -2,7 +2,7 @@
 ## MODELING EXTENSION DICTIONARY ##
 ###################################
 
-# Version 1.4.6 29th January 2024
+# Version 1.4.7 16th December 2024
 
 data_mmcif_ma_ext.dic
 
@@ -16,7 +16,7 @@ data_mmcif_ma_ext.dic
 ;
     _dictionary.title           mmcif_ma_ext.dic
     _dictionary.datablock_id    mmcif_ma_ext.dic
-    _dictionary.version         1.4.6
+    _dictionary.version         1.4.7
 #
      loop_
     _dictionary_history.version
@@ -238,4 +238,22 @@ data_mmcif_ma_ext.dic
 ;
   Changes (bv)
   + Update _item_type.code for _ma_target_ref_db_details.gene_name
+;
+  1.4.7   2024-12-16
+;
+  Changes (bv)
+  + Include entity_branch-extension.dic
+  + Update mmcif_ma-data.dic
+  + Update enumerations for _ma_associated_archive_file_details.file_format and _ma_template_details.template_entity_type
+  + Add ma_template_branched category and _ma_target_ref_db_details.is_primary data item
+  + Add _ma_target_ref_db_details.db_accession to the primary key of ma_target_ref_db_details
+  + Update the category description of ma_qa_metric_local_pairwise
+  + Deprecate _ma_model_list.model_id in favor of _ma_model_list.ordinal_id and make _ma_model_list.model_id not mandatory
+  + Update parent-child relationships of all child data items pointing to _ma_model_list.model_id to point to _ma_model_list.ordinal_id
+  + Deprecate _ma_model_list.model_group_id and _ma_model_list.model_group_name
+  + Add ma_model_group, ma_model_group_link, ma_model_representative
+  + Update enumerations for _ma_qa_metric.mode and _ma_qa_metric.type
+  + Update enumerations for _ma_associated_archive_file_details.file_content and _ma_entry_associated_files.file_content
+  + Add ma_feature_list, ma_atom_feature, ma_poly_residue_feature, ma_entity_instance_feature
+  + Add ma_qa_metric_feature, ma_qa_metric_feature_pairwise
 ;
