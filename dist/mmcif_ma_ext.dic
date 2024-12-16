@@ -265,7 +265,7 @@ _dictionary_history.revision
   + Update _item_type.code for _ma_target_ref_db_details.gene_name
 ;
   
-1.4.7  2024-12-10  
+1.4.7  2024-12-16  
 ;
   Changes (bv)
   + Include entity_branch-extension.dic
@@ -574,7 +574,7 @@ mmcif_ma-core.dic  1.4.6  2024-01-29
   + Update _item_type.code for _ma_target_ref_db_details.gene_name
 ;
   
-mmcif_ma-core.dic  1.4.7  2024-12-10  
+mmcif_ma-core.dic  1.4.7  2024-12-16  
 ;
   Changes (bv)
   + Update enumerations for _ma_associated_archive_file_details.file_format and _ma_template_details.template_entity_type
@@ -2000,8 +2000,12 @@ save_ma_template_non_poly
 ;
     loop_
     _ma_template_non_poly.template_id
-    _ma_template_non_poly.inchi_key
-    1 . 
+    _ma_template_non_poly.comp_id
+    _ma_template_non_poly.details
+    3 ZN 'ZINC ION'
+    4 ZN 'ZINC ION'
+    5 CU 'COPPER (II) ION'
+    6 CU 'COPPER (II) ION'
     # ...  abbreviated ...
 ;
 
@@ -2139,7 +2143,9 @@ save_ma_template_branched
     _ma_template_branched.descriptor_software_id
     _ma_template_branched.type
     _ma_template_branched.details
-    # ...  abbreviated ...
+    1 2 alpha-D-glucopyranose-(1-6)-alpha-D-glucopyranose 'Glycam Condensed Sequence' DGlcpa1-6DGlcpa1-ROH ? oligosaccharide ?
+    2 2 alpha-D-glucopyranose-(1-6)-alpha-D-glucopyranose WURCS 'WURCS=2.0/1,2,1/[a2122h-1a_1-5]/1-1/a6-b1' ? oligosaccharide ?
+    # ...  abbreviated example based on template entity from 3axh ...
 ;
 
    #

@@ -2,7 +2,7 @@
 ## MODELING EXTENSION DICTIONARY ##
 ###################################
 
-# Version 1.4.7 27th November 2024
+# Version 1.4.7 16th December 2024
 
 data_mmcif_ma.dic
 
@@ -239,7 +239,7 @@ data_mmcif_ma.dic
   Changes (bv)
   + Update _item_type.code for _ma_target_ref_db_details.gene_name
 ;
-  1.4.7   2024-12-10
+  1.4.7   2024-12-16
 ;
   Changes (bv)
   + Include entity_branch-extension.dic
@@ -256,4 +256,5 @@ data_mmcif_ma.dic
   + Update enumerations for _ma_associated_archive_file_details.file_content and _ma_entry_associated_files.file_content
   + Add ma_feature_list, ma_atom_feature, ma_poly_residue_feature, ma_entity_instance_feature
   + Add ma_qa_metric_feature, ma_qa_metric_feature_pairwise
+  + Updated mmcif_pdbx_v50.dic to version 5.399
 ;
