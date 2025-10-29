@@ -3,7 +3,7 @@ data_mmcif_ma-core.dic
 _pdbx_dictionary_component.datablock_id   mmcif_ma-core.dic
 _pdbx_dictionary_component.dictionary_component_id  mmcif_ma-core.dic
 _pdbx_dictionary_component.title          "ModeCIF dictionary: mmcif_ma-core"
-_pdbx_dictionary_component.version        1.4.7
+_pdbx_dictionary_component.version        1.4.8
 
 loop_
 _pdbx_dictionary_component_history.dictionary_component_id
@@ -240,6 +240,13 @@ mmcif_ma-core.dic  1.4.7   2024-12-16
   + Update enumerations for _ma_associated_archive_file_details.file_content and _ma_entry_associated_files.file_content
   + Add ma_feature_list, ma_atom_feature, ma_poly_residue_feature, ma_entity_instance_feature
   + Add ma_qa_metric_feature, ma_qa_metric_feature_pairwise
+;
+mmcif_ma-core.dic  1.4.8   2025-10-29
+;
+  Changes (bv, gt)
+  + Update enumerations for _ma_protocol_step.method_type and _ma_data.content_type 
+  + Add ma_qa_metric_dihedral, _ma_qa_metric.data_id
+  + Add ma_energy_estimates, ma_energy_estimates_value, ma_experimental_validation
 ;
 
 ###########
@@ -3169,10 +3176,15 @@ save__ma_data.content_type
       'polymeric template library'  'polymeric template library'
       'spatial restraints'          'spatial restraints'
       'target-template alignment'   'target-template alignment'
-      'coevolution MSA'             'coevolution MSA'
+      'coevolution MSA'             'multiple sequence alignment used for modeling (commonly used to extract coevolution signals explicitly or implicitly)'
       'model coordinates'           'model coordinates'
-      'input structure'             'input structure used in deep learning methods'
+      'input structure'             'input structure used outside of template-based modeling (e.g. deep learning methods or protein design)'
       'reference database'          'reference database used'
+      'intermediate backbone'       'backbone coordinates generated for protein design'
+      'intermediate sequence'       'sequences generated for protein design'
+      'model quality assessment scores'    'model quality assessment scores'
+      'energy estimate'             'energy estimate'
+      'experimental validation'     'experimental validation'
       'other'                       'other'
      save_
 
@@ -5119,6 +5131,23 @@ save_ma_protocol_step
   10 4 1 "model selection" . 2   14  15
   # ... abbreviated ... #
 ;
+; 
+    Example 2 - 
+;
+; 
+loop_
+_ma_protocol_step.ordinal_id
+_ma_protocol_step.protocol_id
+_ma_protocol_step.step_id
+_ma_protocol_step.method_type
+_ma_protocol_step.details
+_ma_protocol_step.software_group_id
+_ma_protocol_step.input_data_group_id
+_ma_protocol_step.output_data_group_id
+1 1 1 'coevolution MSA' 'MSA generated with MMseqs2' 1 1 3
+2 1 2 modeling 'Model generated using AlphaFold2 producing 5 models without model relaxation, ranked by pLDDT' 2 2 4
+3 1 3 'model refinement' 'Model was minimized and subjected to molecular dynamics for 1 ns using GROMACS' 3 4 5
+;
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
    _pdbx_category_context.type         CONTRIBUTED
    _pdbx_category_context.category_id  ma_protocol_step
@@ -5164,15 +5193,22 @@ save__ma_protocol_step.method_type
     _item_type.code               line
     loop_
     _item_enumeration.value
-    'template search'
-    'template selection'
-    'target-template alignment'
-    'coevolution MSA'
-    'contact prediction'
-    'modeling'
-    'model selection'
-    'model refinement'
-    'other'
+    _item_enumeration.detail
+    'template search'           'search for template or input structures'
+    'template selection'        'selection of template(s) out of several found templates'
+    'target-template alignment' 'target-template alignment'
+    'coevolution MSA'           'generation of multiple sequence alignment used for modeling (commonly used to extract coevolution signals explicitly or implicitly)'
+    'contact prediction'        'contact prediction'
+    'modeling'                  'generation of model coordinates (can be only step for end-to-end modeling methods)'
+    'model selection'           'selection of model(s) out of several generated models'
+    'model refinement'          'model refinement'
+    'model quality assessment'  'model quality assessment'
+    'backbone generation'       'generation of backbone coordinates for protein design'
+    'sequence design'           'generation of sequences for protein design (incl. inverse folding)'
+    'structure validation'      'assessing designed sequences with their modeled structures'
+    'energy estimate'           'energy estimate'
+    'experimental validatation' 'experimental validation'
+    'other'                     'other type of step'
      save_
 
 save__ma_protocol_step.details
@@ -5896,6 +5932,19 @@ save__ma_qa_metric.type_other_details
     _item_type.code               text
      save_
 
+save__ma_qa_metric.data_id
+    _item_description.description
+;   The data_id identifier corresponding to the model quality assessment, if available. 
+    This data item is a pointer to _ma_data.id in the MA_DATA category.
+;
+    _item.name                  '_ma_qa_metric.data_id'
+    _item.category_id             ma_qa_metric
+    _item.mandatory_code          no
+    _item_type.code               int
+    _item_linked.child_name       '_ma_qa_metric.data_id'
+    _item_linked.parent_name      '_ma_data.id'
+     save_
+
 save__ma_qa_metric.mode
     _item_description.description
 ;     The mode of calculation of the QA metric.
@@ -5912,6 +5961,7 @@ save__ma_qa_metric.mode
     'local-pairwise'    'QA metric is calculated per-residue-pair'
     'per-feature'   'QA metric is calculated per-feature'
     'per-feature-pair'  'QA metric is calculated per-feature-pair'
+    'dihedral'  'QA metric is calculated per-dihedral'
      save_
 
 save__ma_qa_metric.software_group_id
@@ -7276,7 +7326,7 @@ save__ma_associated_archive_file_details.description
 
 save__ma_associated_archive_file_details.data_id
     _item_description.description
-;     The data_id identifier corresponding to the associated archive file, if availble. 
+;     The data_id identifier corresponding to the associated archive file, if available. 
       This data item is a pointer to _ma_data.id in the MA_DATA category.
 ;
     _item.name                  '_ma_associated_archive_file_details.data_id'
@@ -7437,5 +7487,575 @@ save__chem_comp.ma_provenance
     'CCD Core'   'The chemical component is defined in the core CCD maintained by the wwPDB'
     'CCD MA'     'The chemical component is defined in the ModelArchive extension of the CCD'
     'CCD local'  'The chemical component is defined locally within the mmCIF file instance'
+     save_
+
+###########################
+## MA_QA_METRIC_DIHEDRAL ##
+###########################
+
+save_ma_qa_metric_dihedral
+    _category.description
+;     Data items in the MA_QA_METRIC_DIHEDRAL category capture the analysis of 
+      individual torsion angles of a molecule. This analysis may involve dihedral 
+      scanning using quantum-mechanical calculations, or a comparison of torsion 
+      angle values with probability distributions obtained from experimental data 
+      (e.g. TorsionAnalyzer). Here, the main output is not the value from the 
+      analysis, but rather a quality classification resulting from an assessment 
+      of the energetic state or likelihood of each dihedral angle.                  
+;
+    _category.id                  ma_qa_metric_dihedral
+    _category.mandatory_code      no
+     loop_
+    _category_key.name          '_ma_qa_metric_dihedral.ordinal_id'
+
+    loop_
+    _category_group.id           'inclusive_group'
+                                 'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 - 
+;
+;
+    loop_
+    _ma_qa_metric_dihedral.ordinal_id
+    _ma_qa_metric_dihedral.atom_id_1
+    _ma_qa_metric_dihedral.atom_id_2
+    _ma_qa_metric_dihedral.atom_id_3
+    _ma_qa_metric_dihedral.atom_id_4
+    _ma_qa_metric_dihedral.metric_id
+    _ma_qa_metric_dihedral.metric_value
+    _ma_qa_metric_dihedral.quality
+    _ma_qa_metric_dihedral.smarts_pattern
+    1 2407 2410 2403 2404 3 -137.538 tolerable '[*:1]~[OX2:2]!@[P:3]~[*:4]|GG|'
+    2 2399 2406 2403 2404 3 176.558 relaxed '[*:1]~[OX2:2]!@[P:3]~[*:4]|GG|'
+    # ...  abbreviated ...
+;
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_qa_metric_dihedral
+     save_
+
+save__ma_qa_metric_dihedral.ordinal_id
+    _item_description.description
+;     A unique identifier for the category. 
+;
+    _item.name                  '_ma_qa_metric_dihedral.ordinal_id'
+    _item.category_id             ma_qa_metric_dihedral
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_qa_metric_dihedral.atom_id_1
+    _item_description.description
+;    The identifier for one of the four atoms that define the dihedral angle. 
+     This one is the outer atom connected to atom_id_2. 
+     This data item is a pointer to _atom_site.id in the ATOM_SITE category. 
+;
+    _item.name                  '_ma_qa_metric_dihedral.atom_id_1'
+    _item.category_id             ma_qa_metric_dihedral
+    _item.mandatory_code          yes
+    _item_type.code               code
+    _item_linked.child_name     '_ma_qa_metric_dihedral.atom_id_1'
+    _item_linked.parent_name    '_atom_site.id'
+     save_
+
+save__ma_qa_metric_dihedral.atom_id_2
+    _item_description.description
+;    The identifier for one of the four atoms that define the dihedral angle. 
+     This one is the inner atom connected to atom_id_1 and atom_id_3. 
+     This data item is a pointer to _atom_site.id in the ATOM_SITE category.
+;
+    _item.name                  '_ma_qa_metric_dihedral.atom_id_2'
+    _item.category_id             ma_qa_metric_dihedral
+    _item.mandatory_code          yes
+    _item_type.code               code
+    _item_linked.child_name     '_ma_qa_metric_dihedral.atom_id_2'
+    _item_linked.parent_name    '_atom_site.id'
+     save_
+
+save__ma_qa_metric_dihedral.atom_id_3
+    _item_description.description
+;    The identifier for one of the four atoms that define the dihedral angle. 
+     This one is the inner atom connected to atom_id_2 and atom_id_4. 
+     This data item is a pointer to _atom_site.id in the ATOM_SITE category.
+;
+    _item.name                  '_ma_qa_metric_dihedral.atom_id_3'
+    _item.category_id             ma_qa_metric_dihedral
+    _item.mandatory_code          yes
+    _item_type.code               code
+    _item_linked.child_name     '_ma_qa_metric_dihedral.atom_id_3'
+    _item_linked.parent_name    '_atom_site.id'
+     save_
+
+save__ma_qa_metric_dihedral.atom_id_4
+    _item_description.description
+;    The identifier for one of the four atoms that define the dihedral angle. 
+     This one is the outer atom connected to atom_id_3. 
+     This data item is a pointer to _atom_site.id in the ATOM_SITE category.
+;
+    _item.name                  '_ma_qa_metric_dihedral.atom_id_4'
+    _item.category_id             ma_qa_metric_dihedral
+    _item.mandatory_code          yes
+    _item_type.code               code
+    _item_linked.child_name     '_ma_qa_metric_dihedral.atom_id_4'
+    _item_linked.parent_name    '_atom_site.id'
+     save_
+
+save__ma_qa_metric_dihedral.metric_id
+    _item_description.description
+;    The identifier for the QA metric.
+     This data item is a pointer to _ma_qa_metric.id in the MA_QA_METRIC category.
+;
+    _item.name                  '_ma_qa_metric_dihedral.metric_id'
+    _item.category_id             ma_qa_metric_dihedral
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_qa_metric_dihedral.metric_id'
+    _item_linked.parent_name    '_ma_qa_metric.id'
+     save_
+
+save__ma_qa_metric_dihedral.metric_value
+    _item_description.description
+;     Computed or measured value used for the quality metric. 
+      The type of the value is implicitly determined by the method used in the 
+      validation (e.g. dihedral value, QM energy of dihedral above lowest energy value).
+;
+    _item.name                  '_ma_qa_metric_dihedral.metric_value'
+    _item.category_id             ma_qa_metric_dihedral
+    _item.mandatory_code          yes
+    _item_type.code               float
+     save_
+
+save__ma_qa_metric_dihedral.quality
+    _item_description.description
+;    Indicates the outcome or result of the analysis. For instance a quality 
+     classification into 'relaxed', 'tolerable' or 'strained' as used by TorsionAnalyzer.
+;
+    _item.name                  '_ma_qa_metric_dihedral.quality'
+    _item.category_id             ma_qa_metric_dihedral
+    _item.mandatory_code          yes
+    _item_type.code               line
+    loop_
+    _item_enumeration.value       
+     relaxed
+     tolerable
+     strained
+     save_
+
+save__ma_qa_metric_dihedral.smarts_pattern
+    _item_description.description
+;    Option 1: SMARTS pattern that specifies the dihedral angle in its chemical environment, 
+     encoding the observed frequency distribution for validation against the torsion angle in 
+     the deposited structure model. Option 2: SMARTS pattern that defines the fragment used 
+     for dihedral scanning.
+;
+    _item.name                  '_ma_qa_metric_dihedral.smarts_pattern'
+    _item.category_id             ma_qa_metric_dihedral
+    _item.mandatory_code          no
+    _item_type.code               code
+     save_
+
+#########################
+## MA_ENERGY_ESTIMATES ##
+#########################
+
+save_ma_energy_estimates
+    _category.description
+;     Data items in the MA_ENERGY_ESTIMATES category record the details of the 
+      type of energy estimate calculated for the stored models.
+;
+    _category.id                  ma_energy_estimates
+    _category.mandatory_code      no
+     loop_
+    _category_key.name          '_ma_energy_estimates.ordinal_id'
+
+    loop_
+    _category_group.id           'inclusive_group'
+                                 'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 - 
+;
+;
+    loop_
+    _ma_energy_estimates.ordinal_id
+    _ma_energy_estimates.energy_type
+    _ma_energy_estimates.unit
+    _ma_energy_estimates.details
+    _ma_energy_estimates.data_id
+    1 "folding free energy" "kcal/mol" "Calculated using CHARMM" 1
+    2 "solvation energy" "kcal/mol" "Calculated using Poisson Boltzman" 2
+    # ...  abbreviated ...
+;
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_energy_estimates
+     save_
+
+save__ma_energy_estimates.ordinal_id
+    _item_description.description
+;     A unique identifier for the category. 
+;
+    _item.name                  '_ma_energy_estimates.ordinal_id'
+    _item.category_id             ma_energy_estimates
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_energy_estimates.energy_type
+    _item_description.description
+;    Identifies the type of energy estimate.
+;
+    _item.name                  '_ma_energy_estimates.energy_type'
+    _item.category_id             ma_energy_estimates
+    _item.mandatory_code          yes
+    _item_type.code               line
+    loop_
+    _item_enumeration.value
+    _item_enumeration.detail
+    'conformational energy' 'energy associated with different conformations of a molecule'
+    'potential energy' 'total energy of a system as determined by its molecular geometry'
+    'relative energy' 'energy difference between a given conformer and the global minimum (or reference structure)'
+    'folding free energy' 'free energy difference between the unfolded and folded states of a biomolecule'
+    'binding free energy' 'free energy change upon binding to another molecular entity'
+    'interaction energy' 'non-bonded energy between two molecular entities '
+    'solvation energy' 'energy difference between solvated and gas-phase states'
+    'transition state energy' 'energy required to reach the transition state from reactants'
+    'strain energy' 'energy due to deviation from ideal geometry (torsional strain, steric clash)'
+    'other' 'other energy described in details'
+     save_
+
+save__ma_energy_estimates.unit
+    _item_description.description
+;    Identifies the unit used to provide the energy.
+;
+    _item.name                  '_ma_energy_estimates.unit'
+    _item.category_id             ma_energy_estimates
+    _item.mandatory_code          yes
+    _item_type.code               line
+    loop_
+    _item_enumeration.value
+    _item_enumeration.detail
+    'kcal/mol' 'kilocalories per mole'
+    'kJ/mol' 'kilojoules per mole'
+    'eV' 'electronvolt'
+    'Eh' 'Hartree'
+    'RT' 'temperature equivalent (e.g. at T = 298 K RT = 0.592 kcal/mol)'
+    'other' 'other unit described in details'
+     save_
+
+save__ma_energy_estimates.details
+    _item_description.description
+;    Description with any extra information on how the energy is 
+     computed (e.g. for full system or only considering some subset).
+;
+    _item.name                  '_ma_energy_estimates.details'
+    _item.category_id             ma_energy_estimates
+    _item.mandatory_code          no
+    _item_type.code               text
+     save_
+
+save__ma_energy_estimates.data_id
+    _item_description.description
+;    The data_id identifier corresponding to the energy estimate, if available.
+     This data item is a pointer to _ma_data.id in the MA_DATA category.
+;
+    _item.name                  '_ma_energy_estimates.data_id'
+    _item.category_id             ma_energy_estimates
+    _item.mandatory_code          no
+    _item_type.code               int
+    _item_linked.child_name     '_ma_energy_estimates.data_id'
+    _item_linked.parent_name    '_ma_data.id'
+     save_
+
+###############################
+## MA_ENERGY_ESTIMATES_VALUE ##
+###############################
+
+save_ma_energy_estimates_value
+    _category.description
+;    Data items in the MA_ENERGY_ESTIMATES_VALUE category record the values 
+     per model for a given energy estimate. Only one energy value can be stored 
+     per unique combination of energy_estimates_id and model_id but additional 
+     data items in the MA_ENERGY_ESTIMATES can be added if needed.
+;
+    _category.id                  ma_energy_estimates_value
+    _category.mandatory_code      no
+     loop_
+    _category_key.name          '_ma_energy_estimates_value.energy_estimates_id'
+                                '_ma_energy_estimates_value.model_id'
+
+    loop_
+    _category_group.id           'inclusive_group'
+                                 'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 - 
+;
+;
+    loop_
+    _ma_energy_estimates_value.energy_estimates_id
+    _ma_energy_estimates_value.model_id
+    _ma_energy_estimates_value.numerical_value
+    1 1 -6.52
+    2 3 -12.13
+    # ...  abbreviated ...
+;
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_energy_estimates_value
+     save_
+
+save__ma_energy_estimates_value.energy_estimates_id
+    _item_description.description
+;     Identifier to the energy estimate.
+      This data item is a pointer to _ma_energy_estimates.ordinal_id in the MA_ENERGY_ESTIMATES category. 
+;
+    _item.name                  '_ma_energy_estimates_value.energy_estimates_id'
+    _item.category_id             ma_energy_estimates_value
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_energy_estimates_value.energy_estimates_id'
+    _item_linked.parent_name    '_ma_energy_estimates.ordinal_id'
+     save_
+
+save__ma_energy_estimates_value.model_id
+    _item_description.description
+;     The identifier for the structural model, for which the energy estimate is provided.
+      This data item is a pointer to _ma_model_list.ordinal_id in the MA_MODEL_LIST category.
+;
+    _item.name                  '_ma_energy_estimates_value.model_id'
+    _item.category_id             ma_energy_estimates_value
+    _item.mandatory_code          yes
+    _item_type.code               int
+    _item_linked.child_name     '_ma_energy_estimates_value.model_id'
+    _item_linked.parent_name    '_ma_model_list.ordinal_id'
+     save_
+
+save__ma_energy_estimates_value.numerical_value
+    _item_description.description
+;    Numerical value of the energy.
+;
+    _item.name                  '_ma_energy_estimates_value.numerical_value'
+    _item.category_id             ma_energy_estimates_value
+    _item.mandatory_code          yes
+    _item_type.code               float
+     save_
+
+################################
+## MA_EXPERIMENTAL_VALIDATION ##
+################################
+
+save_ma_experimental_validation
+    _category.description
+;   Data items in the MA_EXPERIMENTAL_VALIDATION category describe how the existence 
+    of the modeled system was experimentally validated, often through multiple 
+    complementary experiments. The aim is to provide experimental evidence supporting 
+    the biological plausibility of the input, such as entities forming a complex with 
+    a specific stoichiometry or designed proteins being able to fold. It can also include 
+    negative evidence (e.g. for models used to distinguish positive and negative results). 
+    It is not meant to capture experimental data used in modeling (e.g. via spatial restraints). 
+;
+    _category.id                  ma_experimental_validation
+    _category.mandatory_code      no
+     loop_
+    _category_key.name          '_ma_experimental_validation.ordinal_id'
+
+    loop_
+    _category_group.id           'inclusive_group'
+                                 'ma_group'
+    loop_
+    _category_examples.detail
+    _category_examples.case
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+    Example 1 - 
+;
+;
+    loop_
+    _ma_experimental_validation.ordinal_id
+    _ma_experimental_validation.method
+    _ma_experimental_validation.value
+    _ma_experimental_validation.positive_outcome
+    _ma_experimental_validation.reference_type
+    _ma_experimental_validation.reference_url
+    _ma_experimental_validation.details
+    1 MST 5.3e-6 YES 'peer-reviewed article' https://doi.org/10.xxxx/xxxxx 'Binding affinity measured using MST, confirming the interaction.'
+    2 SPR 2.1e-7 YES database https://www.bindingdb.org 'SPR was used to determine affinity.'
+    3 SAXS . YES 'conference proceedings' https://www.structconference.org 'SAXS data confirm overall shape of the complex.'
+    # ...  abbreviated ...
+;
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   _pdbx_category_context.type         CONTRIBUTED
+   _pdbx_category_context.category_id  ma_experimental_validation
+     save_
+
+save__ma_experimental_validation.ordinal_id
+    _item_description.description
+;     A unique identifier for the category. 
+;
+    _item.name                  '_ma_experimental_validation.ordinal_id'
+    _item.category_id             ma_experimental_validation
+    _item.mandatory_code          yes
+    _item_type.code               int
+     save_
+
+save__ma_experimental_validation.method
+    _item_description.description
+;    Describes the experimental technique used.
+;
+    _item.name                  '_ma_experimental_validation.method'
+    _item.category_id             ma_experimental_validation
+    _item.mandatory_code          yes
+    _item_type.code               line
+    loop_
+    _item_enumeration.value
+    _item_enumeration.detail
+    'SPR' 'Surface Plasmon Resonance'
+    'MST' 'Microscale Thermophoresis'
+    'ITC' 'Isothermal Titration Calorimetry'
+    'BLI' 'Bio-Layer Interferometry'
+    'MP' 'Mass Photometry'
+    'DSF' 'Differential Scanning Fluorimetry'
+    'FIDA' 'Flow Induced Dispersion Analysis'
+    'AU' 'Analytical Ultracentrifugation'
+    'SEC' 'Size Exclusion Chromatography'
+    'X-ray' 'X-ray Crystallography'
+    'Cryo-EM' 'Cryo-Electron Microscopy'
+    'ELISA' 'Enzyme-Linked Immunosorbent Assay'
+    'Co-IP' 'Co-Immunoprecipitation'
+    'SAXS' 'Small-Angle X-ray Scattering'
+    'NMR' 'Nuclear Magnetic Resonance'
+    'FRET' 'Förster Resonance Energy Transfer'
+    'AFM' 'Atomic Force Microscopy'
+    'CoSAXS' 'Combined Small-Angle X-ray Scattering and Cryo-EM'
+    'Microarray' 'Microarrays with immobilized proteins, peptides or DNA'
+    'CL' 'Cross-linking combined with mass spectrometry'
+    'HDX' 'Hydrogen Deuterium Exchange'
+    'PAL' 'Photoaffinity labeling'
+    'LiP-MS' 'Limited Proteolysis followed by Mass Spectrometry'
+    'fluorescence spectroscopy' 'Fluorescence Spectroscopy'
+    'light scattering' 'Light Scattering'
+    'other' 'Other method described in details'
+     save_
+
+save__ma_experimental_validation.type
+    _item_description.description
+;    The type of evidence.
+;
+    _item.name                  '_ma_experimental_validation.type'
+    _item.category_id             ma_experimental_validation
+    _item.mandatory_code          yes
+    _item_type.code               line
+    loop_
+    _item_enumeration.value
+    _item_enumeration.detail
+    'full assembly' 'evidence for the full assembly to form in the given stoichiometry'
+    'partial assembly' 'evidence for parts of the assembly to form'
+    'single molecules' 'evidence that single molecules exist (e.g. can be synthesized or expresses/folds)'
+     save_
+
+save__ma_experimental_validation.value_name
+    _item_description.description
+;    The name of experimentally observed value, for example, Kd. 
+;
+    _item.name                  '_ma_experimental_validation.value_name'
+    _item.category_id             ma_experimental_validation
+    _item.mandatory_code          no
+    _item_type.code               line
+     save_
+
+save__ma_experimental_validation.value
+    _item_description.description
+;    The value of the experimental observation.
+;
+    _item.name                  '_ma_experimental_validation.value'
+    _item.category_id             ma_experimental_validation
+    _item.mandatory_code          no
+    _item_type.code               float
+     save_
+
+save__ma_experimental_validation.value_unit
+    _item_description.description
+;    Units for the experimental observation value.
+;
+    _item.name                  '_ma_experimental_validation.value_unit'
+    _item.category_id             ma_experimental_validation
+    _item.mandatory_code          no
+    _item_type.code               line
+     save_
+
+save__ma_experimental_validation.positive_outcome
+    _item_description.description
+;    Indicates the outcome or result of a particular experimental validation. 
+     This entry specifies whether the validation step was successful (YES) 
+     or unsuccessful (NO).
+;
+    _item.name                  '_ma_experimental_validation.positive_outcome'
+    _item.category_id             ma_experimental_validation
+    _item.mandatory_code          yes
+    _item_type.code               ucode
+    loop_
+    _item_enumeration.value
+     'yes'
+     'no'
+     save_
+
+save__ma_experimental_validation.reference_type
+    _item_description.description
+;    The type of reference for the experimental validation.
+;
+    _item.name                  '_ma_experimental_validation.reference_type'
+    _item.category_id             ma_experimental_validation
+    _item.mandatory_code          no
+    _item_type.code               line
+    loop_
+    _item_enumeration.value
+     'peer-reviewed article'
+     'database'
+     'webpage'
+     'conference proceedings'
+     save_
+
+save__ma_experimental_validation.reference_url
+    _item_description.description
+;    URL linking to the experimental validation information.
+;
+    _item.name                  '_ma_experimental_validation.reference_url'
+    _item.category_id             ma_experimental_validation
+    _item.mandatory_code          no
+    _item_type.code               code
+     save_
+
+save__ma_experimental_validation.details
+    _item_description.description
+;    Details about the validation process and the data availability.
+;
+    _item.name                  '_ma_experimental_validation.details'
+    _item.category_id             ma_experimental_validation
+    _item.mandatory_code          no
+    _item_type.code               text
+     save_
+
+save__ma_experimental_validation.data_id
+    _item_description.description
+;    The data_id identifier corresponding to the experimental validation, if available.
+     This data item is a pointer to _ma_data.id in the MA_DATA category.
+;
+    _item.name                  '_ma_experimental_validation.data_id'
+    _item.category_id             ma_experimental_validation
+    _item.mandatory_code          no
+    _item_type.code               int
+    _item_linked.child_name     '_ma_experimental_validation.data_id'
+    _item_linked.parent_name    '_ma_data.id'
      save_
 

@@ -2,7 +2,7 @@
 ## MODELING EXTENSION DICTIONARY ##
 ###################################
 
-# Version 1.4.7 16th December 2024
+# Version 1.4.8 29th October 2025
 
 data_mmcif_ma.dic
 
@@ -16,7 +16,7 @@ data_mmcif_ma.dic
 ;
     _dictionary.title           mmcif_ma.dic
     _dictionary.datablock_id    mmcif_ma.dic
-    _dictionary.version         1.4.7
+    _dictionary.version         1.4.8
 #
      loop_
     _dictionary_history.version
@@ -257,4 +257,11 @@ data_mmcif_ma.dic
   + Add ma_feature_list, ma_atom_feature, ma_poly_residue_feature, ma_entity_instance_feature
   + Add ma_qa_metric_feature, ma_qa_metric_feature_pairwise
   + Updated mmcif_pdbx_v50.dic to version 5.399
+;
+  1.4.8   2025-10-29
+;
+  Changes (bv, gt)
+  + Update enumerations for _ma_protocol_step.method_type and _ma_data.content_type
+  + Add ma_qa_metric_dihedral, _ma_qa_metric.data_id
+  + Add ma_energy_estimates, ma_energy_estimates_value, ma_experimental_validation
 ;
