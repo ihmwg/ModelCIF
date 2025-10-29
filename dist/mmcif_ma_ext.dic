@@ -6932,7 +6932,7 @@ save__ma_protocol_step.method_type
      "sequence design"            "generation of sequences for protein design (incl. inverse folding)"  
      "structure validation"       "assessing designed sequences with their modeled structures"  
      "energy estimate"            "energy estimate"  
-     "experimental validatation"  "experimental validation"  
+     "experimental validation"    "experimental validation"  
      other                        "other type of step"  
    #
 save_
