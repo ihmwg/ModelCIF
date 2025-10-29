@@ -8022,8 +8022,8 @@ save__ma_experimental_validation.reference_type
     _item_enumeration.value
      'peer-reviewed article'
      'database'
-     'webpage'
      'conference proceedings'
+     'other'
      save_
 
 save__ma_experimental_validation.reference_url
