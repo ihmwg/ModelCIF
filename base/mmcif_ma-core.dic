@@ -7781,15 +7781,13 @@ save__ma_energy_estimates.data_id
 save_ma_energy_estimates_value
     _category.description
 ;    Data items in the MA_ENERGY_ESTIMATES_VALUE category record the values 
-     per model for a given energy estimate. Only one energy value can be stored 
-     per unique combination of energy_estimates_id and model_id but additional 
+     per model or feature for a given energy estimate. Additional 
      data items in the MA_ENERGY_ESTIMATES can be added if needed.
 ;
     _category.id                  ma_energy_estimates_value
     _category.mandatory_code      no
      loop_
-    _category_key.name          '_ma_energy_estimates_value.energy_estimates_id'
-                                '_ma_energy_estimates_value.model_id'
+    _category_key.name          '_ma_energy_estimates_value.ordinal_id'
 
     loop_
     _category_group.id           'inclusive_group'
@@ -7803,16 +7801,27 @@ save_ma_energy_estimates_value
 ;
 ;
     loop_
+    _ma_energy_estimates_value.ordinal_id
     _ma_energy_estimates_value.energy_estimates_id
     _ma_energy_estimates_value.model_id
     _ma_energy_estimates_value.numerical_value
-    1 1 -6.52
-    2 3 -12.13
+    1 1 1 -6.52
+    2 2 3 -12.13
     # ...  abbreviated ...
 ;
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
    _pdbx_category_context.type         CONTRIBUTED
    _pdbx_category_context.category_id  ma_energy_estimates_value
+     save_
+
+save__ma_energy_estimates_value.ordinal_id
+    _item_description.description
+;     A unique identifier to for the category.
+;
+    _item.name                  '_ma_energy_estimates_value.ordinal_id'
+    _item.category_id             ma_energy_estimates_value
+    _item.mandatory_code          yes
+    _item_type.code               int
      save_
 
 save__ma_energy_estimates_value.energy_estimates_id
@@ -7839,6 +7848,19 @@ save__ma_energy_estimates_value.model_id
     _item_type.code               int
     _item_linked.child_name     '_ma_energy_estimates_value.model_id'
     _item_linked.parent_name    '_ma_model_list.ordinal_id'
+     save_
+
+save__ma_energy_estimates_value.feature_id
+    _item_description.description
+;     The identifier for the feature, for which the energy estimate is provided.
+      This data item is a pointer to  _ma_feature_list.feature_id in the MA_FEATURE_LIST category.
+;
+    _item.name                  '_ma_energy_estimates_value.feature_id'
+    _item.category_id             ma_energy_estimates_value
+    _item.mandatory_code          no
+    _item_type.code               int
+    _item_linked.child_name     '_ma_energy_estimates_value.feature_id'
+    _item_linked.parent_name    '_ma_feature_list.feature_id'
      save_
 
 save__ma_energy_estimates_value.numerical_value
@@ -7887,9 +7909,9 @@ save_ma_experimental_validation
     _ma_experimental_validation.value
     _ma_experimental_validation.positive_outcome
     _ma_experimental_validation.reference_type
-    _ma_experimental_validation.reference_url
+    _ma_experimental_validation.reference_doi
     _ma_experimental_validation.details
-    1 MST 5.3e-6 YES 'peer-reviewed article' https://doi.org/10.xxxx/xxxxx 'Binding affinity measured using MST, confirming the interaction.'
+    1 MST 5.3e-6 YES 'peer-reviewed article' 10.xxxx/xxxxx 'Binding affinity measured using MST, confirming the interaction.'
     2 SPR 2.1e-7 YES database https://www.bindingdb.org 'SPR was used to determine affinity.'
     3 SAXS . YES 'conference proceedings' https://www.structconference.org 'SAXS data confirm overall shape of the complex.'
     # ...  abbreviated ...
@@ -7935,7 +7957,7 @@ save__ma_experimental_validation.method
     'Co-IP' 'Co-Immunoprecipitation'
     'SAXS' 'Small-Angle X-ray Scattering'
     'NMR' 'Nuclear Magnetic Resonance'
-    'FRET' 'Förster Resonance Energy Transfer'
+    'FRET' 'Forster Resonance Energy Transfer'
     'AFM' 'Atomic Force Microscopy'
     'CoSAXS' 'Combined Small-Angle X-ray Scattering and Cryo-EM'
     'Microarray' 'Microarrays with immobilized proteins, peptides or DNA'
@@ -7950,7 +7972,7 @@ save__ma_experimental_validation.method
 
 save__ma_experimental_validation.type
     _item_description.description
-;    The type of evidence.
+;   The type of evidence.
 ;
     _item.name                  '_ma_experimental_validation.type'
     _item.category_id             ma_experimental_validation
@@ -8024,6 +8046,16 @@ save__ma_experimental_validation.reference_type
      'database'
      'conference proceedings'
      'other'
+     save_
+
+save__ma_experimental_validation.reference_doi
+    _item_description.description
+;    The Digital Object Identifier (DOI) for the experimental validation information. 
+;
+    _item.name                  '_ma_experimental_validation.reference_doi'
+    _item.category_id             ma_experimental_validation
+    _item.mandatory_code          no
+    _item_type.code               code
      save_
 
 save__ma_experimental_validation.reference_url
