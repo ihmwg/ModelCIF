@@ -9936,7 +9936,7 @@ save_ma_energy_estimates_value
 save_
 #
 save__ma_energy_estimates_value.ordinal_id
-   _item_description.description  "     A unique identifier to for the category."
+   _item_description.description  "     A unique identifier for the category."
    #
    _item.name            "_ma_energy_estimates_value.ordinal_id"
    _item.category_id     ma_energy_estimates_value
@@ -10046,10 +10046,11 @@ save_ma_experimental_validation
     _ma_experimental_validation.positive_outcome
     _ma_experimental_validation.reference_type
     _ma_experimental_validation.reference_doi
+    _ma_experimental_validation.reference_url
     _ma_experimental_validation.details
-    1 MST 5.3e-6 YES 'peer-reviewed article' 10.xxxx/xxxxx 'Binding affinity measured using MST, confirming the interaction.'
-    2 SPR 2.1e-7 YES database https://www.bindingdb.org 'SPR was used to determine affinity.'
-    3 SAXS . YES 'conference proceedings' https://www.structconference.org 'SAXS data confirm overall shape of the complex.'
+    1 MST 5.3e-6 YES 'peer-reviewed article' 10.xxxx/xxxxx . 'Binding affinity measured using MST, confirming the interaction.'
+    2 SPR 2.1e-7 YES database . https://www.bindingdb.org 'SPR was used to determine affinity.'
+    3 SAXS . YES 'conference proceedings' . https://www.structconference.org 'SAXS data confirm overall shape of the complex.'
     # ...  abbreviated ...
 ;
 
@@ -10202,7 +10203,11 @@ save__ma_experimental_validation.reference_type
 save_
 #
 save__ma_experimental_validation.reference_doi
-   _item_description.description  "    The Digital Object Identifier (DOI) for the experimental validation information."
+   _item_description.description  
+;    The Digital Object Identifier (DOI) for the experimental validation information. 
+     If available, reference_doi should be provided instead of reference_url.
+;
+
    #
    _item.name            "_ma_experimental_validation.reference_doi"
    _item.category_id     ma_experimental_validation
