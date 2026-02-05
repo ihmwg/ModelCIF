@@ -2,7 +2,7 @@
 ## MODELING EXTENSION DICTIONARY ##
 ###################################
 
-# Version 1.4.8 29th October 2025
+# Version 1.4.9 5th February 2026
 
 data_mmcif_ma_ext.dic
 
@@ -16,7 +16,7 @@ data_mmcif_ma_ext.dic
 ;
     _dictionary.title           mmcif_ma_ext.dic
     _dictionary.datablock_id    mmcif_ma_ext.dic
-    _dictionary.version         1.4.8
+    _dictionary.version         1.4.9
 #
      loop_
     _dictionary_history.version
@@ -263,4 +263,9 @@ data_mmcif_ma_ext.dic
   + Update enumerations for _ma_protocol_step.method_type and _ma_data.content_type
   + Add ma_qa_metric_dihedral, _ma_qa_metric.data_id
   + Add ma_energy_estimates, ma_energy_estimates_value, ma_experimental_validation
+;
+  1.4.9   2026-02-05
+;
+  Changes (bv, gt)
+  + Update example for ma_experimental_validation
 ;

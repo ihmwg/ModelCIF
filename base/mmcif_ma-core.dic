@@ -3,7 +3,7 @@ data_mmcif_ma-core.dic
 _pdbx_dictionary_component.datablock_id   mmcif_ma-core.dic
 _pdbx_dictionary_component.dictionary_component_id  mmcif_ma-core.dic
 _pdbx_dictionary_component.title          "ModeCIF dictionary: mmcif_ma-core"
-_pdbx_dictionary_component.version        1.4.8
+_pdbx_dictionary_component.version        1.4.9
 
 loop_
 _pdbx_dictionary_component_history.dictionary_component_id
@@ -247,6 +247,11 @@ mmcif_ma-core.dic  1.4.8   2025-10-29
   + Update enumerations for _ma_protocol_step.method_type and _ma_data.content_type 
   + Add ma_qa_metric_dihedral, _ma_qa_metric.data_id
   + Add ma_energy_estimates, ma_energy_estimates_value, ma_experimental_validation
+;
+mmcif_ma-core.dic  1.4.9   2026-02-05
+;
+  Changes (bv, gt)
+  + Update example for ma_experimental_validation
 ;
 
 ###########
@@ -7906,15 +7911,16 @@ save_ma_experimental_validation
     loop_
     _ma_experimental_validation.ordinal_id
     _ma_experimental_validation.method
+    _ma_experimental_validation.type
     _ma_experimental_validation.value
     _ma_experimental_validation.positive_outcome
     _ma_experimental_validation.reference_type
     _ma_experimental_validation.reference_doi
     _ma_experimental_validation.reference_url
     _ma_experimental_validation.details
-    1 MST 5.3e-6 YES 'peer-reviewed article' 10.xxxx/xxxxx . 'Binding affinity measured using MST, confirming the interaction.'
-    2 SPR 2.1e-7 YES database . https://www.bindingdb.org 'SPR was used to determine affinity.'
-    3 SAXS . YES 'conference proceedings' . https://www.structconference.org 'SAXS data confirm overall shape of the complex.'
+    1 MST 'partial assembly' 5.3e-6 YES 'peer-reviewed article' 10.xxxx/xxxxx . 'Binding affinity measured using MST, confirming the interaction.'
+    2 SPR 'partial assembly' 2.1e-7 YES database . https://www.bindingdb.org 'SPR was used to determine affinity.'
+    3 SAXS 'full assembly' . YES 'conference proceedings' . https://www.structconference.org 'SAXS data confirm overall shape of the complex.'
     # ...  abbreviated ...
 ;
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
