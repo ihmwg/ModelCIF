@@ -820,8 +820,12 @@ Tools to handle ModelCIF files:
 
 - [python-modelcif](https://github.com/ihmwg/python-modelcif) to create ModelCIF files
 - [PDBx/mmCIF Software Resources](https://mmcif.wwpdb.org/docs/software-resources.html) to read and modify any type of mmCIF file
-- [modelcif-converters](https://git.scicore.unibas.ch/schwede/modelcif-converters/) include ModelCIF conversion scripts used for depositions in [ModelArchive](https://modelarchive.org/). These scripts are mostly based on python-modelcif. There is also a ModelCIF validation tool
-based on [RCSB's CifCheck](https://github.com/rcsb/cpp-dict-pack) in the repository.
+- [modelcif-converters](https://git.scicore.unibas.ch/schwede/modelcif-converters/) includes ModelCIF
+  conversion scripts used for depositions in [ModelArchive](https://modelarchive.org/), built on top
+  of the [modelarchive-py](https://pypi.org/project/modelarchive-py/) Python package.
+- [modelarchive-py](https://pypi.org/project/modelarchive-py/) also provides a ModelCIF validation tool based on
+  [RCSB's CifCheck](https://github.com/rcsb/cpp-dict-pack); see the
+  [validator documentation](https://modelarchive-py.readthedocs.io/stable/tools.html#module-modelarchive.tools.validator) for details.
 
 Modeling services and repositories known to contain or produce valid ModelCIF files:
 [ModelArchive](https://www.modelarchive.org),
