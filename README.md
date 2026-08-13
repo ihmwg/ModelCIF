@@ -17,11 +17,10 @@ ModelCIF data standards are used or supported by various model repositories (e.g
 and visualization software (e.g. [Mol*](https://molstar.org/), [ChimeraX](https://www.cgl.ucsf.edu/chimerax/)).
 
 The [python-modelcif](https://github.com/ihmwg/python-modelcif) library facilitates the programmatic
-creation of ModelCIF files and includes convenience classes to streamline this process. A collection
-of ModelCIF conversion scripts, mostly based on python-modelcif, as well as a ModelCIF validation tool
-based on [RCSB's CifCheck](https://github.com/rcsb/cpp-dict-pack), are available in a dedicated
-[modelcif-converters](https://git.scicore.unibas.ch/schwede/modelcif-converters/) code repository
-maintained by the ModelArchive team.
+creation of ModelCIF files and includes convenience classes to streamline this process. A collection of ModelCIF conversion scripts, built on top of the [modelarchive-py](https://pypi.org/project/modelarchive-py/) Python package, are available in a
+dedicated [modelcif-converters](https://git.scicore.unibas.ch/schwede/modelcif-converters/) code repository maintained by the ModelArchive team. The [modelarchive-py](https://pypi.org/project/modelarchive-py/) package also provides a
+ModelCIF validation tool based on [RCSB's CifCheck](https://github.com/rcsb/cpp-dict-pack); see the
+[validator documentation](https://modelarchive-py.readthedocs.io/stable/tools.html#module-modelarchive.tools.validator) for details.
 
 [ModelCIF](dist/mmcif_ma.dic) is an extension of the [PDBx/mmCIF](http://mmcif.wwpdb.org) 
 dictionary. The [PDBx/mmCIF](http://mmcif.wwpdb.org) dictionary is used by the [wwPDB](http://www.wwpdb.org) to
