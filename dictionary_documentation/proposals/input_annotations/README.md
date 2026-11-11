@@ -1,6 +1,6 @@
 # Incorporating Annotated CIF into ModelCIF
 
-We propose a ModelCIF annotation module incorporating the data contract used by AtomWorks and RFD4-Proteina. It enables seamless tool pipelines, meaningful cross-tool benchmarking and exchangeable preprocessed datasets. Both libraries would implement one standardized representation through their normal annotation/I/O APIs. Older Annotated CIF files may be converted; their field names, layout and permanent backward compatibility are not requirements.
+We propose a ModelCIF annotation module incorporating the data contract used by AtomWorks and RFD4-Proteina. It enables seamless tool pipelines, meaningful cross-tool benchmarking and exchangeable preprocessed datasets. Both libraries would implement one standardized representation through their normal annotation/I/O APIs. Preserve the familiar compact annotation tables: each row keeps its subject and value together, with shared metadata written once. Older files may be converted; permanent backward compatibility is unnecessary.
 
 **Discussion proposal for ModelCIF Working Group review.** New `ma_annotation_*` names are provisional. This PR changes no released dictionary and removes no existing ModelCIF content.
 
@@ -9,7 +9,7 @@ We propose a ModelCIF annotation module incorporating the data contract used by 
 Standardize atom, residue, chain, molecule, token and system annotations; 0/1/2-body operands; typed scalar and shaped values; categorical domains, defaults and states; sparse relations; coordinate/index groups; logical design sites/expandable segments; and source-to-output correspondence. The standard describes data and scientific semantics, not executable Python methods. Required conditions must be interpreted before execution; unsupported required conditions must fail explicitly.
 
 - [Module and item definitions](annotation-module.md): complete target scope, a concrete proposed layout for the worked annotations, keys/types/parents and interpretation rules.
-- [Worked CIF](worked-annotations.cif): an illustrative workflow, existing selections and two rigid-point targets plus partial sequence probabilities. It is a parseable example fragment, not a complete deposition or a released schema.
+- [Worked CIF](worked-annotations.cif): an illustrative workflow, two direct atom/XYZ rows sharing a rigid frame and two component-labelled residue probability rows. It is a parseable example fragment, not a complete deposition or a released schema.
 - [API coverage](annotation-coverage.md): compact mappings for all 59 inventoried annotations, the generic API requirements and unresolved scientific choices.
 
 ## Relationship to issue #31 and the published standard
@@ -21,7 +21,7 @@ Standardize atom, residue, chain, molecule, token and system annotations; 0/1/2-
 | `_ma_protocol_step.method_type` | `backbone generation`, `sequence design`, `structure validation` |
 | `_ma_data.content_type` | `intermediate backbone`, `intermediate sequence`, and the broadened `input structure` meaning |
 
-This proposal supplies annotation data consumed by those steps. It uses `ma_data`/data groups/protocols and existing software/parameter records, atom/residue/entity-instance features, and applicable spatial restraints. Quality assessments, energies and experimental results remain in their existing categories. In the example, annotation data use the existing `other` content type with explicit details; a dedicated content-type value can be considered during review.
+This proposal supplies compact annotation data consumed by those steps. Scalar and XYZ rows use fixed dictionary-defined fields; they do not require separate assignment, operand, shape or value tables. Definitions and set/model context are shared across rows. General arrays use additional metadata only when their shapes require it. The module reuses `ma_data`/data groups/protocols and existing software/parameter records, direct structural references, existing features for complex selections, and applicable spatial restraints. Quality assessments, energies and experimental results remain in their existing categories. In the example, annotation data use the existing `other` content type with explicit details; a dedicated content-type value can be considered during review.
 
 Unlike the vocabulary-only change in #31, this addition needs category descriptions, item types/keys/parents, scientific rules and example CIF records. The item descriptions follow the style of [category proposal #29](https://github.com/ihmwg/ModelCIF/issues/29), with a concrete example alongside the full intended scope.
 

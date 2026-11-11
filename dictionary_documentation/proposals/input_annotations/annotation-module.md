@@ -1,178 +1,134 @@
-# A unified ModelCIF annotation module
+# A compact ModelCIF annotation module
 
-**Design proposal for working-group review, not a released dictionary.** This document states the complete target scope and specifies a concrete record layout for the accompanying worked CIF. Items for additional domain, grouping, logical topology and correspondence semantics still need completion within this scope.
+**Design proposal for working-group review, not a released dictionary.** Preserve Annotated CIF's compact tables: put the subject reference and its scalar or XYZ value on the same row, with shared metadata written once. The categories below specify the worked example. Additional domains, general arrays, grouping, logical topology and correspondence remain in the full scope and require item-level completion.
 
-## Objective
+## Objective and representation
 
-Incorporate the data model underlying Annotated CIF into ModelCIF. AtomWorks and RFD4-Proteina should become implementations of this ModelCIF capability, with one authoritative standardized representation for newly written annotations. Existing Annotated CIF files may be converted to the agreed representation; permanent backward compatibility is not a design requirement. A permanently separate annotation standard, or mandatory private annotation sidecar, is not the proposed endpoint.
+Incorporate the annotation data contract used by AtomWorks and RFD4-Proteina into ModelCIF. Both libraries implement one standardized representation through their existing annotation/I/O APIs. Older files may be converted; permanent legacy compatibility is unnecessary. Keep the familiar compact layout wherever it can express the scientific meaning clearly.
 
-The scope is the complete annotation **data contract**, including extensibility, rather than Python methods or model implementation code. Preserve the current public annotation APIs where possible. A library can retain arrays, registries and convenience aliases while its reader/writer implements ModelCIF directly. A consumer need not execute every scientific condition to read the file, but must reject unsupported required conditions before execution.
+Current scalar annotations are extra `atom_site` columns; nonscalar one-body and sparse two-body annotations use index/value rows. The proposed dictionary-defined categories retain that row-oriented approach while replacing array offsets with structural references. Registered and custom definitions share fixed typed value fields, so adding a custom annotation does not require inventing unregistered CIF item names.
 
-## Data model to standardize
+For common values, an annotation is:
 
-| Current API concept | Required ModelCIF representation |
+**shared definition + set context + one row containing subject, value and any frame**
+
+Set metadata supplies data/model, stage, purpose and execution requirements. Definition metadata supplies scientific meaning/version, level, body order, type, units and defaults. A scalar stays in one typed field; an XYZ target stays in three named fields on one row. Shape/axis metadata is needed only for general arrays whose interpretation is not already fixed by the dictionary. There is one authoritative encoding for each declared value kind.
+
+| Current API concept | Compact standard representation |
 | --- | --- |
-| `name`, registry, aliases | Stable definition identifier and version; human-readable name; controlled scientific vocabulary and namespaced custom definitions. Historical aliases may be converter mappings; their spelling does not constrain the standard. |
-| `level` | Atom, residue, chain, molecule, token and system semantic levels. Structural selection and semantic level are separate. |
-| `n_body`, `is_symmetric` | Zero, one or two ordered subject operands; explicit pair symmetry and duplicate/conflict rules. Group size does not change body order. |
-| `dtype`, enum domain | Boolean, integer, real, text and component values; categorical codes have explicit meanings. Define supported portable scalar domains explicitly rather than promising all NumPy dtypes. Machine widths and text capacities must not silently truncate values. |
-| `value_shape` | Scalar or shaped values with rank, dimension lengths, axis order and, when needed, axis labels. Cartesian points, vectors and probability arrays have distinct definitions. |
-| Defaults and masks | Explicit presence/state, uniform defaults when valid, per-element states for partially specified arrays, and materialized structure-dependent defaults with provenance. |
-| Array broadcasting and sparse pairs | Subject membership and a defined broadcast rule; sparse relations with explicit omitted-value semantics. No dense pair matrix requirement. |
-| Coordinate and index groups | Scoped membership, Cartesian frame semantics and explicit relative index offsets; reserved Python integers have no universal scientific meaning. |
-| Expandable segments | Logical design sites, minimum/maximum length and connectivity/order constraints before realization; realized subjects linked afterwards. |
-| Source annotations and reference geometry | Input/output correspondence and derived reference values linked to data and protocol steps. Existing QA/energy/experimental categories remain authoritative for their results. |
-| Registered custom annotations | The same dictionary-defined containers and type rules; namespaced meaning/version, declared support and faithful retention. A description alone does not establish scientific equivalence. |
+| Names, registry and aliases | Versioned shared/custom definition; historical names map during conversion. |
+| Six semantic levels | Atom, residue, chain, molecule, token and system; direct structural references where sufficient, explicit membership for groups. |
+| `n_body` and symmetry | Zero, one or two subject references in the value row; pair endpoints and symmetry remain explicit. |
+| Scalar type and `value_shape` | Typed scalar fields or `x/y/z`; general arrays use declared dimensions, axis labels and element states only when needed. |
+| Defaults and masks | Registered default/state semantics; explicit overrides; structure-dependent defaults materialized with provenance. |
+| Broadcasting and sparse pairs | Validate consistency before collapsing atom-broadcast values; preserve sparse rows and omitted-value rules. |
+| Coordinate/index groups | Frame reference on each coordinate row; explicit grouping/context and relative index offsets. |
+| Expandable segments | Logical positions/segments, length bounds, order/anchors and realization mappings. |
+| Source and derived annotations | Artifact-scoped correspondence and provenance; existing QA, energy and experimental categories retain their meanings. |
 
-Whole-API support requires both schema expressiveness and tested mappings. The [coverage table](annotation-coverage.md) assigns all 59 inventoried entries to target representations and records unresolved semantics. It is a scoped inventory, not proof that every plugin or registry entry has been enumerated.
+The [coverage table](annotation-coverage.md) retains all 59 inventoried entries. Full scope includes extensibility and scientific meaning, rather than executable Python functions or arbitrary NumPy dtype encodings.
 
-## Dictionary structure and remaining scope
+## Levels and body order
 
-The concrete items below cover definitions, annotation sets, subjects, shapes/axes, frames, assignments, operands and typed values. Use general `ma_annotation_*` names because intermediate/output reference data also need annotations. Existing restraint, QA, energy and experimental-validation categories remain authoritative wherever their meanings fit.
+| Level | Subject reference | Example |
+| --- | --- | --- |
+| Atom | `atom_site.id`, within the set's model | Coordinate target or hotspot |
+| Residue | Model-scoped asym/sequence identity, or a logical site | Fixed component or sequence probability |
+| Chain | Model-scoped chain instance | Chain membership relation |
+| Molecule | Explicit molecular group and context | Molecular annotation |
+| Token | Explicit ordered membership and tokenizer/version | Index group |
+| System | Annotation set/data context | Zero-body task label |
 
-Additional records must complete these parts of the same module:
+Body order counts subjects, not value components or atoms inside a group. A system label has no subject fields; a point has one atom reference; a pair relation has two subject references on the same row. Chain and token/molecule groups may select many atoms without changing body order. Existing ModelCIF features may identify complex selections; ordinary atom/residue rows do not require an additional feature or subject table.
 
-- **Domains and defaults:** versioned categorical meanings and typed uniform defaults; materialize structure-dependent defaults with provenance rather than serializing Python functions.
-- **Membership and context:** explicit token/molecule grouping definition/version, ordered or nested membership, assembly-instance identity and relative index offsets. Existing atom/residue/entity-instance feature categories encode selections, not all these semantics.
-- **Logical design sites:** positions or variable-length segments, bounds, molecular context, anchors/order and realization mappings. Link existing entity/sequence records when available; do not invent atom_site rows. Isolated coordinate-free tasks need an agreed application profile.
-- **Correspondence:** data/artifact-scoped source and destination subjects, generated/deleted subjects and one-to-many copies, linked to the responsible protocol step. A short source label cannot be the only identity. Structural edits must remap or explicitly invalidate affected metadata.
+The worked atom/residue categories below are the first concrete items. System, chain/group, pair, logical-site and array records complete the same module; their exact items require working-group review. Pair rows should use two direct structural references where possible, or existing feature/group references for complex subjects, with explicit model/instance context. Avoid forced dense matrices or a separate operand row for each endpoint.
 
-These are required parts of the agreed target, although their exact items remain to be specified. The worked layout is a concrete example of the generic module, not its complete dictionary implementation. Large associated payloads must retain standard-defined shapes, axes and interpretation.
+## Concrete category and item definitions
 
-## How an annotation is constructed
-
-`definition + set + ordered subject operands + typed value/state + optional frame`
-
-| Example | Semantic level | Body order | Value | Supporting records |
-| --- | --- | ---: | --- | --- |
-| Task label | system | 0 | text scalar | Annotation set/data link |
-| Fixed residue identity | residue | 1 | component scalar | Existing residue selection, or a declared logical position |
-| Saved rigid motif target | atom | 1 | real shape (3) | Atom selection and independent rigid frame |
-| Token index group | token | 1 | scoped group reference | Token membership and relative offsets/context |
-| Base-pair type | residue | 2 | categorical scalar | Two residue operands and domain/symmetry definition |
-| Sequence distribution | residue | 1 | real shape (k) | Component-labelled axis and per-component state |
-| Expandable segment bounds | logical segment | 1 | integer bounds | Segment subject, anchors/order and realization mapping |
-
-The 28 scalar probability classes currently exposed by RFD4 can map reversibly to component-keyed values of one shared probability definition. Keep component-specific explicitness: zero excludes an identity; unspecified leaves it unassigned. Specify remaining mass, normalization and exact-identity precedence. Full-API support also permits separate scalar component assignments if the working group selects that encoding; independently editable duplicate encodings should not be authoritative simultaneously.
-
-## Concrete item definitions for the worked CIF
-
-The following is one proposed layout of the module, using the category-description and item-property style of ModelCIF proposals. All names are provisional. Required items apply when the category is present. References are scoped to the CIF data block unless explicitly stated otherwise. The complete example is [worked-annotations.cif](worked-annotations.cif); no separate annotation file format is introduced.
+Names are provisional. Required items apply when the category is present; keys are unique within the data block. Null markers retain CIF meanings: `?` is unknown and `.` inapplicable. Neither substitutes for the explicit state `unconstrained`.
 
 ### ma_annotation_definition
 
-Category description: Data items in the MA_ANNOTATION_DEFINITION category identify the scientific meaning, subject level and value interpretation of an annotation.
+Category description: Data items in MA_ANNOTATION_DEFINITION identify the scientific meaning and interpretation shared by annotation rows.
 
 - `id` (key, required, int): Local definition identifier.
-- `definition_key` (required, line): Namespaced identifier of a shared or custom scientific definition. The example's `proposal:` names are draft terms, not registered identifiers.
-- `version` (required, code): Version of that definition; combined with its key it identifies its meaning.
-- `name` (required, line): Human-readable definition name.
-- `description` (required, text): Scientific interpretation and term-specific rules.
-- `subject_level` (required, code): `atom`, `token`, `residue`, `chain`, `molecule` or `system`.
-- `body_order` (required, int): Number of subject operands: 0, 1 or 2. Zero-body definitions use system scope.
-- `value_type` (required, code): `boolean`, `integer`, `real`, `text` or `component`.
-- `units` (required, line): Value units, or `none` for non-numeric/dimensionless data.
-- `transform_rule` (required, code): `point`, `vector` or `invariant` for the quantities illustrated here. Other geometric tensors require further declared transformation rules before execution support can be claimed.
-- `omitted_element_state` (required, code): Interpretation of an omitted element within a present assignment: `unknown`, `unconstrained` or `not_applicable`. It never implicitly means numeric zero. Additional uniform-value defaults require an explicit typed default definition.
-- `symmetric` (boolean, required for body order 2): Whether exchanging the operands preserves meaning; `YES` or `NO`.
+- `definition_key` (required, line), `version` (required, code): Namespaced scientific definition and version. The example's `proposal:` definitions are specified below and are not registered terms.
+- `name` (required, line), `description` (required, text): Human-readable name and interpretation.
+- `subject_level` (required, code): `atom`, `residue`, `chain`, `molecule`, `token` or `system`.
+- `body_order` (required, int): 0, 1 or 2. Zero-body definitions use system context.
+- `value_kind` (required, code): `boolean`, `integer`, `real`, `text`, `component`, `point3`, `vector3` or `array`. A point translates and rotates; a vector rotates only. Other geometric tensors require declared transformation rules.
+- `units` (required, line): Units, or `none` for dimensionless/non-numeric values.
+- `omitted_state` (required, code): `unconstrained`, `unknown` or `not_applicable` for omitted applicable entries when this definition is used in a set. This is not a numeric default. Uniform typed defaults and categorical domains require supplementary definitions.
+- `symmetric` (boolean, required for body order 2): Whether exchanging endpoints preserves meaning; `YES` or `NO`.
 
-The rigid-point definition requires three finite Cartesian coordinates in angstroms. The partial-probability definition fixes specified component probabilities, leaves omitted components unconstrained, and requires specified values in [0,1] with total at most 1; a complete distribution sums to 1. Unspecified components can share remaining mass. This is a proposed declarative interpretation, not a claim that all current RFD4 normalization paths already conform. Exact-identity precedence and canonicalization must be agreed for the registered scientific term.
+Registered definitions fix common shapes and vocabulary once in the dictionary/specification. Files identify the definition/version and need not reproduce Cartesian axes or a registered component alphabet. Custom shapes/domains must be explicitly declared through the module's supplementary records; a prose label is insufficient.
 
 ### ma_annotation_set
 
-Category description: Data items in the MA_ANNOTATION_SET category connect annotations to the data used or produced by a modeling protocol.
+Category description: Data items in MA_ANNOTATION_SET give the shared data, model and workflow context for annotation rows.
 
-- `id` (key, required, int): Annotation-set identifier.
-- `data_id` (required, int; parent `_ma_data.id`): Data artifact represented by this set.
-- `stage` (required, code): `authored`, `effective` or `derived`. Transformations between sets use the existing protocol/data-group relations.
+- `id` (key, required, int): Set identifier.
+- `data_id` (required, int; parent `_ma_data.id`): Annotation data artifact.
+- `model_id` (int; parent `_ma_model_list.ordinal_id`): Reference model for structural rows. Required for the worked atom/residue categories; absent for coordinate-free tasks. Separate model contexts use separate sets.
+- `stage` (required, code): `authored`, `effective` or `derived`.
+- `purpose` (required, line): `condition`, `prepared feature` or `derived reference`.
+- `required_for_execution` (required, boolean): `YES` or `NO`. A consumer must reject unsupported required conditions before execution.
 
-### ma_annotation_subject
+Rows with different context, purpose or execution requirements use different sets. Transformations between sets reuse ModelCIF data groups and protocol steps. Required interpretation does not guarantee condition satisfaction.
 
-Category description: Data items in the MA_ANNOTATION_SUBJECT category identify the semantic subjects on which annotations are defined.
+### ma_annotation_atom and ma_annotation_residue
 
-- `id` (key, required, int): Subject identifier.
-- `level` (required, code): One of the six semantic levels above.
-- `model_id` (int; parent `_ma_model_list.ordinal_id`): Structural model containing the subject, when applicable.
-- `feature_id` (int; parent `_ma_feature_list.feature_id`): Existing structural selection supporting the subject, when applicable.
+Category descriptions: MA_ANNOTATION_ATOM stores an annotation and its value for one atom. MA_ANNOTATION_RESIDUE stores an annotation and its value for one polymer residue. Non-polymer groups and future positions use the supplementary group/site representation, without invented polymer sequence identifiers.
 
-The example requires model and feature references for its existing atoms/residue. Token/molecule context, ordered membership and logical future subjects require supplementary records described in the full scope above; a feature alone is not their complete semantics. Coordinate-free tasks must not manufacture coordinate models to satisfy these references.
+Both categories have these items:
 
-### ma_annotation_shape and ma_annotation_axis
+- `id` (key, required, int): Row identifier within its category.
+- `set_id` (required, int; parent `_ma_annotation_set.id`): Shared context.
+- `definition_id` (required, int; parent `_ma_annotation_definition.id`): Definition with matching level and body order 1.
+- `state` (code; dictionary default `specified`): `specified`, `unconstrained`, `unknown` or `not_applicable`. The column may be omitted when every row has its default state.
+- `value_real` (float), `value_integer` (int), `value_boolean` (boolean: `YES`/`NO`), `value_text` (text), `value_comp_id` (ucode; parent `_chem_comp.id`): Use only the field matching a scalar definition's value kind.
+- `x`, `y`, `z` (float): Three finite components, all required for a specified `point3`/`vector3`. Other payload fields are then inapplicable.
+- `frame_id` (code; parent `_ma_annotation_frame.id`): Required for specified geometric values, inapplicable for frame-independent scalars.
 
-Category descriptions: MA_ANNOTATION_SHAPE defines the shape and traversal order of a value. MA_ANNOTATION_AXIS defines its individual dimensions.
+Only applicable columns need be written. Explicit non-specified states have no value payload. General arrays need supplementary payload/axis records and a defined link from their owning row; these items remain to be completed. They must not become a second encoding for the scalar and XYZ kinds above.
 
-Shape items:
-- `id` (key, required, int): Shape identifier.
-- `rank` (required, int): Number of axes, at least zero; a scalar has rank zero.
-- `element_order` (required, code): `row-major`: the last axis varies fastest.
+Atom subject item:
+- `atom_id` (required, code; parent `_atom_site.id`): Atom in the set's model. Verify its `pdbx_PDB_model_num` against that context; array row offsets are not atom identities.
 
-Axis items:
-- `shape_id`, `axis_order` (composite key, required, int): Parent `_ma_annotation_shape.id` and one-based axis order.
-- `length` (required, int): Nonnegative number of elements on that axis.
-- `label_kind` (required, code): `Cartesian`, `component`, `text` or `unlabelled`.
+Polymer-residue subject items:
+- `label_asym_id` (required, code; parent `_struct_asym.id`) and `label_seq_id` (required, int): Residue in the set's model. The asym identifies the entity; sequence identity must agree with that entity's polymer sequence and model context. Full dictionary assembly must express the corresponding entity/sequence links.
+- `component_id` (ucode; parent `_chem_comp.id`): Component parameter for definitions such as sequence probability. It identifies the candidate being constrained, not the observed residue identity or a component-valued payload. Required for the probability definition; otherwise inapplicable unless the definition explicitly uses it.
 
-### ma_annotation_axis_label
-
-Category description: Data items in the MA_ANNOTATION_AXIS_LABEL category give semantic labels to positions along an annotation-value axis.
-
-- `shape_id`, `axis_order`, `index` (composite key, required, int): Parent axis and one-based position. The first two items jointly reference the key of MA_ANNOTATION_AXIS.
-- `label` (line): A Cartesian or text label, for example `x`, `y` or `z`.
-- `comp_id` (ucode; parent `_chem_comp.id`): Chemical component at this position on a component-labelled axis.
-
-Exactly the applicable label field is populated for each labelled position. Component axes list their full declared alphabet; identities are not inferred from array order. A different alphabet uses a different shape/axis record while reusing the scientific definition.
+Within a category, `(set, definition, subject, component parameter when applicable)` must be unique. Duplicate/conflicting values are errors, not an ordering convention. Absence of a definition from a set does not instantiate it. For a used definition, omitted applicable subjects/components follow its declared omission rule within the set's scope. Structure-dependent defaults must be materialized; they cannot be inferred from an unspecified Python function.
 
 ### ma_annotation_frame
 
-Category description: Data items in the MA_ANNOTATION_FRAME category describe the placement freedom and Cartesian frame of geometric annotation values.
+Category description: Data items in MA_ANNOTATION_FRAME define the Cartesian frame and permitted placement of geometric values.
 
 - `id` (key, required, code): Frame identifier.
 - `kind` (required, line): `model Cartesian` or `independent rigid`.
-- `model_id` (int; parent `_ma_model_list.ordinal_id`): Required for a model Cartesian frame; inapplicable for an independent rigid frame.
+- `model_id` (int; parent `_ma_model_list.ordinal_id`): Required for model Cartesian placement and must match the consuming set; inapplicable for an independent rigid frame.
 
-Points in one independent rigid frame retain their relative geometry while that whole frame may rotate and translate. The saved values are Cartesian points, not bond-length/angle/torsion internal coordinates. Frame membership follows the assignment's frame reference.
+Points sharing an independent rigid frame retain their relative geometry while the whole frame may rotate and translate. This represents saved group-local Cartesian coordinates, not bond lengths/angles/torsions. Group renaming must preserve references; changing membership requires revalidation.
 
-### ma_annotation
+## Worked definitions and CIF interpretation
 
-Category description: Data items in the MA_ANNOTATION category identify annotation assignments and their interpretation.
+The full [worked CIF](worked-annotations.cif) uses five proposed categories: definitions, sets, frames, atom rows and residue rows. It supplies existing structural/workflow records without adding a feature for each atom.
 
-- `id` (key, required, int): Assignment identifier.
-- `set_id` (required, int; parent `_ma_annotation_set.id`): Annotation set.
-- `definition_id` (required, int; parent `_ma_annotation_definition.id`): Scientific definition.
-- `shape_id` (required, int; parent `_ma_annotation_shape.id`): Shape, including rank-zero scalar shapes.
-- `frame_id` (code; parent `_ma_annotation_frame.id`): Frame for geometric values; inapplicable for frame-independent values.
-- `purpose` (required, line): `condition`, `prepared feature` or `derived reference`. Existing ModelCIF results categories remain authoritative for their respective results.
-- `value_state` (required, code): `specified`, `unconstrained`, `unknown` or `not_applicable`. `specified` means a value container is supplied; individual elements can still be unconstrained. Other assignment states have no value rows.
-- `required_for_execution` (required, boolean): `YES` or `NO`. Required interpretation is not a guarantee of condition satisfaction.
+`proposal:coordinate`, version `draft-1`, is an atom-level, one-body `point3` in angstroms, with complete finite XYZ values and omission meaning unconstrained. Two atom rows reference atoms 10 and 20 and frame G; their targets are `(0,0,0)` and `(3.8,0,0)`. Set 1 supplies model 1, authored condition status and required interpretation once for both rows.
 
-### ma_annotation_operand
+`proposal:sequence_probability`, version `draft-1`, is a residue-level, one-body real value parameterized by chemical component. This draft term uses the fixed canonical-polymer-28 domain:
 
-Category description: Data items in the MA_ANNOTATION_OPERAND category identify the ordered subjects of an annotation assignment.
+`ALA ARG ASN ASP CYS GLN GLU GLY HIS ILE LEU LYS MET PHE PRO SER THR TRP TYR VAL A C G U DA DC DG DT`.
 
-- `annotation_id`, `position` (composite key, required, int): Parent `_ma_annotation.id` and operand position, from 1 through the definition's body order.
-- `subject_id` (required, int; parent `_ma_annotation_subject.id`): Subject operand.
+That domain belongs to this definition, not to the generic residue category or a model's private channel ordering. Other alphabets require a separately versioned definition/domain, including support for custom components. Only components referenced by actual rows need corresponding component records in the fragment.
 
-A zero-body annotation has no operand rows. Every subject has the definition's semantic level. Pair symmetry and duplicate/conflict rules apply independently of shape and the number of atoms selected by each subject.
+The two probability rows specify ALA at 0.7 and GLY at 0 for residue A/1. The other 26 components are unconstrained and can share the remaining 0.3. Explicit values must lie in [0,1] and sum to at most 1; a fully specified distribution sums to 1. Zero excludes an identity. Exact-identity precedence and canonicalization require agreement before registering the term; this proposed interpretation does not establish conformity of every current RFD4 normalization path. The reference structure's observed identity is not itself a requested identity condition.
 
-### ma_annotation_value
+## Full scope and integration
 
-Category description: Data items in the MA_ANNOTATION_VALUE category store typed scalar or shaped annotation values and explicit element states.
+Retain explicit categorical domains and typed defaults; token/molecule membership, order and context; index groups and relative offsets; logical design sites, length bounds and connectivity; and artifact-scoped correspondence, including generated/deleted subjects and assembly copies. General shaped values retain rank, axis labels/order, per-element states and transformation semantics. These supplementary items are required for complete API coverage but need not appear in ordinary scalar/XYZ files.
 
-- `id` (key, required, int): Value-row identifier.
-- `annotation_id` (required, int; parent `_ma_annotation.id`): Assignment.
-- `element_index` (required, int): One-based flattened position in the declared row-major shape; 1 for a scalar. The assignment/index pair is unique.
-- `state` (required, code): `specified`, `unconstrained`, `unknown` or `not_applicable`.
-- `value_real` (float), `value_integer` (int), `value_boolean` (boolean: `YES`/`NO`), `value_text` (text), `value_comp_id` (ucode; parent `_chem_comp.id`): Exactly the definition's typed slot is populated for a specified element; no payload is present for other states. Numeric values are finite.
+AtomWorks keeps its registry, array storage and accessors while its codec maps compact rows and preserves/remaps metadata after edits. RFD4 keeps ConditionBase while recording authored/effective inputs and provenance. Readers must distinguish optional retention from execution support and reject unsupported required conditions. Existing QA, energy, experimental-validation and applicable restraint categories remain authoritative for their respective quantities.
 
-Axis positions and labels are decoded from the declared shape, rather than a private tensor convention. Missing element rows use the definition's omitted-element state; an entirely absent assignment does not inherit that rule. CIF `?` and `.` retain unknown/inapplicable meanings and do not encode unconstrained conditions by themselves.
-
-## Worked records and interpretation
-
-The example links annotation set 1 to data 2, alongside the reference coordinate data in the backbone-generation input group. Definitions 1 and 2 describe rigid points and partial sequence probabilities. Subjects 1/2 select atoms 10/20; subject 3 selects residue A/1. Shape 1 is `(3)` with x/y/z labels; shape 2 is `(28)` with explicit chemical-component labels.
-
-Assignments 1 and 2 share frame `G`, with targets `(0,0,0)` and `(3.8,0,0)`. Assignment 3 specifies ALA at probability 0.7 and GLY at 0; the other 26 components remain unconstrained. These are requested conditions, not observed frequencies or claims that generated models satisfy them. The reference structure's existing residue identity is not itself an identity condition.
-
-The full file supplies all supporting definitions, shape labels, selections and protocol links. Its workflow uses the released spelling `structure validation`. The dictionary additions, term registration and broader grouping/topology/correspondence item definitions remain proposed work.
-
-## Integration
-
-See the [proposal overview](README.md) for library integration, dataset migration and exchange-profile requirements. Full coverage includes every inventoried term and generic API fixtures, with separate claims for representation, roundtrip preservation, transformations and execution. Dictionary assembly, reference implementations and independent CIF/BinaryCIF tests are required before release. Adoption, naming and release remain ModelCIF Working Group decisions.
+See the [overview](README.md) for migration and exchange profiles. Complete dictionary assembly, the remaining items, representative conversion/equivalent-input tests, measured CIF/BinaryCIF performance and independent interoperability precede a release claim.
