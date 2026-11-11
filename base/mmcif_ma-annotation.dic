@@ -1,0 +1,2352 @@
+data_mmcif_ma-annotation.dic
+# Proposed ModelCIF annotation module; release numbering is maintained upstream.
+_pdbx_dictionary_component.datablock_id mmcif_ma-annotation.dic
+_pdbx_dictionary_component.dictionary_component_id mmcif_ma-annotation.dic
+_pdbx_dictionary_component.title 'ModelCIF compact annotation module'
+_pdbx_dictionary_component.version 0.2.0
+_pdbx_dictionary_component_history.dictionary_component_id mmcif_ma-annotation.dic
+_pdbx_dictionary_component_history.version 0.2.0
+_pdbx_dictionary_component_history.update 2026-11-11
+_pdbx_dictionary_component_history.revision 'Consolidated annotation module with shared value, subject, relation and axis records.'
+
+save_ma_annotation_definition
+_category.description
+;
+Data items in the MA_ANNOTATION_DEFINITION category define scientific meaning, version, semantic level and value interpretation. Definitions may be shared terms or namespaced custom terms. A definition key and version must have one meaning throughout a data block.
+;
+_category.id ma_annotation_definition
+_category.mandatory_code no
+loop_
+_category_key.name
+'_ma_annotation_definition.id'
+loop_
+_category_group.id
+inclusive_group
+ma_group
+_pdbx_category_context.type CONTRIBUTED
+_pdbx_category_context.category_id ma_annotation_definition
+save_
+
+save__ma_annotation_definition.id
+_item_description.description
+;
+Unique row identifier within this category.
+;
+_item.name '_ma_annotation_definition.id'
+_item.category_id ma_annotation_definition
+_item.mandatory_code yes
+_item_type.code int
+save_
+
+save__ma_annotation_definition.definition_key
+_item_description.description
+;
+Namespaced, stable identifier of the scientific definition.
+;
+_item.name '_ma_annotation_definition.definition_key'
+_item.category_id ma_annotation_definition
+_item.mandatory_code yes
+_item_type.code line
+save_
+
+save__ma_annotation_definition.version
+_item_description.description
+;
+Version of the scientific definition, not the application version.
+;
+_item.name '_ma_annotation_definition.version'
+_item.category_id ma_annotation_definition
+_item.mandatory_code yes
+_item_type.code code
+save_
+
+save__ma_annotation_definition.name
+_item_description.description
+;
+Human-readable annotation name.
+;
+_item.name '_ma_annotation_definition.name'
+_item.category_id ma_annotation_definition
+_item.mandatory_code yes
+_item_type.code line
+save_
+
+save__ma_annotation_definition.description
+_item_description.description
+;
+Scientific interpretation, including operational definitions and value-domain meaning.
+;
+_item.name '_ma_annotation_definition.description'
+_item.category_id ma_annotation_definition
+_item.mandatory_code yes
+_item_type.code text
+save_
+
+save__ma_annotation_definition.reference
+_item_description.description
+;
+Resolvable reference to the definition or method.
+;
+_item.name '_ma_annotation_definition.reference'
+_item.category_id ma_annotation_definition
+_item.mandatory_code no
+_item_type.code line
+save_
+
+save__ma_annotation_definition.subject_level
+_item_description.description
+;
+Semantic level of each subject. System is used only for zero-body annotations.
+;
+_item.name '_ma_annotation_definition.subject_level'
+_item.category_id ma_annotation_definition
+_item.mandatory_code yes
+_item_type.code code
+loop_
+_item_enumeration.value
+atom
+residue
+chain
+molecule
+token
+system
+save_
+
+save__ma_annotation_definition.body_order
+_item_description.description
+;
+Number of subject operands, independently of value shape and group size.
+;
+_item.name '_ma_annotation_definition.body_order'
+_item.category_id ma_annotation_definition
+_item.mandatory_code yes
+_item_type.code int
+loop_
+_item_enumeration.value
+0
+1
+2
+save_
+
+save__ma_annotation_definition.symmetric
+_item_description.description
+;
+For two-body definitions, whether exchanging endpoints preserves meaning. Inapplicable otherwise.
+;
+_item.name '_ma_annotation_definition.symmetric'
+_item.category_id ma_annotation_definition
+_item.mandatory_code no
+_item_type.code boolean
+loop_
+_item_enumeration.value
+YES
+NO
+save_
+
+save__ma_annotation_definition.value_kind
+_item_description.description
+;
+Payload kind. Scalar and XYZ kinds have direct fields; array and group kinds reference their corresponding records.
+;
+_item.name '_ma_annotation_definition.value_kind'
+_item.category_id ma_annotation_definition
+_item.mandatory_code yes
+_item_type.code code
+loop_
+_item_enumeration.value
+boolean
+integer
+real
+text
+component
+point3
+vector3
+array
+group
+save_
+
+save__ma_annotation_definition.units
+_item_description.description
+;
+Units of values: none for dimensionless/non-numeric values and angstroms for points. Any other unit requires units_details, using existing dictionary unit codes where applicable.
+;
+_item.name '_ma_annotation_definition.units'
+_item.category_id ma_annotation_definition
+_item.mandatory_code yes
+_item_type.code line
+save_
+
+save__ma_annotation_definition.units_details
+_item_description.description
+;
+Unambiguous definition and conversion convention for a unit not listed in the assembled dictionary.
+;
+_item.name '_ma_annotation_definition.units_details'
+_item.category_id ma_annotation_definition
+_item.mandatory_code no
+_item_type.code text
+save_
+
+save__ma_annotation_definition.parameter_kind
+_item_description.description
+;
+Optional selector on a value, separate from its subject and payload.
+;
+_item.name '_ma_annotation_definition.parameter_kind'
+_item.category_id ma_annotation_definition
+_item.mandatory_code no
+_item_type.code code
+loop_
+_item_enumeration.value
+none
+component
+_item_default.value none
+save_
+
+save__ma_annotation_definition.domain_id
+_item_description.description
+;
+Closed categorical value domain, or candidate component domain for a component-parameterized definition.
+;
+_item.name '_ma_annotation_definition.domain_id'
+_item.category_id ma_annotation_definition
+_item.mandatory_code no
+_item_type.code int
+_item_linked.child_name '_ma_annotation_definition.domain_id'
+_item_linked.parent_name '_ma_annotation_domain.id'
+save_
+
+save__ma_annotation_definition.omitted_state
+_item_description.description
+;
+State of an omitted applicable value for a definition used in a set, unless a set-specific typed default applies. A wholly absent definition is not activated.
+;
+_item.name '_ma_annotation_definition.omitted_state'
+_item.category_id ma_annotation_definition
+_item.mandatory_code yes
+_item_type.code code
+loop_
+_item_enumeration.value
+unconstrained
+unknown
+not_applicable
+save_
+
+save__ma_annotation_definition.array_element_kind
+_item_description.description
+;
+Scalar type of array elements; required only for array values.
+;
+_item.name '_ma_annotation_definition.array_element_kind'
+_item.category_id ma_annotation_definition
+_item.mandatory_code no
+_item_type.code code
+loop_
+_item_enumeration.value
+boolean
+integer
+real
+text
+component
+save_
+
+save__ma_annotation_definition.array_rank
+_item_description.description
+;
+Required positive rank for array values; inapplicable for other kinds.
+;
+_item.name '_ma_annotation_definition.array_rank'
+_item.category_id ma_annotation_definition
+_item.mandatory_code no
+_item_type.code int
+save_
+
+save__ma_annotation_definition.array_transform
+_item_description.description
+;
+Array transformation. Point/vector arrays have a final Cartesian axis of length three; invariant arrays do not transform.
+;
+_item.name '_ma_annotation_definition.array_transform'
+_item.category_id ma_annotation_definition
+_item.mandatory_code no
+_item_type.code code
+loop_
+_item_enumeration.value
+invariant
+point3
+vector3
+save_
+
+save_ma_annotation_domain
+_category.description
+;
+Data items in MA_ANNOTATION_DOMAIN identify a finite, versioned vocabulary. Complete members are recorded in MA_ANNOTATION_DOMAIN_VALUE; private array-channel orders are not identities.
+;
+_category.id ma_annotation_domain
+_category.mandatory_code no
+loop_
+_category_key.name
+'_ma_annotation_domain.id'
+loop_
+_category_group.id
+inclusive_group
+ma_group
+_pdbx_category_context.type CONTRIBUTED
+_pdbx_category_context.category_id ma_annotation_domain
+save_
+
+save__ma_annotation_domain.id
+_item_description.description
+;
+Unique row identifier within this category.
+;
+_item.name '_ma_annotation_domain.id'
+_item.category_id ma_annotation_domain
+_item.mandatory_code yes
+_item_type.code int
+save_
+
+save__ma_annotation_domain.name
+_item_description.description
+;
+Domain name.
+;
+_item.name '_ma_annotation_domain.name'
+_item.category_id ma_annotation_domain
+_item.mandatory_code yes
+_item_type.code line
+save_
+
+save__ma_annotation_domain.version
+_item_description.description
+;
+Domain version.
+;
+_item.name '_ma_annotation_domain.version'
+_item.category_id ma_annotation_domain
+_item.mandatory_code yes
+_item_type.code code
+save_
+
+save__ma_annotation_domain.kind
+_item_description.description
+;
+Domain member interpretation.
+;
+_item.name '_ma_annotation_domain.kind'
+_item.category_id ma_annotation_domain
+_item.mandatory_code yes
+_item_type.code code
+loop_
+_item_enumeration.value
+categorical
+component
+save_
+
+save__ma_annotation_domain.description
+_item_description.description
+;
+Meaning and closed membership of this domain.
+;
+_item.name '_ma_annotation_domain.description'
+_item.category_id ma_annotation_domain
+_item.mandatory_code yes
+_item_type.code text
+save_
+
+save__ma_annotation_domain.reference
+_item_description.description
+;
+Resolvable source of the vocabulary.
+;
+_item.name '_ma_annotation_domain.reference'
+_item.category_id ma_annotation_domain
+_item.mandatory_code no
+_item_type.code line
+save_
+
+save_ma_annotation_domain_value
+_category.description
+;
+Data items in MA_ANNOTATION_DOMAIN_VALUE list every allowed member of a closed domain.
+;
+_category.id ma_annotation_domain_value
+_category.mandatory_code no
+loop_
+_category_key.name
+'_ma_annotation_domain_value.domain_id'
+'_ma_annotation_domain_value.code'
+loop_
+_category_group.id
+inclusive_group
+ma_group
+_pdbx_category_context.type CONTRIBUTED
+_pdbx_category_context.category_id ma_annotation_domain_value
+save_
+
+save__ma_annotation_domain_value.domain_id
+_item_description.description
+;
+Identifier of the referenced record.
+;
+_item.name '_ma_annotation_domain_value.domain_id'
+_item.category_id ma_annotation_domain_value
+_item.mandatory_code yes
+_item_type.code int
+_item_linked.child_name '_ma_annotation_domain_value.domain_id'
+_item_linked.parent_name '_ma_annotation_domain.id'
+save_
+
+save__ma_annotation_domain_value.code
+_item_description.description
+;
+Stable symbolic member code.
+;
+_item.name '_ma_annotation_domain_value.code'
+_item.category_id ma_annotation_domain_value
+_item.mandatory_code yes
+_item_type.code code
+save_
+
+save__ma_annotation_domain_value.meaning
+_item_description.description
+;
+Meaning of this member.
+;
+_item.name '_ma_annotation_domain_value.meaning'
+_item.category_id ma_annotation_domain_value
+_item.mandatory_code yes
+_item_type.code text
+save_
+
+save__ma_annotation_domain_value.comp_id
+_item_description.description
+;
+Component identity for a component domain; inapplicable for categorical domains.
+;
+_item.name '_ma_annotation_domain_value.comp_id'
+_item.category_id ma_annotation_domain_value
+_item.mandatory_code no
+_item_type.code ucode
+_item_linked.child_name '_ma_annotation_domain_value.comp_id'
+_item_linked.parent_name '_chem_comp.id'
+save_
+
+save_ma_annotation_set
+_category.description
+;
+Data items in MA_ANNOTATION_SET define a common data, model, purpose and execution context for compact annotation rows. The scope is the referenced model or, for coordinate-free tasks, the data artifact and its declared groups/sites.
+;
+_category.id ma_annotation_set
+_category.mandatory_code no
+loop_
+_category_key.name
+'_ma_annotation_set.id'
+loop_
+_category_group.id
+inclusive_group
+ma_group
+_pdbx_category_context.type CONTRIBUTED
+_pdbx_category_context.category_id ma_annotation_set
+save_
+
+save__ma_annotation_set.id
+_item_description.description
+;
+Unique row identifier within this category.
+;
+_item.name '_ma_annotation_set.id'
+_item.category_id ma_annotation_set
+_item.mandatory_code yes
+_item_type.code int
+save_
+
+save__ma_annotation_set.data_id
+_item_description.description
+;
+Annotation data artifact.
+;
+_item.name '_ma_annotation_set.data_id'
+_item.category_id ma_annotation_set
+_item.mandatory_code yes
+_item_type.code int
+_item_linked.child_name '_ma_annotation_set.data_id'
+_item_linked.parent_name '_ma_data.id'
+save_
+
+save__ma_annotation_set.model_id
+_item_description.description
+;
+Reference model for structural subjects; inapplicable for coordinate-free tasks.
+;
+_item.name '_ma_annotation_set.model_id'
+_item.category_id ma_annotation_set
+_item.mandatory_code no
+_item_type.code int
+_item_linked.child_name '_ma_annotation_set.model_id'
+_item_linked.parent_name '_ma_model_list.ordinal_id'
+save_
+
+save__ma_annotation_set.stage
+_item_description.description
+;
+Provenance stage. Effective values materialize any structure-dependent defaults and inferred conditions.
+;
+_item.name '_ma_annotation_set.stage'
+_item.category_id ma_annotation_set
+_item.mandatory_code yes
+_item_type.code code
+loop_
+_item_enumeration.value
+authored
+effective
+derived
+save_
+
+save__ma_annotation_set.purpose
+_item_description.description
+;
+Scientific role of these annotations.
+;
+_item.name '_ma_annotation_set.purpose'
+_item.category_id ma_annotation_set
+_item.mandatory_code yes
+_item_type.code line
+loop_
+_item_enumeration.value
+condition
+'prepared feature'
+'derived reference'
+save_
+
+save__ma_annotation_set.required_for_execution
+_item_description.description
+;
+Whether a consumer must understand these annotations before executing a workflow. This does not assert satisfaction of a condition.
+;
+_item.name '_ma_annotation_set.required_for_execution'
+_item.category_id ma_annotation_set
+_item.mandatory_code yes
+_item_type.code boolean
+loop_
+_item_enumeration.value
+YES
+NO
+save_
+
+save_ma_annotation_frame
+_category.description
+;
+Data items in MA_ANNOTATION_FRAME describe Cartesian placement. Points sharing an independent rigid frame preserve their relative geometry but may rotate/translate as a whole. Frame coordinates use angstroms.
+;
+_category.id ma_annotation_frame
+_category.mandatory_code no
+loop_
+_category_key.name
+'_ma_annotation_frame.id'
+loop_
+_category_group.id
+inclusive_group
+ma_group
+_pdbx_category_context.type CONTRIBUTED
+_pdbx_category_context.category_id ma_annotation_frame
+save_
+
+save__ma_annotation_frame.id
+_item_description.description
+;
+Unique frame identifier.
+;
+_item.name '_ma_annotation_frame.id'
+_item.category_id ma_annotation_frame
+_item.mandatory_code yes
+_item_type.code code
+save_
+
+save__ma_annotation_frame.kind
+_item_description.description
+;
+Placement freedom.
+;
+_item.name '_ma_annotation_frame.kind'
+_item.category_id ma_annotation_frame
+_item.mandatory_code yes
+_item_type.code line
+loop_
+_item_enumeration.value
+'model Cartesian'
+'independent rigid'
+save_
+
+save__ma_annotation_frame.model_id
+_item_description.description
+;
+Required for model Cartesian placement; inapplicable for independent rigid placement.
+;
+_item.name '_ma_annotation_frame.model_id'
+_item.category_id ma_annotation_frame
+_item.mandatory_code no
+_item_type.code int
+_item_linked.child_name '_ma_annotation_frame.model_id'
+_item_linked.parent_name '_ma_model_list.ordinal_id'
+save_
+
+save_ma_annotation_atom
+_category.description
+;
+Data items in MA_ANNOTATION_ATOM hold a one-body atom annotation and its value on one row. Atom identity is scoped by the model in MA_ANNOTATION_SET.
+;
+_category.id ma_annotation_atom
+_category.mandatory_code no
+loop_
+_category_key.name
+'_ma_annotation_atom.id'
+loop_
+_category_group.id
+inclusive_group
+ma_group
+_pdbx_category_context.type CONTRIBUTED
+_pdbx_category_context.category_id ma_annotation_atom
+save_
+
+save__ma_annotation_atom.id
+_item_description.description
+;
+Unique row identifier within this category.
+;
+_item.name '_ma_annotation_atom.id'
+_item.category_id ma_annotation_atom
+_item.mandatory_code yes
+_item_type.code int
+save_
+
+save__ma_annotation_atom.set_id
+_item_description.description
+;
+Identifier of the referenced record.
+;
+_item.name '_ma_annotation_atom.set_id'
+_item.category_id ma_annotation_atom
+_item.mandatory_code yes
+_item_type.code int
+_item_linked.child_name '_ma_annotation_atom.set_id'
+_item_linked.parent_name '_ma_annotation_set.id'
+save_
+
+save__ma_annotation_atom.definition_id
+_item_description.description
+;
+Identifier of the referenced record.
+;
+_item.name '_ma_annotation_atom.definition_id'
+_item.category_id ma_annotation_atom
+_item.mandatory_code yes
+_item_type.code int
+_item_linked.child_name '_ma_annotation_atom.definition_id'
+_item_linked.parent_name '_ma_annotation_definition.id'
+save_
+
+save__ma_annotation_atom.atom_id
+_item_description.description
+;
+Identifier of the referenced record.
+;
+_item.name '_ma_annotation_atom.atom_id'
+_item.category_id ma_annotation_atom
+_item.mandatory_code yes
+_item_type.code code
+_item_linked.child_name '_ma_annotation_atom.atom_id'
+_item_linked.parent_name '_atom_site.id'
+save_
+
+save__ma_annotation_atom.component_id
+_item_description.description
+;
+Candidate component parameter; required only when the definition parameter_kind is component.
+;
+_item.name '_ma_annotation_atom.component_id'
+_item.category_id ma_annotation_atom
+_item.mandatory_code no
+_item_type.code ucode
+_item_linked.child_name '_ma_annotation_atom.component_id'
+_item_linked.parent_name '_chem_comp.id'
+save_
+
+save__ma_annotation_atom.context_group_id
+_item_description.description
+;
+Partner/selection context for a scientific definition, such as a requested interaction.
+;
+_item.name '_ma_annotation_atom.context_group_id'
+_item.category_id ma_annotation_atom
+_item.mandatory_code no
+_item_type.code int
+_item_linked.child_name '_ma_annotation_atom.context_group_id'
+_item_linked.parent_name '_ma_annotation_group.id'
+save_
+
+save__ma_annotation_atom.state
+_item_description.description
+;
+Value state. Non-specified states carry no payload; specified is the default when the item is absent.
+;
+_item.name '_ma_annotation_atom.state'
+_item.category_id ma_annotation_atom
+_item.mandatory_code no
+_item_type.code code
+loop_
+_item_enumeration.value
+specified
+unconstrained
+unknown
+not_applicable
+_item_default.value specified
+save_
+
+save__ma_annotation_atom.value_real
+_item_description.description
+;
+Finite real scalar payload.
+;
+_item.name '_ma_annotation_atom.value_real'
+_item.category_id ma_annotation_atom
+_item.mandatory_code no
+_item_type.code float
+save_
+
+save__ma_annotation_atom.value_integer
+_item_description.description
+;
+Integer scalar payload.
+;
+_item.name '_ma_annotation_atom.value_integer'
+_item.category_id ma_annotation_atom
+_item.mandatory_code no
+_item_type.code int
+save_
+
+save__ma_annotation_atom.value_boolean
+_item_description.description
+;
+Boolean scalar payload; false is a value, not a universal inactive state.
+;
+_item.name '_ma_annotation_atom.value_boolean'
+_item.category_id ma_annotation_atom
+_item.mandatory_code no
+_item_type.code boolean
+loop_
+_item_enumeration.value
+YES
+NO
+save_
+
+save__ma_annotation_atom.value_text
+_item_description.description
+;
+Text scalar or symbolic categorical payload.
+;
+_item.name '_ma_annotation_atom.value_text'
+_item.category_id ma_annotation_atom
+_item.mandatory_code no
+_item_type.code text
+save_
+
+save__ma_annotation_atom.value_comp_id
+_item_description.description
+;
+Component-valued payload, distinct from a candidate component parameter.
+;
+_item.name '_ma_annotation_atom.value_comp_id'
+_item.category_id ma_annotation_atom
+_item.mandatory_code no
+_item_type.code ucode
+_item_linked.child_name '_ma_annotation_atom.value_comp_id'
+_item_linked.parent_name '_chem_comp.id'
+save_
+
+save__ma_annotation_atom.x
+_item_description.description
+;
+Finite x Cartesian component. All x/y/z components are required for specified point3/vector3 values.
+;
+_item.name '_ma_annotation_atom.x'
+_item.category_id ma_annotation_atom
+_item.mandatory_code no
+_item_type.code float
+save_
+
+save__ma_annotation_atom.y
+_item_description.description
+;
+Finite y Cartesian component. All x/y/z components are required for specified point3/vector3 values.
+;
+_item.name '_ma_annotation_atom.y'
+_item.category_id ma_annotation_atom
+_item.mandatory_code no
+_item_type.code float
+save_
+
+save__ma_annotation_atom.z
+_item_description.description
+;
+Finite z Cartesian component. All x/y/z components are required for specified point3/vector3 values.
+;
+_item.name '_ma_annotation_atom.z'
+_item.category_id ma_annotation_atom
+_item.mandatory_code no
+_item_type.code float
+save_
+
+save__ma_annotation_atom.frame_id
+_item_description.description
+;
+Required for geometric values; inapplicable for invariant values.
+;
+_item.name '_ma_annotation_atom.frame_id'
+_item.category_id ma_annotation_atom
+_item.mandatory_code no
+_item_type.code code
+_item_linked.child_name '_ma_annotation_atom.frame_id'
+_item_linked.parent_name '_ma_annotation_frame.id'
+save_
+
+save__ma_annotation_atom.array_id
+_item_description.description
+;
+General shaped value; not an alternative scalar or XYZ encoding.
+;
+_item.name '_ma_annotation_atom.array_id'
+_item.category_id ma_annotation_atom
+_item.mandatory_code no
+_item_type.code int
+_item_linked.child_name '_ma_annotation_atom.array_id'
+_item_linked.parent_name '_ma_annotation_array.id'
+save_
+
+save__ma_annotation_atom.value_group_id
+_item_description.description
+;
+Group-valued payload, for example an index-group membership request.
+;
+_item.name '_ma_annotation_atom.value_group_id'
+_item.category_id ma_annotation_atom
+_item.mandatory_code no
+_item_type.code int
+_item_linked.child_name '_ma_annotation_atom.value_group_id'
+_item_linked.parent_name '_ma_annotation_group.id'
+save_
+
+save_ma_annotation_residue
+_category.description
+;
+Data items in MA_ANNOTATION_RESIDUE hold one-body polymer-residue annotations. Asym/entity/sequence identity is checked jointly, in the set model; unresolved polymer residues may be referenced through the polymer sequence.
+;
+_category.id ma_annotation_residue
+_category.mandatory_code no
+loop_
+_category_key.name
+'_ma_annotation_residue.id'
+loop_
+_category_group.id
+inclusive_group
+ma_group
+_pdbx_category_context.type CONTRIBUTED
+_pdbx_category_context.category_id ma_annotation_residue
+save_
+
+save__ma_annotation_residue.id
+_item_description.description
+;
+Unique row identifier within this category.
+;
+_item.name '_ma_annotation_residue.id'
+_item.category_id ma_annotation_residue
+_item.mandatory_code yes
+_item_type.code int
+save_
+
+save__ma_annotation_residue.set_id
+_item_description.description
+;
+Identifier of the referenced record.
+;
+_item.name '_ma_annotation_residue.set_id'
+_item.category_id ma_annotation_residue
+_item.mandatory_code yes
+_item_type.code int
+_item_linked.child_name '_ma_annotation_residue.set_id'
+_item_linked.parent_name '_ma_annotation_set.id'
+save_
+
+save__ma_annotation_residue.definition_id
+_item_description.description
+;
+Identifier of the referenced record.
+;
+_item.name '_ma_annotation_residue.definition_id'
+_item.category_id ma_annotation_residue
+_item.mandatory_code yes
+_item_type.code int
+_item_linked.child_name '_ma_annotation_residue.definition_id'
+_item_linked.parent_name '_ma_annotation_definition.id'
+save_
+
+save__ma_annotation_residue.label_asym_id
+_item_description.description
+;
+Identifier of the referenced record.
+;
+_item.name '_ma_annotation_residue.label_asym_id'
+_item.category_id ma_annotation_residue
+_item.mandatory_code yes
+_item_type.code code
+_item_linked.child_name '_ma_annotation_residue.label_asym_id'
+_item_linked.parent_name '_struct_asym.id'
+save_
+
+save__ma_annotation_residue.label_entity_id
+_item_description.description
+;
+Identifier of the referenced record.
+;
+_item.name '_ma_annotation_residue.label_entity_id'
+_item.category_id ma_annotation_residue
+_item.mandatory_code yes
+_item_type.code code
+_item_linked.child_name '_ma_annotation_residue.label_entity_id'
+_item_linked.parent_name '_entity.id'
+save_
+
+save__ma_annotation_residue.label_seq_id
+_item_description.description
+;
+Polymer sequence position; together with entity identity defines the sequence member.
+;
+_item.name '_ma_annotation_residue.label_seq_id'
+_item.category_id ma_annotation_residue
+_item.mandatory_code yes
+_item_type.code int
+_item_linked.child_name '_ma_annotation_residue.label_seq_id'
+_item_linked.parent_name '_entity_poly_seq.num'
+save_
+
+save__ma_annotation_residue.component_id
+_item_description.description
+;
+Candidate component parameter; required only when the definition parameter_kind is component.
+;
+_item.name '_ma_annotation_residue.component_id'
+_item.category_id ma_annotation_residue
+_item.mandatory_code no
+_item_type.code ucode
+_item_linked.child_name '_ma_annotation_residue.component_id'
+_item_linked.parent_name '_chem_comp.id'
+save_
+
+save__ma_annotation_residue.context_group_id
+_item_description.description
+;
+Partner/selection context for a scientific definition, such as a requested interaction.
+;
+_item.name '_ma_annotation_residue.context_group_id'
+_item.category_id ma_annotation_residue
+_item.mandatory_code no
+_item_type.code int
+_item_linked.child_name '_ma_annotation_residue.context_group_id'
+_item_linked.parent_name '_ma_annotation_group.id'
+save_
+
+save__ma_annotation_residue.state
+_item_description.description
+;
+Value state. Non-specified states carry no payload; specified is the default when the item is absent.
+;
+_item.name '_ma_annotation_residue.state'
+_item.category_id ma_annotation_residue
+_item.mandatory_code no
+_item_type.code code
+loop_
+_item_enumeration.value
+specified
+unconstrained
+unknown
+not_applicable
+_item_default.value specified
+save_
+
+save__ma_annotation_residue.value_real
+_item_description.description
+;
+Finite real scalar payload.
+;
+_item.name '_ma_annotation_residue.value_real'
+_item.category_id ma_annotation_residue
+_item.mandatory_code no
+_item_type.code float
+save_
+
+save__ma_annotation_residue.value_integer
+_item_description.description
+;
+Integer scalar payload.
+;
+_item.name '_ma_annotation_residue.value_integer'
+_item.category_id ma_annotation_residue
+_item.mandatory_code no
+_item_type.code int
+save_
+
+save__ma_annotation_residue.value_boolean
+_item_description.description
+;
+Boolean scalar payload; false is a value, not a universal inactive state.
+;
+_item.name '_ma_annotation_residue.value_boolean'
+_item.category_id ma_annotation_residue
+_item.mandatory_code no
+_item_type.code boolean
+loop_
+_item_enumeration.value
+YES
+NO
+save_
+
+save__ma_annotation_residue.value_text
+_item_description.description
+;
+Text scalar or symbolic categorical payload.
+;
+_item.name '_ma_annotation_residue.value_text'
+_item.category_id ma_annotation_residue
+_item.mandatory_code no
+_item_type.code text
+save_
+
+save__ma_annotation_residue.value_comp_id
+_item_description.description
+;
+Component-valued payload, distinct from a candidate component parameter.
+;
+_item.name '_ma_annotation_residue.value_comp_id'
+_item.category_id ma_annotation_residue
+_item.mandatory_code no
+_item_type.code ucode
+_item_linked.child_name '_ma_annotation_residue.value_comp_id'
+_item_linked.parent_name '_chem_comp.id'
+save_
+
+save__ma_annotation_residue.x
+_item_description.description
+;
+Finite x Cartesian component. All x/y/z components are required for specified point3/vector3 values.
+;
+_item.name '_ma_annotation_residue.x'
+_item.category_id ma_annotation_residue
+_item.mandatory_code no
+_item_type.code float
+save_
+
+save__ma_annotation_residue.y
+_item_description.description
+;
+Finite y Cartesian component. All x/y/z components are required for specified point3/vector3 values.
+;
+_item.name '_ma_annotation_residue.y'
+_item.category_id ma_annotation_residue
+_item.mandatory_code no
+_item_type.code float
+save_
+
+save__ma_annotation_residue.z
+_item_description.description
+;
+Finite z Cartesian component. All x/y/z components are required for specified point3/vector3 values.
+;
+_item.name '_ma_annotation_residue.z'
+_item.category_id ma_annotation_residue
+_item.mandatory_code no
+_item_type.code float
+save_
+
+save__ma_annotation_residue.frame_id
+_item_description.description
+;
+Required for geometric values; inapplicable for invariant values.
+;
+_item.name '_ma_annotation_residue.frame_id'
+_item.category_id ma_annotation_residue
+_item.mandatory_code no
+_item_type.code code
+_item_linked.child_name '_ma_annotation_residue.frame_id'
+_item_linked.parent_name '_ma_annotation_frame.id'
+save_
+
+save__ma_annotation_residue.array_id
+_item_description.description
+;
+General shaped value; not an alternative scalar or XYZ encoding.
+;
+_item.name '_ma_annotation_residue.array_id'
+_item.category_id ma_annotation_residue
+_item.mandatory_code no
+_item_type.code int
+_item_linked.child_name '_ma_annotation_residue.array_id'
+_item_linked.parent_name '_ma_annotation_array.id'
+save_
+
+save__ma_annotation_residue.value_group_id
+_item_description.description
+;
+Group-valued payload, for example an index-group membership request.
+;
+_item.name '_ma_annotation_residue.value_group_id'
+_item.category_id ma_annotation_residue
+_item.mandatory_code no
+_item_type.code int
+_item_linked.child_name '_ma_annotation_residue.value_group_id'
+_item_linked.parent_name '_ma_annotation_group.id'
+save_
+
+save_ma_annotation_value
+_category.description
+;
+Data items in MA_ANNOTATION_VALUE store all other value rows: zero-body system values, direct chain/group or logical-subject values, sparse pairs, and uniform scalar defaults. Body order and level come from the definition. Ordinary structural atom/residue values use their direct categories. Unused columns may be omitted.
+;
+_category.id ma_annotation_value
+_category.mandatory_code no
+loop_
+_category_key.name
+'_ma_annotation_value.id'
+loop_
+_category_group.id
+inclusive_group
+ma_group
+_pdbx_category_context.type CONTRIBUTED
+_pdbx_category_context.category_id ma_annotation_value
+save_
+
+save__ma_annotation_value.id
+_item_description.description
+;
+Unique row identifier within this category.
+;
+_item.name '_ma_annotation_value.id'
+_item.category_id ma_annotation_value
+_item.mandatory_code yes
+_item_type.code int
+save_
+
+save__ma_annotation_value.set_id
+_item_description.description
+;
+Identifier of the referenced record.
+;
+_item.name '_ma_annotation_value.set_id'
+_item.category_id ma_annotation_value
+_item.mandatory_code yes
+_item_type.code int
+_item_linked.child_name '_ma_annotation_value.set_id'
+_item_linked.parent_name '_ma_annotation_set.id'
+save_
+
+save__ma_annotation_value.definition_id
+_item_description.description
+;
+Identifier of the referenced record.
+;
+_item.name '_ma_annotation_value.definition_id'
+_item.category_id ma_annotation_value
+_item.mandatory_code yes
+_item_type.code int
+_item_linked.child_name '_ma_annotation_value.definition_id'
+_item_linked.parent_name '_ma_annotation_definition.id'
+save_
+
+save__ma_annotation_value.is_default
+_item_description.description
+;
+YES marks a uniform scalar default for this set/definition and has no subject selectors. NO is the default when the item is absent. Explicit values, including non-specified states, override defaults.
+;
+_item.name '_ma_annotation_value.is_default'
+_item.category_id ma_annotation_value
+_item.mandatory_code no
+_item_type.code boolean
+loop_
+_item_enumeration.value
+YES
+NO
+_item_default.value NO
+save_
+
+save__ma_annotation_value.label_asym_id
+_item_description.description
+;
+Direct chain subject for one-body chain values.
+;
+_item.name '_ma_annotation_value.label_asym_id'
+_item.category_id ma_annotation_value
+_item.mandatory_code no
+_item_type.code code
+_item_linked.child_name '_ma_annotation_value.label_asym_id'
+_item_linked.parent_name '_struct_asym.id'
+save_
+
+save__ma_annotation_value.group_id
+_item_description.description
+;
+Direct token/molecule subject for one-body values.
+;
+_item.name '_ma_annotation_value.group_id'
+_item.category_id ma_annotation_value
+_item.mandatory_code no
+_item_type.code int
+_item_linked.child_name '_ma_annotation_value.group_id'
+_item_linked.parent_name '_ma_annotation_group.id'
+save_
+
+save__ma_annotation_value.subject_id_1
+_item_description.description
+;
+Logical subject for a one-body value, or first endpoint of a two-body value.
+;
+_item.name '_ma_annotation_value.subject_id_1'
+_item.category_id ma_annotation_value
+_item.mandatory_code no
+_item_type.code int
+_item_linked.child_name '_ma_annotation_value.subject_id_1'
+_item_linked.parent_name '_ma_annotation_subject.id'
+save_
+
+save__ma_annotation_value.subject_id_2
+_item_description.description
+;
+Second endpoint, required only for a two-body value.
+;
+_item.name '_ma_annotation_value.subject_id_2'
+_item.category_id ma_annotation_value
+_item.mandatory_code no
+_item_type.code int
+_item_linked.child_name '_ma_annotation_value.subject_id_2'
+_item_linked.parent_name '_ma_annotation_subject.id'
+save_
+
+save__ma_annotation_value.component_id
+_item_description.description
+;
+Candidate component parameter; required only when the definition parameter_kind is component.
+;
+_item.name '_ma_annotation_value.component_id'
+_item.category_id ma_annotation_value
+_item.mandatory_code no
+_item_type.code ucode
+_item_linked.child_name '_ma_annotation_value.component_id'
+_item_linked.parent_name '_chem_comp.id'
+save_
+
+save__ma_annotation_value.context_group_id
+_item_description.description
+;
+Partner/selection context for a scientific definition, such as a requested interaction.
+;
+_item.name '_ma_annotation_value.context_group_id'
+_item.category_id ma_annotation_value
+_item.mandatory_code no
+_item_type.code int
+_item_linked.child_name '_ma_annotation_value.context_group_id'
+_item_linked.parent_name '_ma_annotation_group.id'
+save_
+
+save__ma_annotation_value.state
+_item_description.description
+;
+Value state. Non-specified states carry no payload; specified is the default when the item is absent.
+;
+_item.name '_ma_annotation_value.state'
+_item.category_id ma_annotation_value
+_item.mandatory_code no
+_item_type.code code
+loop_
+_item_enumeration.value
+specified
+unconstrained
+unknown
+not_applicable
+_item_default.value specified
+save_
+
+save__ma_annotation_value.value_real
+_item_description.description
+;
+Finite real scalar payload.
+;
+_item.name '_ma_annotation_value.value_real'
+_item.category_id ma_annotation_value
+_item.mandatory_code no
+_item_type.code float
+save_
+
+save__ma_annotation_value.value_integer
+_item_description.description
+;
+Integer scalar payload.
+;
+_item.name '_ma_annotation_value.value_integer'
+_item.category_id ma_annotation_value
+_item.mandatory_code no
+_item_type.code int
+save_
+
+save__ma_annotation_value.value_boolean
+_item_description.description
+;
+Boolean scalar payload; false is a value, not a universal inactive state.
+;
+_item.name '_ma_annotation_value.value_boolean'
+_item.category_id ma_annotation_value
+_item.mandatory_code no
+_item_type.code boolean
+loop_
+_item_enumeration.value
+YES
+NO
+save_
+
+save__ma_annotation_value.value_text
+_item_description.description
+;
+Text scalar or symbolic categorical payload.
+;
+_item.name '_ma_annotation_value.value_text'
+_item.category_id ma_annotation_value
+_item.mandatory_code no
+_item_type.code text
+save_
+
+save__ma_annotation_value.value_comp_id
+_item_description.description
+;
+Component-valued payload, distinct from a candidate component parameter.
+;
+_item.name '_ma_annotation_value.value_comp_id'
+_item.category_id ma_annotation_value
+_item.mandatory_code no
+_item_type.code ucode
+_item_linked.child_name '_ma_annotation_value.value_comp_id'
+_item_linked.parent_name '_chem_comp.id'
+save_
+
+save__ma_annotation_value.x
+_item_description.description
+;
+Finite x Cartesian component. All x/y/z components are required for specified point3/vector3 values.
+;
+_item.name '_ma_annotation_value.x'
+_item.category_id ma_annotation_value
+_item.mandatory_code no
+_item_type.code float
+save_
+
+save__ma_annotation_value.y
+_item_description.description
+;
+Finite y Cartesian component. All x/y/z components are required for specified point3/vector3 values.
+;
+_item.name '_ma_annotation_value.y'
+_item.category_id ma_annotation_value
+_item.mandatory_code no
+_item_type.code float
+save_
+
+save__ma_annotation_value.z
+_item_description.description
+;
+Finite z Cartesian component. All x/y/z components are required for specified point3/vector3 values.
+;
+_item.name '_ma_annotation_value.z'
+_item.category_id ma_annotation_value
+_item.mandatory_code no
+_item_type.code float
+save_
+
+save__ma_annotation_value.frame_id
+_item_description.description
+;
+Required for geometric values; inapplicable for invariant values.
+;
+_item.name '_ma_annotation_value.frame_id'
+_item.category_id ma_annotation_value
+_item.mandatory_code no
+_item_type.code code
+_item_linked.child_name '_ma_annotation_value.frame_id'
+_item_linked.parent_name '_ma_annotation_frame.id'
+save_
+
+save__ma_annotation_value.array_id
+_item_description.description
+;
+General shaped value; not an alternative scalar or XYZ encoding.
+;
+_item.name '_ma_annotation_value.array_id'
+_item.category_id ma_annotation_value
+_item.mandatory_code no
+_item_type.code int
+_item_linked.child_name '_ma_annotation_value.array_id'
+_item_linked.parent_name '_ma_annotation_array.id'
+save_
+
+save__ma_annotation_value.value_group_id
+_item_description.description
+;
+Group-valued payload, for example an index-group membership request.
+;
+_item.name '_ma_annotation_value.value_group_id'
+_item.category_id ma_annotation_value
+_item.mandatory_code no
+_item_type.code int
+_item_linked.child_name '_ma_annotation_value.value_group_id'
+_item_linked.parent_name '_ma_annotation_group.id'
+save_
+
+save_ma_annotation_group
+_category.description
+;
+Data items in MA_ANNOTATION_GROUP describe explicit tokens, molecules, index groups or partner selections. Membership is finite, may be nested without cycles, and is scoped to a data artifact and optionally a structural model.
+;
+_category.id ma_annotation_group
+_category.mandatory_code no
+loop_
+_category_key.name
+'_ma_annotation_group.id'
+loop_
+_category_group.id
+inclusive_group
+ma_group
+_pdbx_category_context.type CONTRIBUTED
+_pdbx_category_context.category_id ma_annotation_group
+save_
+
+save__ma_annotation_group.id
+_item_description.description
+;
+Unique row identifier within this category.
+;
+_item.name '_ma_annotation_group.id'
+_item.category_id ma_annotation_group
+_item.mandatory_code yes
+_item_type.code int
+save_
+
+save__ma_annotation_group.data_id
+_item_description.description
+;
+Identifier of the referenced record.
+;
+_item.name '_ma_annotation_group.data_id'
+_item.category_id ma_annotation_group
+_item.mandatory_code yes
+_item_type.code int
+_item_linked.child_name '_ma_annotation_group.data_id'
+_item_linked.parent_name '_ma_data.id'
+save_
+
+save__ma_annotation_group.model_id
+_item_description.description
+;
+Identifier of the referenced record.
+;
+_item.name '_ma_annotation_group.model_id'
+_item.category_id ma_annotation_group
+_item.mandatory_code no
+_item_type.code int
+_item_linked.child_name '_ma_annotation_group.model_id'
+_item_linked.parent_name '_ma_model_list.ordinal_id'
+save_
+
+save__ma_annotation_group.kind
+_item_description.description
+;
+Group interpretation.
+;
+_item.name '_ma_annotation_group.kind'
+_item.category_id ma_annotation_group
+_item.mandatory_code yes
+_item_type.code code
+loop_
+_item_enumeration.value
+token
+molecule
+index
+context
+save_
+
+save__ma_annotation_group.definition_key
+_item_description.description
+;
+Versioned tokenizer, molecular grouping or selection method identifier.
+;
+_item.name '_ma_annotation_group.definition_key'
+_item.category_id ma_annotation_group
+_item.mandatory_code yes
+_item_type.code line
+save_
+
+save__ma_annotation_group.version
+_item_description.description
+;
+Grouping-method version.
+;
+_item.name '_ma_annotation_group.version'
+_item.category_id ma_annotation_group
+_item.mandatory_code yes
+_item_type.code code
+save_
+
+save__ma_annotation_group.description
+_item_description.description
+;
+Scientific grouping definition and membership context.
+;
+_item.name '_ma_annotation_group.description'
+_item.category_id ma_annotation_group
+_item.mandatory_code yes
+_item_type.code text
+save_
+
+save__ma_annotation_group.ordered
+_item_description.description
+;
+Whether member order carries meaning.
+;
+_item.name '_ma_annotation_group.ordered'
+_item.category_id ma_annotation_group
+_item.mandatory_code yes
+_item_type.code boolean
+loop_
+_item_enumeration.value
+YES
+NO
+save_
+
+save__ma_annotation_group.context_group_id
+_item_description.description
+;
+Enclosing molecular/context group, required for an index group.
+;
+_item.name '_ma_annotation_group.context_group_id'
+_item.category_id ma_annotation_group
+_item.mandatory_code no
+_item_type.code int
+_item_linked.child_name '_ma_annotation_group.context_group_id'
+_item_linked.parent_name '_ma_annotation_group.id'
+save_
+
+save_ma_annotation_group_member
+_category.description
+;
+Data items in MA_ANNOTATION_GROUP_MEMBER list ordered members. Exactly one of atom_id, child_group_id or subject_id is populated. Index groups require child token groups or logical token positions of length one with explicit relative index offsets; the absolute index origin is arbitrary. Expandable segments acquire token offsets after realization.
+;
+_category.id ma_annotation_group_member
+_category.mandatory_code no
+loop_
+_category_key.name
+'_ma_annotation_group_member.group_id'
+'_ma_annotation_group_member.ordinal_id'
+loop_
+_category_group.id
+inclusive_group
+ma_group
+_pdbx_category_context.type CONTRIBUTED
+_pdbx_category_context.category_id ma_annotation_group_member
+save_
+
+save__ma_annotation_group_member.group_id
+_item_description.description
+;
+Identifier of the referenced record.
+;
+_item.name '_ma_annotation_group_member.group_id'
+_item.category_id ma_annotation_group_member
+_item.mandatory_code yes
+_item_type.code int
+_item_linked.child_name '_ma_annotation_group_member.group_id'
+_item_linked.parent_name '_ma_annotation_group.id'
+save_
+
+save__ma_annotation_group_member.ordinal_id
+_item_description.description
+;
+Positive member order within the group.
+;
+_item.name '_ma_annotation_group_member.ordinal_id'
+_item.category_id ma_annotation_group_member
+_item.mandatory_code yes
+_item_type.code int
+save_
+
+save__ma_annotation_group_member.atom_id
+_item_description.description
+;
+Identifier of the referenced record.
+;
+_item.name '_ma_annotation_group_member.atom_id'
+_item.category_id ma_annotation_group_member
+_item.mandatory_code no
+_item_type.code code
+_item_linked.child_name '_ma_annotation_group_member.atom_id'
+_item_linked.parent_name '_atom_site.id'
+save_
+
+save__ma_annotation_group_member.child_group_id
+_item_description.description
+;
+Identifier of the referenced record.
+;
+_item.name '_ma_annotation_group_member.child_group_id'
+_item.category_id ma_annotation_group_member
+_item.mandatory_code no
+_item_type.code int
+_item_linked.child_name '_ma_annotation_group_member.child_group_id'
+_item_linked.parent_name '_ma_annotation_group.id'
+save_
+
+save__ma_annotation_group_member.subject_id
+_item_description.description
+;
+Logical position or segment member; structural atoms use atom_id.
+;
+_item.name '_ma_annotation_group_member.subject_id'
+_item.category_id ma_annotation_group_member
+_item.mandatory_code no
+_item_type.code int
+_item_linked.child_name '_ma_annotation_group_member.subject_id'
+_item_linked.parent_name '_ma_annotation_subject.id'
+save_
+
+save__ma_annotation_group_member.index_offset
+_item_description.description
+;
+Relative offset for an index-group member; unknown offsets between distinct index groups are not inferred.
+;
+_item.name '_ma_annotation_group_member.index_offset'
+_item.category_id ma_annotation_group_member
+_item.mandatory_code no
+_item_type.code int
+save_
+
+save_ma_annotation_subject
+_category.description
+;
+Data items in MA_ANNOTATION_SUBJECT declare structural identities for pair endpoints and mappings, or logical positions/segments directly. Structural subjects select exactly one atom, chain/residue or group. Logical subjects carry level, ordered context and length bounds with no structural selector or model. A value on a segment applies to each realized member.
+;
+_category.id ma_annotation_subject
+_category.mandatory_code no
+loop_
+_category_key.name
+'_ma_annotation_subject.id'
+loop_
+_category_group.id
+inclusive_group
+ma_group
+_pdbx_category_context.type CONTRIBUTED
+_pdbx_category_context.category_id ma_annotation_subject
+save_
+
+save__ma_annotation_subject.id
+_item_description.description
+;
+Unique row identifier within this category.
+;
+_item.name '_ma_annotation_subject.id'
+_item.category_id ma_annotation_subject
+_item.mandatory_code yes
+_item_type.code int
+save_
+
+save__ma_annotation_subject.data_id
+_item_description.description
+;
+Identifier of the referenced record.
+;
+_item.name '_ma_annotation_subject.data_id'
+_item.category_id ma_annotation_subject
+_item.mandatory_code yes
+_item_type.code int
+_item_linked.child_name '_ma_annotation_subject.data_id'
+_item_linked.parent_name '_ma_data.id'
+save_
+
+save__ma_annotation_subject.model_id
+_item_description.description
+;
+Structural model; inapplicable for logical positions/segments.
+;
+_item.name '_ma_annotation_subject.model_id'
+_item.category_id ma_annotation_subject
+_item.mandatory_code no
+_item_type.code int
+_item_linked.child_name '_ma_annotation_subject.model_id'
+_item_linked.parent_name '_ma_model_list.ordinal_id'
+save_
+
+save__ma_annotation_subject.kind
+_item_description.description
+;
+Reference to an atom/chain/residue/group, or a logical subject.
+;
+_item.name '_ma_annotation_subject.kind'
+_item.category_id ma_annotation_subject
+_item.mandatory_code yes
+_item_type.code code
+loop_
+_item_enumeration.value
+reference
+position
+segment
+save_
+
+save__ma_annotation_subject.level
+_item_description.description
+;
+Semantic level.
+;
+_item.name '_ma_annotation_subject.level'
+_item.category_id ma_annotation_subject
+_item.mandatory_code yes
+_item_type.code code
+loop_
+_item_enumeration.value
+atom
+residue
+chain
+molecule
+token
+save_
+
+save__ma_annotation_subject.atom_id
+_item_description.description
+;
+Identifier of the referenced record.
+;
+_item.name '_ma_annotation_subject.atom_id'
+_item.category_id ma_annotation_subject
+_item.mandatory_code no
+_item_type.code code
+_item_linked.child_name '_ma_annotation_subject.atom_id'
+_item_linked.parent_name '_atom_site.id'
+save_
+
+save__ma_annotation_subject.label_asym_id
+_item_description.description
+;
+Identifier of the referenced record.
+;
+_item.name '_ma_annotation_subject.label_asym_id'
+_item.category_id ma_annotation_subject
+_item.mandatory_code no
+_item_type.code code
+_item_linked.child_name '_ma_annotation_subject.label_asym_id'
+_item_linked.parent_name '_struct_asym.id'
+save_
+
+save__ma_annotation_subject.label_entity_id
+_item_description.description
+;
+Identifier of the referenced record.
+;
+_item.name '_ma_annotation_subject.label_entity_id'
+_item.category_id ma_annotation_subject
+_item.mandatory_code no
+_item_type.code code
+_item_linked.child_name '_ma_annotation_subject.label_entity_id'
+_item_linked.parent_name '_entity.id'
+save_
+
+save__ma_annotation_subject.label_seq_id
+_item_description.description
+;
+Identifier of the referenced record.
+;
+_item.name '_ma_annotation_subject.label_seq_id'
+_item.category_id ma_annotation_subject
+_item.mandatory_code no
+_item_type.code int
+_item_linked.child_name '_ma_annotation_subject.label_seq_id'
+_item_linked.parent_name '_entity_poly_seq.num'
+save_
+
+save__ma_annotation_subject.group_id
+_item_description.description
+;
+Identifier of the referenced record.
+;
+_item.name '_ma_annotation_subject.group_id'
+_item.category_id ma_annotation_subject
+_item.mandatory_code no
+_item_type.code int
+_item_linked.child_name '_ma_annotation_subject.group_id'
+_item_linked.parent_name '_ma_annotation_group.id'
+save_
+
+save__ma_annotation_subject.context_group_id
+_item_description.description
+;
+Ordered coordinate-free context, required for logical subjects only.
+;
+_item.name '_ma_annotation_subject.context_group_id'
+_item.category_id ma_annotation_subject
+_item.mandatory_code no
+_item_type.code int
+_item_linked.child_name '_ma_annotation_subject.context_group_id'
+_item_linked.parent_name '_ma_annotation_group.id'
+save_
+
+save__ma_annotation_subject.min_length
+_item_description.description
+;
+Nonnegative minimum realized length for a logical subject; positions have length one.
+;
+_item.name '_ma_annotation_subject.min_length'
+_item.category_id ma_annotation_subject
+_item.mandatory_code no
+_item_type.code int
+save_
+
+save__ma_annotation_subject.max_length
+_item_description.description
+;
+Maximum realized length, at least min_length. Required for logical subjects; positions have length one.
+;
+_item.name '_ma_annotation_subject.max_length'
+_item.category_id ma_annotation_subject
+_item.mandatory_code no
+_item_type.code int
+save_
+
+save__ma_annotation_subject.details
+_item_description.description
+;
+Additional subject interpretation.
+;
+_item.name '_ma_annotation_subject.details'
+_item.category_id ma_annotation_subject
+_item.mandatory_code no
+_item_type.code text
+save_
+
+save_ma_annotation_relation
+_category.description
+;
+Data items in MA_ANNOTATION_RELATION express logical order/connectivity or source/output correspondence using the same endpoint identities. Topology relations require a logical source and have no producing step. Mapping relations reference a producing protocol step. Realization preserves explicit member order. These relations do not themselves assert geometric equivalence.
+;
+_category.id ma_annotation_relation
+_category.mandatory_code no
+loop_
+_category_key.name
+'_ma_annotation_relation.id'
+loop_
+_category_group.id
+inclusive_group
+ma_group
+_pdbx_category_context.type CONTRIBUTED
+_pdbx_category_context.category_id ma_annotation_relation
+save_
+
+save__ma_annotation_relation.id
+_item_description.description
+;
+Unique row identifier within this category.
+;
+_item.name '_ma_annotation_relation.id'
+_item.category_id ma_annotation_relation
+_item.mandatory_code yes
+_item_type.code int
+save_
+
+save__ma_annotation_relation.source_subject_id
+_item_description.description
+;
+Identifier of the referenced record.
+;
+_item.name '_ma_annotation_relation.source_subject_id'
+_item.category_id ma_annotation_relation
+_item.mandatory_code no
+_item_type.code int
+_item_linked.child_name '_ma_annotation_relation.source_subject_id'
+_item_linked.parent_name '_ma_annotation_subject.id'
+save_
+
+save__ma_annotation_relation.target_subject_id
+_item_description.description
+;
+Identifier of the referenced record.
+;
+_item.name '_ma_annotation_relation.target_subject_id'
+_item.category_id ma_annotation_relation
+_item.mandatory_code no
+_item_type.code int
+_item_linked.child_name '_ma_annotation_relation.target_subject_id'
+_item_linked.parent_name '_ma_annotation_subject.id'
+save_
+
+save__ma_annotation_relation.relation
+_item_description.description
+;
+Relation from source to target. Generated has no source; deleted has no target; all other relations require both.
+;
+_item.name '_ma_annotation_relation.relation'
+_item.category_id ma_annotation_relation
+_item.mandatory_code yes
+_item_type.code code
+loop_
+_item_enumeration.value
+before
+after
+adjacent_before
+adjacent_after
+connected
+mapped
+copy
+realized
+generated
+deleted
+save_
+
+save__ma_annotation_relation.protocol_step_id
+_item_description.description
+;
+Required only for mapped/copy/realized/generated/deleted relations.
+;
+_item.name '_ma_annotation_relation.protocol_step_id'
+_item.category_id ma_annotation_relation
+_item.mandatory_code no
+_item_type.code int
+_item_linked.child_name '_ma_annotation_relation.protocol_step_id'
+_item_linked.parent_name '_ma_protocol_step.ordinal_id'
+save_
+
+save__ma_annotation_relation.target_ordinal_id
+_item_description.description
+;
+One-based realized-member order within a source logical subject and protocol step; required only for realized relations and contiguous from one.
+;
+_item.name '_ma_annotation_relation.target_ordinal_id'
+_item.category_id ma_annotation_relation
+_item.mandatory_code no
+_item_type.code int
+save_
+
+save__ma_annotation_relation.source_atom_name
+_item_description.description
+;
+Named atom for a residue-level connected source; otherwise inapplicable.
+;
+_item.name '_ma_annotation_relation.source_atom_name'
+_item.category_id ma_annotation_relation
+_item.mandatory_code no
+_item_type.code code
+save_
+
+save__ma_annotation_relation.target_atom_name
+_item_description.description
+;
+Named atom for a residue-level connected target; otherwise inapplicable.
+;
+_item.name '_ma_annotation_relation.target_atom_name'
+_item.category_id ma_annotation_relation
+_item.mandatory_code no
+_item_type.code code
+save_
+
+save__ma_annotation_relation.bond_order
+_item_description.description
+;
+Required only for connected relations.
+;
+_item.name '_ma_annotation_relation.bond_order'
+_item.category_id ma_annotation_relation
+_item.mandatory_code no
+_item_type.code code
+loop_
+_item_enumeration.value
+single
+double
+triple
+aromatic
+save_
+
+save__ma_annotation_relation.details
+_item_description.description
+;
+Additional relation interpretation.
+;
+_item.name '_ma_annotation_relation.details'
+_item.category_id ma_annotation_relation
+_item.mandatory_code no
+_item_type.code text
+save_
+
+save_ma_annotation_array
+_category.description
+;
+Data items in MA_ANNOTATION_ARRAY identify general shaped values. Each array has exactly one owning value row, whose definition supplies element type, rank and transform. Traversal is always row-major, with the last axis varying fastest; these facts are not repeated per array.
+;
+_category.id ma_annotation_array
+_category.mandatory_code no
+loop_
+_category_key.name
+'_ma_annotation_array.id'
+loop_
+_category_group.id
+inclusive_group
+ma_group
+_pdbx_category_context.type CONTRIBUTED
+_pdbx_category_context.category_id ma_annotation_array
+save_
+
+save__ma_annotation_array.id
+_item_description.description
+;
+Unique row identifier within this category.
+;
+_item.name '_ma_annotation_array.id'
+_item.category_id ma_annotation_array
+_item.mandatory_code yes
+_item_type.code int
+save_
+
+save__ma_annotation_array.omitted_state
+_item_description.description
+;
+State of absent element rows; never an implicit numeric zero.
+;
+_item.name '_ma_annotation_array.omitted_state'
+_item.category_id ma_annotation_array
+_item.mandatory_code yes
+_item_type.code code
+loop_
+_item_enumeration.value
+unconstrained
+unknown
+not_applicable
+save_
+
+save_ma_annotation_axis
+_category.description
+;
+Data items in MA_ANNOTATION_AXIS declare shared definition axes and array-specific dimensions. Exactly one of definition_id or array_id is present. Definition axes supply label kind/domain and fixed length (or inapplicable length for a variable dimension). Array axes supply actual lengths and inherit interpretation; fixed axes and labels can be used directly without repeating rows.
+;
+_category.id ma_annotation_axis
+_category.mandatory_code no
+loop_
+_category_key.name
+'_ma_annotation_axis.id'
+loop_
+_category_group.id
+inclusive_group
+ma_group
+_pdbx_category_context.type CONTRIBUTED
+_pdbx_category_context.category_id ma_annotation_axis
+save_
+
+save__ma_annotation_axis.id
+_item_description.description
+;
+Unique row identifier within this category.
+;
+_item.name '_ma_annotation_axis.id'
+_item.category_id ma_annotation_axis
+_item.mandatory_code yes
+_item_type.code int
+save_
+
+save__ma_annotation_axis.definition_id
+_item_description.description
+;
+Owner of a shared axis declaration.
+;
+_item.name '_ma_annotation_axis.definition_id'
+_item.category_id ma_annotation_axis
+_item.mandatory_code no
+_item_type.code int
+_item_linked.child_name '_ma_annotation_axis.definition_id'
+_item_linked.parent_name '_ma_annotation_definition.id'
+save_
+
+save__ma_annotation_axis.array_id
+_item_description.description
+;
+Owner of an array-specific dimension/labels.
+;
+_item.name '_ma_annotation_axis.array_id'
+_item.category_id ma_annotation_axis
+_item.mandatory_code no
+_item_type.code int
+_item_linked.child_name '_ma_annotation_axis.array_id'
+_item_linked.parent_name '_ma_annotation_array.id'
+save_
+
+save__ma_annotation_axis.axis_order
+_item_description.description
+;
+One-based dimension order.
+;
+_item.name '_ma_annotation_axis.axis_order'
+_item.category_id ma_annotation_axis
+_item.mandatory_code yes
+_item_type.code int
+save_
+
+save__ma_annotation_axis.length
+_item_description.description
+;
+Nonnegative fixed/actual length. Inapplicable only for a variable definition axis.
+;
+_item.name '_ma_annotation_axis.length'
+_item.category_id ma_annotation_axis
+_item.mandatory_code no
+_item_type.code int
+save_
+
+save__ma_annotation_axis.label_kind
+_item_description.description
+;
+Required for definition axes only; array axes inherit this interpretation.
+;
+_item.name '_ma_annotation_axis.label_kind'
+_item.category_id ma_annotation_axis
+_item.mandatory_code no
+_item_type.code code
+loop_
+_item_enumeration.value
+unlabelled
+text
+component
+Cartesian
+save_
+
+save__ma_annotation_axis.domain_id
+_item_description.description
+;
+Optional closed label domain on a definition axis only.
+;
+_item.name '_ma_annotation_axis.domain_id'
+_item.category_id ma_annotation_axis
+_item.mandatory_code no
+_item_type.code int
+_item_linked.child_name '_ma_annotation_axis.domain_id'
+_item_linked.parent_name '_ma_annotation_domain.id'
+save_
+
+save_ma_annotation_axis_label
+_category.description
+;
+Data items in MA_ANNOTATION_AXIS_LABEL label every position of a labelled axis. Shared fixed-axis labels are written once on the definition axis. Array axes give labels only when not supplied by the definition. Cartesian axes contain x/y/z in order.
+;
+_category.id ma_annotation_axis_label
+_category.mandatory_code no
+loop_
+_category_key.name
+'_ma_annotation_axis_label.axis_id'
+'_ma_annotation_axis_label.index'
+loop_
+_category_group.id
+inclusive_group
+ma_group
+_pdbx_category_context.type CONTRIBUTED
+_pdbx_category_context.category_id ma_annotation_axis_label
+save_
+
+save__ma_annotation_axis_label.axis_id
+_item_description.description
+;
+Identifier of the referenced record.
+;
+_item.name '_ma_annotation_axis_label.axis_id'
+_item.category_id ma_annotation_axis_label
+_item.mandatory_code yes
+_item_type.code int
+_item_linked.child_name '_ma_annotation_axis_label.axis_id'
+_item_linked.parent_name '_ma_annotation_axis.id'
+save_
+
+save__ma_annotation_axis_label.index
+_item_description.description
+;
+One-based axis position.
+;
+_item.name '_ma_annotation_axis_label.index'
+_item.category_id ma_annotation_axis_label
+_item.mandatory_code yes
+_item_type.code int
+save_
+
+save__ma_annotation_axis_label.label
+_item_description.description
+;
+Text or Cartesian label.
+;
+_item.name '_ma_annotation_axis_label.label'
+_item.category_id ma_annotation_axis_label
+_item.mandatory_code no
+_item_type.code line
+save_
+
+save__ma_annotation_axis_label.comp_id
+_item_description.description
+;
+Component identity for component-labelled axes.
+;
+_item.name '_ma_annotation_axis_label.comp_id'
+_item.category_id ma_annotation_axis_label
+_item.mandatory_code no
+_item_type.code ucode
+_item_linked.child_name '_ma_annotation_axis_label.comp_id'
+_item_linked.parent_name '_chem_comp.id'
+save_
+
+save_ma_annotation_array_value
+_category.description
+;
+Data items in MA_ANNOTATION_ARRAY_VALUE give typed elements at one-based flattened indices. Non-specified states have no payload. Missing rows inherit the array omitted_state.
+;
+_category.id ma_annotation_array_value
+_category.mandatory_code no
+loop_
+_category_key.name
+'_ma_annotation_array_value.array_id'
+'_ma_annotation_array_value.element_index'
+loop_
+_category_group.id
+inclusive_group
+ma_group
+_pdbx_category_context.type CONTRIBUTED
+_pdbx_category_context.category_id ma_annotation_array_value
+save_
+
+save__ma_annotation_array_value.array_id
+_item_description.description
+;
+Identifier of the referenced record.
+;
+_item.name '_ma_annotation_array_value.array_id'
+_item.category_id ma_annotation_array_value
+_item.mandatory_code yes
+_item_type.code int
+_item_linked.child_name '_ma_annotation_array_value.array_id'
+_item_linked.parent_name '_ma_annotation_array.id'
+save_
+
+save__ma_annotation_array_value.element_index
+_item_description.description
+;
+One-based flattened index within the array.
+;
+_item.name '_ma_annotation_array_value.element_index'
+_item.category_id ma_annotation_array_value
+_item.mandatory_code yes
+_item_type.code int
+save_
+
+save__ma_annotation_array_value.state
+_item_description.description
+;
+Value state. Non-specified states carry no payload; specified is the default when the item is absent.
+;
+_item.name '_ma_annotation_array_value.state'
+_item.category_id ma_annotation_array_value
+_item.mandatory_code no
+_item_type.code code
+loop_
+_item_enumeration.value
+specified
+unconstrained
+unknown
+not_applicable
+_item_default.value specified
+save_
+
+save__ma_annotation_array_value.value_real
+_item_description.description
+;
+Finite real scalar payload.
+;
+_item.name '_ma_annotation_array_value.value_real'
+_item.category_id ma_annotation_array_value
+_item.mandatory_code no
+_item_type.code float
+save_
+
+save__ma_annotation_array_value.value_integer
+_item_description.description
+;
+Integer scalar payload.
+;
+_item.name '_ma_annotation_array_value.value_integer'
+_item.category_id ma_annotation_array_value
+_item.mandatory_code no
+_item_type.code int
+save_
+
+save__ma_annotation_array_value.value_boolean
+_item_description.description
+;
+Boolean scalar payload; false is a value, not a universal inactive state.
+;
+_item.name '_ma_annotation_array_value.value_boolean'
+_item.category_id ma_annotation_array_value
+_item.mandatory_code no
+_item_type.code boolean
+loop_
+_item_enumeration.value
+YES
+NO
+save_
+
+save__ma_annotation_array_value.value_text
+_item_description.description
+;
+Text scalar or symbolic categorical payload.
+;
+_item.name '_ma_annotation_array_value.value_text'
+_item.category_id ma_annotation_array_value
+_item.mandatory_code no
+_item_type.code text
+save_
+
+save__ma_annotation_array_value.value_comp_id
+_item_description.description
+;
+Component-valued payload, distinct from a candidate component parameter.
+;
+_item.name '_ma_annotation_array_value.value_comp_id'
+_item.category_id ma_annotation_array_value
+_item.mandatory_code no
+_item_type.code ucode
+_item_linked.child_name '_ma_annotation_array_value.value_comp_id'
+_item_linked.parent_name '_chem_comp.id'
+save_
+
+loop_
+_pdbx_item_linked_group.category_id
+_pdbx_item_linked_group.link_group_id
+_pdbx_item_linked_group.label
+_pdbx_item_linked_group.context
+_pdbx_item_linked_group.condition_id
+ma_annotation_residue 1 chain_entity . .
+ma_annotation_residue 2 entity_sequence . .
+ma_annotation_subject 3 chain_entity . .
+ma_annotation_subject 4 entity_sequence . .
+loop_
+_pdbx_item_linked_group_list.child_category_id
+_pdbx_item_linked_group_list.link_group_id
+_pdbx_item_linked_group_list.child_name
+_pdbx_item_linked_group_list.parent_name
+_pdbx_item_linked_group_list.parent_category_id
+ma_annotation_residue 1 '_ma_annotation_residue.label_asym_id' '_struct_asym.id' struct_asym
+ma_annotation_residue 1 '_ma_annotation_residue.label_entity_id' '_struct_asym.entity_id' struct_asym
+ma_annotation_residue 2 '_ma_annotation_residue.label_entity_id' '_entity_poly_seq.entity_id' entity_poly_seq
+ma_annotation_residue 2 '_ma_annotation_residue.label_seq_id' '_entity_poly_seq.num' entity_poly_seq
+ma_annotation_subject 3 '_ma_annotation_subject.label_asym_id' '_struct_asym.id' struct_asym
+ma_annotation_subject 3 '_ma_annotation_subject.label_entity_id' '_struct_asym.entity_id' struct_asym
+ma_annotation_subject 4 '_ma_annotation_subject.label_entity_id' '_entity_poly_seq.entity_id' entity_poly_seq
+ma_annotation_subject 4 '_ma_annotation_subject.label_seq_id' '_entity_poly_seq.num' entity_poly_seq
