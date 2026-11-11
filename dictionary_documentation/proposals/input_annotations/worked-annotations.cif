@@ -1,0 +1,244 @@
+data_worked_annotations
+# Proposed integrated ma_annotation_* layout, not released ModelCIF.
+# Illustrative fragment, not a complete deposition or executed workflow.
+# Existing workflow/selection/chemistry fields use ModelCIF 1.4.9.
+# Output data are workflow illustrations; their structures are not included.
+
+# BEGIN workflow
+loop_
+_ma_data.id
+_ma_data.name
+_ma_data.content_type
+_ma_data.content_type_other_details
+1 'Reference coordinates' 'input structure' .
+2 'Authored design conditions' other 'Annotation set'
+3 'Designed backbone' 'intermediate backbone' .
+4 'Designed sequence' 'intermediate sequence' .
+5 'Predicted validation model' 'model coordinates' .
+loop_
+_ma_data_group.ordinal_id
+_ma_data_group.group_id
+_ma_data_group.data_id
+1 1 1
+2 1 2
+3 2 3
+4 3 3
+5 3 2
+6 4 4
+7 5 3
+8 5 4
+9 6 5
+loop_
+_ma_protocol_step.ordinal_id
+_ma_protocol_step.protocol_id
+_ma_protocol_step.step_id
+_ma_protocol_step.method_type
+_ma_protocol_step.input_data_group_id
+_ma_protocol_step.output_data_group_id
+1 1 1 'backbone generation' 1 2
+2 1 2 'sequence design' 3 4
+3 1 3 'structure validation' 5 6
+# END workflow
+
+# BEGIN chemistry
+loop_
+_chem_comp.id
+_chem_comp.name
+_chem_comp.type
+ALA ALANINE 'L-peptide linking'
+ARG ARGININE 'L-peptide linking'
+ASN ASPARAGINE 'L-peptide linking'
+ASP ASPARTATE 'L-peptide linking'
+CYS CYSTEINE 'L-peptide linking'
+GLN GLUTAMINE 'L-peptide linking'
+GLU GLUTAMATE 'L-peptide linking'
+GLY GLYCINE 'peptide linking'
+HIS HISTIDINE 'L-peptide linking'
+ILE ISOLEUCINE 'L-peptide linking'
+LEU LEUCINE 'L-peptide linking'
+LYS LYSINE 'L-peptide linking'
+MET METHIONINE 'L-peptide linking'
+PHE PHENYLALANINE 'L-peptide linking'
+PRO PROLINE 'L-peptide linking'
+SER SERINE 'L-peptide linking'
+THR THREONINE 'L-peptide linking'
+TRP TRYPTOPHAN 'L-peptide linking'
+TYR TYROSINE 'L-peptide linking'
+VAL VALINE 'L-peptide linking'
+A A 'RNA linking'
+C C 'RNA linking'
+G G 'RNA linking'
+U U 'RNA linking'
+DA DA 'DNA linking'
+DC DC 'DNA linking'
+DG DG 'DNA linking'
+DT DT 'DNA linking'
+# END chemistry
+
+# BEGIN structure
+_ma_model_list.ordinal_id 1
+_ma_model_list.model_name 'Input reference'
+_ma_model_list.data_id 1
+_ma_model_list.model_type Other
+_entity.id 1
+_entity.type polymer
+_struct_asym.id A
+_struct_asym.entity_id 1
+loop_
+_atom_site.id
+_atom_site.type_symbol
+_atom_site.label_atom_id
+_atom_site.label_comp_id
+_atom_site.label_asym_id
+_atom_site.label_entity_id
+_atom_site.label_seq_id
+_atom_site.Cartn_x
+_atom_site.Cartn_y
+_atom_site.Cartn_z
+_atom_site.pdbx_PDB_model_num
+10 C CA ALA A 1 1 0 0 0 1
+20 C CA GLY A 1 2 3.8 0 0 1
+loop_
+_ma_feature_list.feature_id
+_ma_feature_list.feature_type
+_ma_feature_list.entity_type
+1 atom polymer
+2 atom polymer
+3 residue polymer
+loop_
+_ma_atom_feature.ordinal_id
+_ma_atom_feature.feature_id
+_ma_atom_feature.atom_id
+1 1 10
+2 2 20
+loop_
+_ma_poly_residue_feature.ordinal_id
+_ma_poly_residue_feature.feature_id
+_ma_poly_residue_feature.label_asym_id
+_ma_poly_residue_feature.label_seq_id
+_ma_poly_residue_feature.label_comp_id
+1 3 A 1 ALA
+# END structure
+
+# BEGIN definitions
+loop_
+_ma_annotation_definition.id
+_ma_annotation_definition.definition_key
+_ma_annotation_definition.version
+_ma_annotation_definition.name
+_ma_annotation_definition.subject_level
+_ma_annotation_definition.body_order
+_ma_annotation_definition.value_type
+_ma_annotation_definition.units
+_ma_annotation_definition.transform_rule
+_ma_annotation_definition.omitted_element_state
+_ma_annotation_definition.description
+1 proposal:rigid_point draft-1 'Rigid motif point' atom 1 real angstroms point unknown 'Complete Cartesian point; placement is shared by its frame.'
+2 proposal:sequence_probability draft-1 'Sequence probability' residue 1 real none invariant unconstrained 'Specified component probabilities are fixed; unspecified components can share the remaining mass.'
+_ma_annotation_set.id 1
+_ma_annotation_set.data_id 2
+_ma_annotation_set.stage authored
+loop_
+_ma_annotation_subject.id
+_ma_annotation_subject.level
+_ma_annotation_subject.model_id
+_ma_annotation_subject.feature_id
+1 atom 1 1
+2 atom 1 2
+3 residue 1 3
+# END definitions
+
+# BEGIN shape
+loop_
+_ma_annotation_shape.id
+_ma_annotation_shape.rank
+_ma_annotation_shape.element_order
+1 1 'row-major'
+2 1 'row-major'
+loop_
+_ma_annotation_axis.shape_id
+_ma_annotation_axis.axis_order
+_ma_annotation_axis.length
+_ma_annotation_axis.label_kind
+1 1 3 Cartesian
+2 1 28 component
+loop_
+_ma_annotation_axis_label.shape_id
+_ma_annotation_axis_label.axis_order
+_ma_annotation_axis_label.index
+_ma_annotation_axis_label.label
+_ma_annotation_axis_label.comp_id
+1 1 1 x .
+1 1 2 y .
+1 1 3 z .
+2 1 1 . ALA
+2 1 2 . ARG
+2 1 3 . ASN
+2 1 4 . ASP
+2 1 5 . CYS
+2 1 6 . GLN
+2 1 7 . GLU
+2 1 8 . GLY
+2 1 9 . HIS
+2 1 10 . ILE
+2 1 11 . LEU
+2 1 12 . LYS
+2 1 13 . MET
+2 1 14 . PHE
+2 1 15 . PRO
+2 1 16 . SER
+2 1 17 . THR
+2 1 18 . TRP
+2 1 19 . TYR
+2 1 20 . VAL
+2 1 21 . A
+2 1 22 . C
+2 1 23 . G
+2 1 24 . U
+2 1 25 . DA
+2 1 26 . DC
+2 1 27 . DG
+2 1 28 . DT
+# END shape
+
+# BEGIN assignments
+loop_
+_ma_annotation.id
+_ma_annotation.set_id
+_ma_annotation.definition_id
+_ma_annotation.shape_id
+_ma_annotation.frame_id
+_ma_annotation.purpose
+_ma_annotation.value_state
+_ma_annotation.required_for_execution
+1 1 1 1 G condition specified YES
+2 1 1 1 G condition specified YES
+3 1 2 2 . condition specified YES
+loop_
+_ma_annotation_operand.annotation_id
+_ma_annotation_operand.position
+_ma_annotation_operand.subject_id
+1 1 1
+2 1 2
+3 1 3
+# END assignments
+
+# BEGIN values
+_ma_annotation_frame.id G
+_ma_annotation_frame.kind 'independent rigid'
+_ma_annotation_frame.model_id .
+loop_
+_ma_annotation_value.id
+_ma_annotation_value.annotation_id
+_ma_annotation_value.element_index
+_ma_annotation_value.state
+_ma_annotation_value.value_real
+1 1 1 specified 0.0
+2 1 2 specified 0.0
+3 1 3 specified 0.0
+4 2 1 specified 3.8
+5 2 2 specified 0.0
+6 2 3 specified 0.0
+7 3 1 specified 0.7
+8 3 8 specified 0.0
+# END values

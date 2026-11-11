@@ -1,0 +1,52 @@
+# Annotation coverage
+
+The proposed module covers the six semantic levels, body orders 0/1/2, typed scalars and shaped values, domains/defaults, sparse relations, custom definitions and metadata-preserving edits. This table groups all 59 entries in a scoped source inventory; it is not a full live-registry enumeration or an implemented conformance claim.
+
+| Existing annotations | Proposed representation and remaining semantic work |
+| --- | --- |
+| `expsegmin`, `expsegmax` | Logical design segment with minimum/maximum realized length, context, anchors/order and later realization correspondence. Replace placeholder-residue sentinel encoding with declared logical subjects. Preserve zero-length bounds; -1 means this annotation is inactive, not a negative segment length. Specify joint-bound validity, ordering and realization provenance. |
+| `atomize` | Tokenization definition/version and resulting explicit membership, plus an atomistic treatment request where necessary. Materialize structure-dependent defaults. Distinguish an authored request from the tokenization actually consumed. Retain atom-level source semantics; a boolean alone is not a portable tokenizer. |
+| `sequence` | Component identity assignment on a residue or logical position. Map <M> to explicit condition state. Reference unambiguous canonical or custom component definitions. Specify precedence relative to partial sequence probabilities and effective inferred identities. |
+| `coordinate`, `InternalCoordinate`, `CoordinateGroup` | Point target, explicit coordinate frame and scoped rigid-group membership. Distinguish absolute model placement from independent rigid placement. InternalCoordinate is group-local Cartesian geometry, not bond/angle/torsion coordinates. Replace reserved -1/0/positive group conventions with explicit states/frame kind. Resolve partial-component coordinate acceptance explicitly; current code paths differ. Keep coordinate presence and group membership consistent. |
+| `index`, `index-group` | Indexed-status definition and contextual token membership, ordered groups and explicit relative offsets. C_IDX defaults to true; materialize or define that default. Record molecule instance context and unindexed insertion relations, not just group integers. Preserve any known offsets and distinguish unknown inter-group distances. |
+| `distance` | Existing ModelCIF distance restraints where endpoint and scientific semantics match, with annotation state/purpose links as required. Do not introduce a competing distance category for already representable semantics. Specify units, target/tolerance or bounds and symmetric endpoint interpretation. The source mask uses distance > 0; do not invent a requested zero-distance constraint from inactive storage. |
+| `n-terminus`, `c-terminus` | Typed terminal-position condition on structural/logical residues, linked to chain topology. Materialize structural defaults and account for non-polymers. Define false/inactive behavior using each consumer, not a generic boolean rule. Validate against future topology and realized chain boundaries. |
+| `chain` | Symmetric pair relation between chain subjects with explicit instance membership. Validate consistency before collapsing atom-broadcast pair storage. Specify default same-chain relation and omitted-pair semantics. Keep chain and molecule instance/group identity distinct. |
+| `hotspot`, `hbond`, `pistack`, `pication`, `saltbridge`, `hydrophobic`, `metal-coord` | Typed atom-level condition with a versioned categorical/boolean domain and partner/context references. Do not infer observed interaction from a request. Hotspot false means no hotspot request, not a requested anti-hotspot. Publish donor/acceptor, charge, aromatic and metal-role meanings as applicable. Specify partner/context and operational definitions separately from training-time label-generation recipes. |
+| `rasa-binned` | Atom-level categorical solvent-accessibility condition with versioned bin semantics. Specify radii, normalization, probe, algorithm, boundary convention and source provenance. Map UNSPECIFIED to explicit state without interpreting its integer code as a measurement. |
+| `secondary-structure` | Residue-level categorical secondary-structure condition. Version the symbolic domain and assignment convention. Distinguish condition, prepared label and evaluated result. Map NONE to its actual inactive meaning. |
+| `cath-label` | Residue-level classification term and vocabulary release/source. Define CATH label granularity and source release. Preserve null/unassigned state and residue coverage without relying on fixed text width. |
+| `ChainCentroid` | Explicitly defined centroid target with point shape, frame and selected contributing atoms. Source annotation level is atom, despite its class name; do not silently relabel it chain-level. Resolve unweighted coordinate-mean implementation versus center-of-mass wording. Define aggregation, membership and broadcasting before registering the shared term. |
+| `basepair` | Pairwise residue relation with a versioned base-pair domain and symmetry rule. Publish meanings of non-pair and unspecified states separately. Validate endpoint consistency and sparse omitted-value semantics. Use structural or logical residue subjects as appropriate. |
+| `na-ss-state` | One-residue nucleic structural-state condition with a versioned domain. Its use of BasePairEnum does not turn it into a two-body relation. Clarify per-residue interpretation and relation to pairwise base-pair assignments. |
+| `src-coordinate-conditioned-region`, `src-component`, `src-index-group`, `is-unindexed-insertion` | Data/artifact-scoped correspondence and derivation records, with descriptive source labels retained when useful. Do not infer globally unique subjects from short local strings or -1 sentinels. Represent generated/deleted subjects, assembly copies and insertion mapping explicitly. If the old file lacks sufficient source identity, preserve the label and report unresolved correspondence. These annotations can occur on derived/output data; an input-only namespace is insufficient. |
+| `coords-with-insertion` | Derived reference point values with frame, structural correspondence and producing protocol. This is reference geometry, not itself a QA score. Preserve point transformation and insertion correspondence. Store downstream computed QA in existing ModelCIF result categories. |
+| `sequence-probability-<component>` (28 classes; components listed below) | Component-labelled elements of a residue-level sequence-probability assignment, with per-component states. Map each source probability class to its explicit chemical component, without private channel indices. Zero excludes the component; NaN is unspecified in the source. Define remaining mass, normalization and exact-identity precedence, including noncanonical identities. The 28 built-in channels are not a universal chemical vocabulary; the representation must admit other components. Choose one authoritative standardized layout; source scalar accessors may map to elements of a shaped value. |
+
+The 28 probability components are `ALA ARG ASN ASP CYS GLN GLU GLY HIS ILE LEU LYS MET PHE PRO SER THR TRP TYR VAL A C G U DA DC DG DT`. Axis labels carry these component identities; their order is explicitly recorded, not a model-specific channel convention.
+
+## Generic API requirements
+
+| API concept | Standard contract |
+| --- | --- |
+| definition identity and extension registry | Stable identifier/namespace/version, scientific definition, registered shared terms and custom terms; no executable code loading. |
+| semantic level | Semantic subjects separate from feature selection; explicit membership/context/order where needed. |
+| body order | Ordered operands, with zero-body set/system context and explicit pair symmetry; group size independent of body order. |
+| scalar type and categorical domain | Defined portable scalar domains and symbolic/code meanings; reject unsupported dtypes explicitly rather than silently coercing. |
+| value shape | Declared rank, dimension lengths, axis order/labels, element indexing and state; support general declared shapes within explicit profile/resource limits. |
+| defaults and masks | Definition-specific inactive/unknown/not-applicable/explicit states; scalar and per-element defaults; materialize structure-dependent default functions as effective values with provenance. |
+| broadcasting and sparse pairs | Validate level consistency before collapse; preserve sparse storage and omitted-value rules; no forced dense pair matrices. |
+| coordinates and transformations | Frame/scoped membership, point versus vector transformation rule, explicit revalidation after membership change. |
+| index and future topology | Logical positions/segments, order, bounds, anchors, relative offsets, context and later realization mappings without fake atoms. |
+| metadata lifecycle | Retain definitions/provenance alongside arrays; copy/slice/concatenate/assembly/edit remap or explicitly invalidate references. |
+| custom definitions and unknown content | Same generic representation and types; distinguish retention from semantic execution support; reject unsupported required conditions. |
+| file migration | One canonical ModelCIF representation. A versioned converter may rewrite historical files; permanent legacy reading and byte/name/layout compatibility are not requirements. |
+
+## Source scope
+
+The inventory was extracted from these four definition modules, including the dynamic probability family. AtomWorks was subsequently re-reviewed at `d922a471381dd0f8bccaf78c384a6b56b6f8e391`; RFD4 remains at `68058693cb88762a8aaf806571e13b291ce6318a`.
+
+- [rfproteina/conditions.py](https://github.com/RosettaCommons/RFD4-Proteina/blob/68058693cb88762a8aaf806571e13b291ce6318a/src/rfproteina/conditions.py)
+- [rfproteina/utils/standard_annotations.py](https://github.com/RosettaCommons/RFD4-Proteina/blob/68058693cb88762a8aaf806571e13b291ce6318a/src/rfproteina/utils/standard_annotations.py)
+- [atomworks/io/utils/standard_annotations/definitions.py](https://github.com/RosettaCommons/atomworks/blob/a0c63a8f77e76aba93857f444d02092354972c45/src/atomworks/io/utils/standard_annotations/definitions.py)
+- [atomworks/ml/conditions/definitions.py](https://github.com/RosettaCommons/atomworks/blob/a0c63a8f77e76aba93857f444d02092354972c45/src/atomworks/ml/conditions/definitions.py)
