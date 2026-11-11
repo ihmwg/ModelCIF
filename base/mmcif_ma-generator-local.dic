@@ -25,3 +25,4 @@ mmcif_pdbx-def-ilg.dic              ../mmcif_pdbx/base/mmcif_pdbx-def-ilg.dic   
 mmcif_pdbx-def-pdb-ilg.dic          ../mmcif_pdbx/base/mmcif_pdbx-def-pdb-ilg.dic               extend . .
 #mmcif_ma core
 mmcif_ma-core.dic                   mmcif_ma-core.dic                                           extend . .
+mmcif_ma-annotation.dic             mmcif_ma-annotation.dic                                     extend . .

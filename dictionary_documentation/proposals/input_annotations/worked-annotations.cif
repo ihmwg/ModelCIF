@@ -1,34 +1,162 @@
+# Complete illustrative ModelCIF input with proposed annotation module 0.1.0.
+# This is an example, not an executed design or a deposited structure.
 data_worked_annotations
-# Proposed compact ModelCIF annotation categories, not released items.
-# Illustrative fragment; not a complete deposition or executed workflow.
-# Existing fields use ModelCIF 1.4.9. Output structures are not included.
-# State defaults to specified for the populated rows below.
-# Dictionary-defined point3 means x/y/z; no per-file shape table is needed.
+_entry.id annotation_example
 
-# BEGIN workflow
+_struct.entry_id annotation_example
+_struct.pdbx_model_details .
+_struct.pdbx_structure_determination_methodology computational
+_struct.title 'Illustrative annotation example'
+
+loop_
+_audit_conform.dict_name
+_audit_conform.dict_version
+_audit_conform.dict_location
+'mmcif_ma.dic' 1.4.9 'https://mmcif.wwpdb.org/dictionaries/ascii/mmcif_ma.dic'
+'mmcif_ma-annotation.dic' 0.1.0 'https://github.com/kierandidi/ModelCIF/blob/propose-input-annotations/base/mmcif_ma-annotation.dic'
+
+loop_
+_chem_comp.id
+_chem_comp.type
+_chem_comp.name
+_chem_comp.formula
+_chem_comp.formula_weight
+_chem_comp.ma_provenance
+ALA 'L-peptide linking' ALANINE 'C3 H7 N O2' 89.093 'CCD Core'
+GLY 'peptide linking' GLYCINE 'C2 H5 N O2' 75.067 'CCD Core'
+
+loop_
+_entity.id
+_entity.type
+_entity.src_method
+_entity.pdbx_description
+_entity.formula_weight
+_entity.pdbx_number_of_molecules
+_entity.details
+1 polymer man 'Two-residue reference' 146.145 1 .
+
+loop_
+_entity_poly.entity_id
+_entity_poly.type
+_entity_poly.nstd_linkage
+_entity_poly.nstd_monomer
+_entity_poly.pdbx_strand_id
+_entity_poly.pdbx_seq_one_letter_code
+_entity_poly.pdbx_seq_one_letter_code_can
+1 polypeptide(L) no no A AG AG
+
+loop_
+_entity_poly_seq.entity_id
+_entity_poly_seq.num
+_entity_poly_seq.mon_id
+_entity_poly_seq.hetero
+1 1 ALA .
+1 2 GLY .
+
+loop_
+_struct_asym.id
+_struct_asym.entity_id
+_struct_asym.details
+A 1 'Reference chain'
+
+loop_
+_pdbx_poly_seq_scheme.asym_id
+_pdbx_poly_seq_scheme.entity_id
+_pdbx_poly_seq_scheme.seq_id
+_pdbx_poly_seq_scheme.mon_id
+_pdbx_poly_seq_scheme.pdb_seq_num
+_pdbx_poly_seq_scheme.auth_seq_num
+_pdbx_poly_seq_scheme.pdb_mon_id
+_pdbx_poly_seq_scheme.auth_mon_id
+_pdbx_poly_seq_scheme.pdb_strand_id
+_pdbx_poly_seq_scheme.pdb_ins_code
+A 1 1 ALA 1 1 ALA ALA A .
+A 1 2 GLY 2 2 GLY GLY A .
+
 loop_
 _ma_data.id
 _ma_data.name
 _ma_data.content_type
 _ma_data.content_type_other_details
-1 'Reference coordinates' 'input structure' .
-2 'Authored design conditions' other 'Annotation set'
-3 'Designed backbone' 'intermediate backbone' .
-4 'Designed sequence' 'intermediate sequence' .
-5 'Predicted validation model' 'model coordinates' .
+1 'Reference sequence' target .
+2 'Reference coordinates' 'input structure' .
+3 'Authored conditions' other 'ModelCIF annotation set'
+4 'Illustrative designed backbone' 'intermediate backbone' .
+5 'Illustrative designed sequence' 'intermediate sequence' .
+6 'Illustrative structure validation' 'model coordinates' .
+
+loop_
+_ma_target_entity.entity_id
+_ma_target_entity.data_id
+_ma_target_entity.origin
+1 1 designed
+
+loop_
+_ma_target_entity_instance.asym_id
+_ma_target_entity_instance.entity_id
+_ma_target_entity_instance.details
+A 1 'Reference chain'
+
+loop_
+_ma_model_list.ordinal_id
+_ma_model_list.model_name
+_ma_model_list.data_id
+_ma_model_list.model_type
+_ma_model_list.model_type_other_details
+1 'Illustrative reference' 2 'Ab initio model' .
+
+loop_
+_ma_model_group.id
+_ma_model_group.name
+_ma_model_group.details
+1 'Reference model' .
+
+loop_
+_ma_model_group_link.group_id
+_ma_model_group_link.model_id
+1 1
+
+loop_
+_atom_site.group_PDB
+_atom_site.id
+_atom_site.type_symbol
+_atom_site.label_atom_id
+_atom_site.label_alt_id
+_atom_site.label_comp_id
+_atom_site.label_seq_id
+_atom_site.auth_seq_id
+_atom_site.pdbx_PDB_ins_code
+_atom_site.label_asym_id
+_atom_site.Cartn_x
+_atom_site.Cartn_y
+_atom_site.Cartn_z
+_atom_site.occupancy
+_atom_site.label_entity_id
+_atom_site.auth_asym_id
+_atom_site.auth_comp_id
+_atom_site.B_iso_or_equiv
+_atom_site.pdbx_PDB_model_num
+ATOM 10 C CA . ALA 1 1 ? A 0.000 0 0 1.000 1 A ALA 0.000 1
+ATOM 20 C CA . GLY 2 2 ? A 3.800 0 0 1.000 1 A GLY 0.000 1
+
+loop_
+_atom_type.symbol
+C
+
 loop_
 _ma_data_group.ordinal_id
 _ma_data_group.group_id
 _ma_data_group.data_id
-1 1 1
-2 1 2
-3 2 3
+1 1 2
+2 1 3
+3 2 4
 4 3 3
-5 3 2
-6 4 4
-7 5 3
-8 5 4
-9 6 5
+5 3 4
+6 4 5
+7 5 4
+8 5 5
+9 6 6
+
 loop_
 _ma_protocol_step.ordinal_id
 _ma_protocol_step.protocol_id
@@ -39,93 +167,57 @@ _ma_protocol_step.output_data_group_id
 1 1 1 'backbone generation' 1 2
 2 1 2 'sequence design' 3 4
 3 1 3 'structure validation' 5 6
-# END workflow
 
-# BEGIN chemistry
-loop_
-_chem_comp.id
-_chem_comp.name
-_chem_comp.type
-ALA ALANINE 'L-peptide linking'
-GLY GLYCINE 'peptide linking'
-# END chemistry
-
-# BEGIN structure
-_ma_model_list.ordinal_id 1
-_ma_model_list.model_name 'Input reference'
-_ma_model_list.data_id 1
-_ma_model_list.model_type Other
-_entity.id 1
-_entity.type polymer
-_struct_asym.id A
-_struct_asym.entity_id 1
-loop_
-_atom_site.id
-_atom_site.type_symbol
-_atom_site.label_atom_id
-_atom_site.label_comp_id
-_atom_site.label_asym_id
-_atom_site.label_entity_id
-_atom_site.label_seq_id
-_atom_site.Cartn_x
-_atom_site.Cartn_y
-_atom_site.Cartn_z
-_atom_site.pdbx_PDB_model_num
-10 C CA ALA A 1 1 0 0 0 1
-20 C CA GLY A 1 2 3.8 0 0 1
-# END structure
-
-# BEGIN definitions
 loop_
 _ma_annotation_definition.id
 _ma_annotation_definition.definition_key
 _ma_annotation_definition.version
 _ma_annotation_definition.name
+_ma_annotation_definition.description
 _ma_annotation_definition.subject_level
 _ma_annotation_definition.body_order
 _ma_annotation_definition.value_kind
 _ma_annotation_definition.units
 _ma_annotation_definition.omitted_state
-_ma_annotation_definition.description
-1 proposal:coordinate draft-1 Coordinate atom 1 point3 angstroms unconstrained 'Complete Cartesian target in the referenced frame.'
-2 proposal:sequence_probability draft-1 'Sequence probability' residue 1 real none unconstrained 'Partial probabilities over the canonical-polymer-28 domain defined in this proposal; omitted components share remaining mass.'
-# END definitions
+_ma_annotation_definition.parameter_kind
+1 proposal:coordinate draft-1 coordinate 'Complete Cartesian target in the referenced frame.' atom 1 point3 angstroms unconstrained .
+2 'proposal:sequence_probability' draft-1 'sequence_probability' 'Partial probabilities over canonical-polymer-28; unspecified candidates share remaining mass.' residue 1 real none unconstrained component
 
-# BEGIN context
-_ma_annotation_set.id 1
-_ma_annotation_set.data_id 2
-_ma_annotation_set.model_id 1
-_ma_annotation_set.stage authored
-_ma_annotation_set.purpose condition
-_ma_annotation_set.required_for_execution YES
-# END context
+loop_
+_ma_annotation_set.id
+_ma_annotation_set.data_id
+_ma_annotation_set.model_id
+_ma_annotation_set.stage
+_ma_annotation_set.purpose
+_ma_annotation_set.required_for_execution
+1 3 1 authored condition YES
 
-# BEGIN points
-_ma_annotation_frame.id G
-_ma_annotation_frame.kind 'independent rigid'
-_ma_annotation_frame.model_id .
+loop_
+_ma_annotation_frame.id
+_ma_annotation_frame.kind
+_ma_annotation_frame.model_id
+G 'independent rigid' .
+
 loop_
 _ma_annotation_atom.id
 _ma_annotation_atom.set_id
 _ma_annotation_atom.definition_id
 _ma_annotation_atom.atom_id
-_ma_annotation_atom.frame_id
 _ma_annotation_atom.x
 _ma_annotation_atom.y
 _ma_annotation_atom.z
-1 1 1 10 G 0.0 0.0 0.0
-2 1 1 20 G 3.8 0.0 0.0
-# END points
+_ma_annotation_atom.frame_id
+1 1 1 10 0 0 0 G
+2 1 1 20 3.8 0 0 G
 
-# BEGIN probabilities
 loop_
 _ma_annotation_residue.id
 _ma_annotation_residue.set_id
 _ma_annotation_residue.definition_id
 _ma_annotation_residue.label_asym_id
+_ma_annotation_residue.label_entity_id
 _ma_annotation_residue.label_seq_id
 _ma_annotation_residue.component_id
 _ma_annotation_residue.value_real
-1 1 2 A 1 ALA 0.7
-2 1 2 A 1 GLY 0.0
-# END probabilities
+1 1 2 A 1 1 ALA 0.7
+2 1 2 A 1 1 GLY 0
