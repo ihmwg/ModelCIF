@@ -8,6 +8,24 @@ AtomWorks and RFD4-Proteina exchange molecular structures together with typed in
 
 The 2026 update explains how ModelCIF represents design workflows and recommends documenting selected models and their protocols. Here the additional requirement is a machine-readable description of the conditions and prepared features consumed by those protocols. The execution rules below apply to consumers claiming the exchange profile, not to every ModelCIF reader or archive.
 
+## Scope and adoption
+
+Retain Annotated CIF as a semantic and implementation layer: named, typed annotations with explicit subject level, body order, value shape, symmetry and condition-specific defaults. AtomWorks' array representation and RFD4's condition APIs need not be replaced. A ModelCIF adapter maps supported annotations to shared definitions and structural references while continuing to read existing annotated CIF/BinaryCIF datasets. Python aliases, positional storage indices and reserved integer sentinels are implementation conventions, not proposed dictionary semantics.
+
+The five categories below are a **pilot mapping for existing structural subjects**, not a complete replacement for Annotated CIF. The pilot covers exact identity of an existing polymer residue and absolute/independent-rigid atom coordinate targets; a task label illustrates system metadata. Token/molecule membership, index-offset relations, sequence probabilities and future topology require additional reviewed definitions. An executing consumer must reject unsupported required inputs rather than discard them or manufacture a coordinate model for a task that has none.
+
+For adoption, first export valid existing ModelCIF model/protocol records, then implement the pilot through an optional adapter, and only broaden the dictionary after independent consumers demonstrate preservation of task meaning. The standardization proposal is the shared semantic contract and its ModelCIF mapping; the current physical layout remains subject to interoperability and size measurements. No retraining or rewrite of model conditioning is required for this approach.
+
+| Annotated CIF capability | Retain in the implementation | ModelCIF pilot coverage |
+| --- | --- | --- |
+| Atom, residue, chain, molecule, token, system levels | Explicit semantic level and membership rules | Atom/residue selections and zero-body metadata exemplified; molecule/token semantics need further design. |
+| Body order and value shape | Keep operand count separate from scalar/vector shape and pair symmetry | Zero/one/two operands; scalar values and Cartesian point targets only. |
+| Defaults and missing information | Translate each condition's semantics explicitly | Explicit assignment states; no universal false/zero/NaN default. |
+| Registry and extensibility | Preserve registered names, versions and supported native values | Shared definitions require governance; unknown required semantics must fail execution. |
+| Compact CIF/BinaryCIF and sparse relations | Keep the native codec available | Measure the expanded mapping; do not require dense pair matrices or migration of all cached tensors. |
+
+When native annotations and a ModelCIF projection coexist, declare one authoritative task artifact and record the projection version, source checksum and loss/support report. Reject conflicting duplicate definitions. Keeping unrecognized data intact does not establish the ability to execute it, and preservation is only valid while its structural references remain valid.
+
 ## Keep and reuse
 
 - Keep `backbone generation`, `sequence design`, `structural validation`, `intermediate backbone`, `intermediate sequence`, and the existing `input structure` definition from #31.
@@ -19,7 +37,7 @@ The 2026 update explains how ModelCIF represents design workflows and recommends
 
 ## Proposed categories
 
-The following descriptions and item properties follow the style of ModelCIF category proposals such as #29. A matching DDL2 discussion component and CIF fragment accompany this document. They are kept outside the production dictionary until review. All categories are optional; required items below apply when that category is present. Conditional scientific rules are listed separately.
+The following descriptions and item properties follow the style of ModelCIF category proposals such as #29. A matching DDL2 discussion component and CIF fragment accompany this document. They are kept outside the production dictionary until review. All categories are optional; required items below apply when that category is present. Conditional scientific rules are listed separately. Despite its current `vector3` name, this pilot's vector payload represents Cartesian **points**, not a general direction, displacement, probability vector or tensor; those quantities have different semantics and transformation rules.
 
 
 ### ma_input_annotation_type
@@ -191,19 +209,19 @@ The input model contains atom IDs 10 and 20. Features 1 and 2 select those atoms
 
 **Prepared datasets.** Associate a manifest containing source/CCD snapshots, licenses, checksums, preparation parameters, stable example IDs and split provenance. Distinguish prepared structures from stochastic sampled examples and model-specific feature tensors; include token-to-structure and tensor-axis mappings where applicable. Custom component definitions take precedence only under an explicit recorded chemistry policy.
 
-**Benchmarks.** Associate a manifest defining tasks, permitted information, seeds and sampling budgets, all scheduled attempts, failure states, evaluator versions, selections/alignment, thresholds and denominators. Report valid-only summaries separately from all-attempt summaries. Unavailable evaluation evidence is `not_evaluated`, not a measured zero. Equal samples and equal compute are distinct comparisons. Existing QA categories hold suitable model-level/feature-level results; attempt accounting is associated metadata.
+**Benchmarks.** Associate a manifest defining tasks, permitted information, seeds and sampling budgets, all scheduled attempts, failure states, evaluator versions, selections/alignment, thresholds and denominators. Record effective inputs after defaults and consistency transforms. Enforce the permitted information at the consumer boundary: an unconditioned mask does not hide identities or coordinates that remain readable in the source structure. Remove prohibited information from the supplied artifact or use a documented, verified input projection. Report valid-only summaries separately from all-attempt summaries. Unavailable evaluation evidence is `not_evaluated`, not a measured zero. Equal samples and equal compute are distinct comparisons. Existing QA categories hold suitable model-level/feature-level results; attempt accounting is associated metadata.
 
 These are proposed application-profile requirements. The manifest schemas and production transformations require further validation before claiming profile conformance. Future residues, variable-length topology, fully model-independent coordinate-free task files, multi-model selection rules and portable token-index semantics are separate follow-up designs. A small first increment must not imply full support for every RFD4 condition.
 
 ## Implementation evidence and migration
 
-Pinned sources: AtomWorks `a0c63a8f77e76aba93857f444d02092354972c45`; RFD4-Proteina `68058693cb88762a8aaf806571e13b291ce6318a`.
+Initial inventory: AtomWorks `a0c63a8f77e76aba93857f444d02092354972c45`. Local re-review: AtomWorks `d922a471381dd0f8bccaf78c384a6b56b6f8e391`; RFD4-Proteina `68058693cb88762a8aaf806571e13b291ce6318a`.
 
 | Implementation convention | Exchange requirement |
 | --- | --- |
 | `name`, `n_body`, `level`, `dtype`, `value_shape`, aliases and defaults in StandardAnnotation | Preserve scientific meaning, body order, subject selection and type; aliases and Python class names are adapter concerns. |
 | Residue-level annotations broadcast over atoms | Check consistency before collapsing to a residue feature; storage granularity is not semantic scope. |
-| Scalar one-body data in atom_site; vectors/pairs in idx/val categories | Map original row indices to explicit structural IDs before edits; keep file encoding independent of semantic meaning. |
+| Scalar one-body data in atom_site; vectors/pairs in idx/val categories | The current loader remaps saved indices through unique atom_array_index after filtering and drops rows for removed atoms. Reuse this protection; add portable artifact/structural identity, one-to-many lineage and explicit loss handling. |
 | `C_SEQ` uses `<M>`; `C_CRD` uses NaN; hotspot uses false | Translate condition-specific sentinels explicitly. Do not infer zero/false/absence equivalence for all fields. |
 | `C_IDX` defaults to true; index groups depend on molecules and indexed status | Materialize or declare defaults; portable index relations need explicit offsets and molecular context, not raw group integers. |
 | Positive `C_CRDGRP` plus `C_INTCRD` describes freely placed rigid groups | Preserve group membership and group-local Cartesian targets; reserved IDs -1/0 and int16 limits remain implementation details. |
@@ -213,11 +231,13 @@ Pinned sources: AtomWorks `a0c63a8f77e76aba93857f444d02092354972c45`; RFD4-Prote
 
 The simple Coordinate mask accepts any finite component; RFD4 CoordinateGroup assignment separately rejects partially specified absolute vectors. This is an API-level distinction, not evidence that all RFD4 execution accepts partial vectors. Saved internal targets may be preserved or materialized from live coordinates by specific transforms; any reconstruction must be recorded by adapters.
 
+The existing loader can warn and skip malformed non-system annotation categories. A consumer claiming the execution profile needs a strict path: a malformed or unrepresentable required condition is an error. Unknown optional content can be retained opaquely for an unchanged artifact; after structural edits, remap, invalidate or reject affected content explicitly. The current native serializer demonstrates scalar system values, scalar/nonscalar one-body columns and sparse pair rows, not universal arbitrary-rank tensor interchange.
+
 ## Review and validation
 
 The DDL2 fragment uses existing ModelCIF conventions for keys, parent links and category descriptions. It is a candidate for direct incorporation into `base/mmcif_ma-core.dic` after agreement; it is not a new syntax or a competing file type. This draft PR changes no released dictionary, does not assign a release version, and removes nothing from ModelCIF. Maintainers determine final names, integration and release.
 
-Checks cover CIF parsing, declared fields/types/keys/enumerations, proposed and existing parent references, representative scientific invariants, row reorder preservation and rejection of malformed example mutations. Positive fixtures cover an independent rigid frame and an explicit false pairwise prepared feature. Full RCSB dictionary assembly, general DDL2 validation, deposition validation, BinaryCIF, runtime adapters, independent-tool workflows and scientific benchmarks remain release gates. The proposal intentionally does not equate a candidate-schema check with standards conformance.
+Checks cover CIF parsing, declared fields/types/keys/enumerations, proposed and existing parent references, representative scientific invariants, row reorder preservation and rejection of malformed example mutations. Comparison includes definitions, subjects, payloads and frames; changed targets or atom identities must be observable. Pilot names at version draft-1 cannot be redefined with a different type/subject signature. Positive fixtures cover an independent rigid frame and an explicit false pairwise prepared feature. Full RCSB dictionary assembly, general DDL2 validation, deposition validation, BinaryCIF, runtime adapters, independent-tool workflows and scientific benchmarks remain release gates. The proposal intentionally does not equate a candidate-schema check with standards conformance.
 
 Review decisions: typed dedicated conditions versus the generic type/value layer; registry ownership; model-free inputs and future topology; independent frame semantics; mapping/profile governance; and the smallest vocabulary justified by independent consumers.
 
@@ -227,9 +247,9 @@ Review decisions: typed dedicated conditions versus the generic type/value layer
 - [Protein-design vocabulary proposal #31](https://github.com/ihmwg/ModelCIF/issues/31)
 - [Category proposal style #29](https://github.com/ihmwg/ModelCIF/issues/29)
 - [2026 ModelCIF update](https://doi.org/10.1016/j.jmb.2026.169658)
-- [AtomWorks annotation base](https://github.com/RosettaCommons/atomworks/blob/a0c63a8f77e76aba93857f444d02092354972c45/src/atomworks/io/utils/standard_annotations/base.py)
-- [AtomWorks serialization](https://github.com/RosettaCommons/atomworks/blob/a0c63a8f77e76aba93857f444d02092354972c45/src/atomworks/io/utils/standard_annotations/serialization.py)
-- [AtomWorks conditions](https://github.com/RosettaCommons/atomworks/blob/a0c63a8f77e76aba93857f444d02092354972c45/src/atomworks/ml/conditions/definitions.py)
+- [AtomWorks annotation base](https://github.com/RosettaCommons/atomworks/blob/d922a471381dd0f8bccaf78c384a6b56b6f8e391/src/atomworks/io/utils/standard_annotations/base.py)
+- [AtomWorks serialization](https://github.com/RosettaCommons/atomworks/blob/d922a471381dd0f8bccaf78c384a6b56b6f8e391/src/atomworks/io/utils/standard_annotations/serialization.py)
+- [AtomWorks conditions](https://github.com/RosettaCommons/atomworks/blob/d922a471381dd0f8bccaf78c384a6b56b6f8e391/src/atomworks/ml/conditions/definitions.py)
 - [RFD4 conditions](https://github.com/RosettaCommons/RFD4-Proteina/blob/68058693cb88762a8aaf806571e13b291ce6318a/src/rfproteina/conditions.py)
 - [RFD4 sequence conditioning](https://github.com/RosettaCommons/RFD4-Proteina/blob/68058693cb88762a8aaf806571e13b291ce6318a/src/rfproteina/transforms/sequence_conditioning.py)
 - [RFD4 parsing presets](https://github.com/RosettaCommons/RFD4-Proteina/blob/68058693cb88762a8aaf806571e13b291ce6318a/src/rfproteina/utils/parse_presets.py)

@@ -29,6 +29,16 @@ def validate(text):
                     pc,pn=i['parent'][1:].split('.')
                     assert v in {x.get(pn) for x in rows(b,pc)},(i['parent'],v)
     types={r['id']:r for r in data['ma_input_annotation_type']}
+    # A declared pilot name/version must retain its defined scientific signature.
+    pilot_types={
+        'sequence identity':('component','residue','1','none'),
+        'absolute coordinate':('vector3','atom','1','angstroms'),
+        'relative coordinate':('vector3','atom','1','angstroms'),
+        'task label':('text','system','0','none'),
+    }
+    for t in types.values():
+        if t['version']=='draft-1' and t['name'] in pilot_types:
+            assert tuple(t[k] for k in ('data_type','feature_type','body_order','unit'))==pilot_types[t['name']]
     atoms={r['id']:r for r in rows(b,'atom_site')}
     feats={r['feature_id']:r for r in rows(b,'ma_feature_list')}
     am={};rm={}
@@ -72,8 +82,9 @@ def validate(text):
                 assert t['data_type']=='component' and n==1 and len(rm.get(ids[0],[]))==1
                 residue=rm[ids[0]][0]
                 assert any(all(ar[k]==residue[k] for k in ['label_asym_id','label_seq_id','label_comp_id']) and ar['pdbx_PDB_model_num']==a['model_id'] for ar in atoms.values())
-    # Compare semantic targets rather than serialization order.
-    return sorted((a['ordinal_id'],a['type_id'],a.get('feature_id_1'),a.get('feature_id_2'),a['value_state']) for a in data['ma_input_annotation'])
+    # Compare all example content, including subjects and payloads, independently of row order.
+    return {cat:sorted(json.dumps(r,sort_keys=True) for r in rows(b,cat[1:-1]))
+            for cat in b.get_mmcif_category_names()}
 def run():
     text=(D/'example.cif').read_text();results=[]
     def check(name,fn):
@@ -83,6 +94,17 @@ def run():
         except (AssertionError,ValueError,KeyError):return
         raise AssertionError('Expected rejection')
     check('valid proposed example',lambda:validate(text))
+    def content_changes():
+        assert validate(text)!=validate(text.replace('_ma_input_annotation_vector.Cartn_x 0','_ma_input_annotation_vector.Cartn_x 100'))
+        assert validate(text)!=validate(text.replace('10 C CA ALA A 1 1 0 0 0 1','10 C CB ALA A 1 1 0 0 0 1'))
+    check('comparison detects changed coordinate targets and atom identity',content_changes)
+    def wrong_pilot_signature():
+        altered=text.replace('vector3 atom 1 angstroms .','real atom 1 angstroms .')
+        altered=altered[:altered.index('_ma_input_annotation_vector.annotation_id')]
+        altered=altered.replace("_ma_input_annotation_value.value_text\n3 ALA .\n4 . 'Illustrative task'",
+            "_ma_input_annotation_value.value_text\n_ma_input_annotation_value.value_real\n3 ALA . .\n4 . 'Illustrative task' .\n1 . . 5")
+        reject(altered)
+    check('reject changed pilot type signature even with a matching scalar payload',wrong_pilot_signature)
     def dictionary():
         b=gemmi.cif.read_file(str(D/'modelcif-input-annotations.dic')).sole_block()
         frames={i.frame.name:i.frame for i in b if i.frame is not None}
