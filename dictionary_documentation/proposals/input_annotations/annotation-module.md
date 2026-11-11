@@ -1,89 +1,85 @@
-# Compact ModelCIF annotation module
+# Compact annotation module
 
-Proposed component 0.1.0. The [DDL2 component](../../../base/mmcif_ma-annotation.dic) is the item/type/key reference; the rules below define conditional and scientific semantics that cannot all be expressed through DDL2. The module incorporates Annotated CIF into ModelCIF and supports custom definitions through the same fields.
+Proposed component 0.2.0. The [DDL2 component](../../../base/mmcif_ma-annotation.dic) defines items, types, keys and parent links. These rules supply conditional and scientific interpretation. All category names below have prefix `ma_annotation_`; all IDs are local to the data block.
 
-## Construction
+## Three value layouts
 
-**Shared definition + annotation set + a row containing subject and value.** A frame is added for geometry. A definition supplies stable scientific identity/version, description, level, body order, value kind, units and omission behavior. A set supplies data/model context, authored/effective/derived stage, purpose and execution requirements. Unused optional columns need not appear.
+An annotation consists of a **definition, shared set context and subject/value row**. A definition declares scientific identity/version, semantic level, body order, value type, units and omission behavior. A set declares annotation data, optional reference model, authored/effective/derived stage, purpose and execution requirements.
 
-| Level | Subject | Example |
-| --- | --- | --- |
-| Atom | `atom_site.id` in the set model | XYZ target |
-| Residue | Joint asym/entity/polymer-sequence identity, or a logical site | Component or sequence probability |
-| Chain | `struct_asym.id` in the set model | Chain label or chain-pair relation |
-| Molecule | Explicit molecular group with definition/version | Molecular feature |
-| Token | Explicit membership and tokenizer/version | Indexed status or shaped feature |
-| System | Set/data context | Zero-body task label |
-
-Body order counts operands: 0 for system, 1 for one subject, 2 for a pair. It is independent of atom count within a group or value shape. Pair operands occupy the same value row. Scalar and XYZ values have one canonical direct encoding; arrays add metadata only for other shaped values.
-
-## Categories
-
-Every name below has prefix `ma_annotation_`. Keys are unique within the data block. Individual item parents and composite asym/entity, entity/sequence and array/axis links are declared in DDL2.
-
-| Categories | Role and key |
+| Layout | Subject fields |
 | --- | --- |
-| `definition`, `domain` | Versioned scientific definitions and closed vocabularies; `id` |
-| `domain_value` | Every member of a custom domain; `(domain_id, code)` |
-| `set`, `frame` | Shared execution/data context and Cartesian placement; `id` |
-| `atom`, `residue`, `chain`, `group_value`, `system`, `site_value`, `pair` | Compact value rows for the corresponding subjects; `id` |
-| `default` | Uniform scalar default; `(set_id, definition_id)` |
-| `group`, `group_member` | Explicit nested membership; `id` and `(group_id, ordinal_id)` |
-| `site`, `site_link`, `subject` | Logical positions/topology and reusable pair/anchor/mapping identities; `id` |
-| `correspondence` | Source/output mapping through a protocol step; `id` |
-| `array`, `definition_axis`, `axis`, `axis_label`, `array_value` | Shaped values, dimensions, labels and elements; `id`, `(definition_id, axis_order)`, `(array_id, axis_order)`, `(array_id, axis_order, index)`, `(array_id, element_index)` |
+| `atom` | `atom_id`, for one structural atom |
+| `residue` | Joint `label_asym_id`, `label_entity_id`, `label_seq_id`, for one polymer residue |
+| `value` | No selector for a system value; `label_asym_id` for a chain; `group_id` for a token/molecule; `subject_id_1` for a logical position/segment; `subject_id_1` and `subject_id_2` for a pair |
 
-## Definitions, values and scope
+Body order counts operands, independently of group size or value shape: 0 for system, 1 for one subject, 2 for a pair. Definitions are atom/residue/chain/token/molecule/system level; pair endpoints have the same declared level and an explicit symmetry rule. Ordinary structural atom/residue values use their direct layout, not a second encoding through `value`. No separate subject records are needed for those rows.
 
-1. A `(definition_key, version)` identifies one scientific meaning. Use a namespaced key and a resolvable reference where available. Custom definitions must document operational meaning, units, domains and preparation method sufficiently for an independent implementation; importing executable code is not part of interpretation. Changing these semantics requires a new version/key. Shared draft terms are specified below; `example:` terms are illustrative, not a shared scientific registry.
-2. A used definition must match the carrier's body order and level. Zero-body definitions use system; two-body definitions declare `symmetric` YES/NO. Both pair endpoints have that level. Heterogeneous raw selectors do not change the declared semantic level.
-3. A specified value uses exactly one matching scalar slot (`value_boolean`, `value_integer`, `value_real`, `value_text`, `value_comp_id`), all three `x/y/z` plus a frame, an `array_id` (plus frame for geometric arrays), or a `value_group_id`. Integers are mathematical integers; reals must be finite. Booleans use YES/NO. A candidate `component_id` is a parameter, distinct from a component-valued payload and from the reference structure's identity.
-4. `state` defaults to `specified` only when its column is absent. Explicit `?` or `.` is not that default. `unconstrained`, `unknown` and `not_applicable` have no payload and remain distinct. CIF null markers keep their ordinary unknown/inapplicable meanings in other fields. False and numeric zero are ordinary values unless the definition explicitly maps a historical inactive code to a state.
-5. A definition is active in a set only when a value row or default uses it. For active definitions, omitted applicable values inherit `omitted_state`, except where a set-specific typed default applies. Explicit rows override that default, including explicit non-specified states. Defaults are uniform scalars, without component parameters; exact identities, geometry, groups and arrays are materialized. Structure-dependent default functions must become effective rows and recorded preprocessing provenance.
-6. Scope is the set model for structural subjects, or the annotation data artifact and its declared logical sites/groups for coordinate-free tasks. Atom IDs reference actual atoms in that model. Polymer residues use consistent asym/entity/sequence identity, including unresolved residues; non-polymer subjects use explicit groups. Structural groups and reusable subjects identify the model's `ma_data` artifact; logical ones identify their own data artifact. An annotation set's data ID identifies the annotations, independently of the referenced model's data ID. Cross-file references require the relevant declarations in the exchange context and standard associated-file links, not bare array offsets or unqualified external IDs.
-7. `(set, definition, subject(s), component parameter, context group)` is unique. Equivalent subject aliases count as the same identity; reversed endpoints duplicate a symmetric pair. Explicit context permits distinct partner-specific values. A context group must match the set's model, or its data artifact when coordinate-free. Consumers combine sets only under an explicit workflow/profile and check conflicts after that combination.
-8. `required_for_execution` means the consumer must understand the definition, resolve required data and implement its conditions before execution. Preservation by a generic reader is insufficient. Unknown required values, unsupported semantics and conflicting effective conditions must be reported before execution. This flag does not assert that an output satisfies a condition.
+A specified value occupies exactly its typed scalar slot (`value_boolean`, `value_integer`, `value_real`, `value_text`, `value_comp_id`), all three `x/y/z` plus a frame, `array_id` (plus frame for geometric arrays), or `value_group_id`. Booleans use YES/NO, integers are mathematical integers and real values are finite. Unused columns may be omitted. A candidate `component_id` is a parameter, distinct from a component-valued payload or the reference structure's identity.
 
-Use units `none` for dimensionless/non-numeric values and `angstroms` for point coordinates. Other units require `units_details` describing their meaning/conversion, using existing dictionary unit names where applicable. Use a separately versioned scientific definition to change units or interpretation.
+## States, defaults and execution
 
-## Geometry, groups and logical topology
+`state` defaults to `specified` when its column is absent. Explicit `?`/`.` does not invoke that default. `unconstrained`, `unknown` and `not_applicable` carry no payload and remain distinct. CIF null markers retain their ordinary meanings elsewhere. False and zero are values; converting an inactive historical code to a state requires the particular annotation's semantics.
 
-Points rotate and translate; vectors rotate only. A `model Cartesian` frame refers to the set model. An `independent rigid` frame has no model placement: its complete finite XYZ points retain their relative geometry while the frame can rotate/translate as a whole. Partial XYZ targets are not representable as complete points and must not be silently filled. Reserved legacy coordinate-group integers become explicit frame IDs/kinds and states. Group-local Cartesian coordinates do not mean internal bond-angle/torsion coordinates.
+`value.is_default = YES` declares a uniform scalar default for the set/definition, with no subject, component parameter or partner selector. Otherwise `is_default` is NO, including when the column is absent. Explicit rows override defaults, including explicit non-specified states. A default activates its definition even without other rows. Geometry, arrays, groups, component-parameterized values and exact sequence identities must be materialized. Structure-dependent functions become effective rows with preprocessing provenance.
 
-Groups declare data/model, kind, definition/version, order and explicit members. Each member selects exactly one atom, child group or logical site. Membership and enclosing-context references are acyclic; duplicate direct members are invalid. Token/molecule interpretation is determined by the named grouping method, not by array storage or chain labels. Ordered membership preserves its declared relative order; ordinals need not be contiguous.
+A definition is active in a set only if a row/default uses it. Omitted applicable values of an active definition inherit its `omitted_state` unless a typed default applies. `(set, definition, subject(s), component parameter, partner context)` is unique; defaults are unique by set/definition. Reversed endpoints duplicate a symmetric pair, and aliases of structural subjects do not create different assignments.
 
-An index group is ordered within an explicit enclosing context. Its members are tokens or logical token positions of length one; each has an integer offset. Expandable segments acquire token offsets after realization. Offsets increase uniquely in member order, may have arbitrary origin and must preserve known relative differences. Members belong to the enclosing context. Distances between separate index groups are unknown unless separately asserted. Slicing or assembly copying must remap all references and frames, or explicitly invalidate dependent annotations.
+`required_for_execution` requires the consumer to understand the definition, resolve required data and implement the conditions before execution. Generic preservation is insufficient. Unknown required values, unsupported semantics and conflicting effective conditions must be reported. The flag does not assert output satisfaction. Combining sets requires an explicit workflow/profile and a conflict check after combination.
 
-A logical position has realized length one. A segment has explicit nonnegative `min_length <= max_length`; zero permits deletion. Sites name an ordered, coordinate-free context that includes them. A site-value row on a segment applies the same value/state to each realized member; use separate positions or post-realization rows for differing member values. A pair with a segment endpoint applies to every realized endpoint combination. The definition determines whether any resulting self-relation is meaningful. `before`/`after` impose order; `adjacent_before`/`adjacent_after` additionally prohibit intervening realized positions. Logical order must be acyclic and agree with context order. Structural anchors must share a declared data-group context with the logical artifact. `connected` means a chemical bond with bond order; residue endpoints name atoms, atom endpoints do not repeat atom names. Chemical feasibility, valence and final adjacency are checked by an interpreter against the realized structure.
+## Definitions and reference scope
 
-`correspondence` references the producing protocol step. Source data occur among its inputs and target data among its outputs. `mapped`, `copy` and `realized` require both endpoints; `generated` only a target; `deleted` only a source. Endpoint levels agree. `realized` maps logical sites to actual output subjects, allowing one-to-many segment realization. Realized rows supply contiguous target_ordinal_id values starting at one within each source site/protocol step, so segment order survives row shuffling. Duplicate realized identities are invalid. Count distinct realized identities, not alias IDs, against the length bounds; zero realization is recorded by deletion. A site cannot be both realized and deleted in one step. Correspondence does not itself assert geometric equality. Copies, inserted/generated subjects and deleted subjects must retain distinct artifact/instance identity.
+A namespaced `(definition_key, version)` has one meaning. Custom definitions document scientific interpretation, units, domains and preparation method for an independent implementation, with a source reference where available. Changed semantics require a new version/key. Executable code is not part of interchange. `example:` terms illustrate storage, not a shared scientific registry.
 
-## Arrays and custom domains
+Use `none` for dimensionless/non-numeric values and `angstroms` for points. Other units require `units_details` describing meaning/conversion and should use existing dictionary unit names where applicable. Custom domains are closed, versioned vocabularies in `domain`/`domain_value`; list every member. Categorical scalar values use symbolic text codes; component domains use unique `chem_comp` identities. Custom component parameters require an explicit domain unless the shared definition fixes it.
 
-An array has exactly one owning annotation row. Its definition gives scalar element type, positive rank, transform rule and one `definition_axis` per dimension. A fixed axis length is an integer; `.` declares a variable dimension whose length is supplied by each array. Dimensions may be zero. Array axes are numbered contiguously from one, match the definition and record all dimension lengths. Flat element indices are one-based and row-major, with the last axis varying fastest. Sparse missing elements inherit the array's explicit omission state, never numeric zero.
+Scope is the set model for structural subjects, or its data artifact and declared groups/logical positions for coordinate-free tasks. Atom references belong to that model. Polymer residues use consistent chain/entity/sequence identities, including unresolved positions; non-polymers use groups. Structural subjects/groups identify the model's `ma_data` artifact; logical ones identify their own data artifact. The set's data ID identifies the annotations independently of the model data ID. Cross-file exchange needs the relevant declarations and standard associated-file links, not bare array offsets or unqualified external IDs. Partner/context groups must match the model, or data artifact when coordinate-free.
 
-Labelled axes give one unique label per index. Text labels are explicit strings; component labels reference `chem_comp`; a Cartesian axis is exactly x,y,z. Custom categorical/component domains list every member in `domain_value`, with unique component identities where applicable. Categorical scalar payloads use symbolic text codes, rather than undocumented integer enum values. Component parameters require an explicit complete component domain unless their shared definition fixes it.
+## Groups, frames and subjects
 
-Geometric arrays use real elements and a final Cartesian axis of length three. Each triple has one state: all specified with finite values, or all the same non-specified state. Point arrays use angstroms and translate/rotate; vector arrays rotate. Invariant arrays do not transform. A custom tensor with another transformation law must be mapped to these supported forms or rejected explicitly; arbitrary NumPy dtypes and executable transformation functions are not interchange semantics.
+`group` gives explicit token, molecule, index or context membership and a versioned grouping method. Each `group_member` selects one atom, child group or logical subject. Membership and enclosing-context references are acyclic; direct members are unique. Ordered groups preserve member order; ordinals need not be contiguous. An index group belongs to an enclosing context and contains tokens or unit logical token positions with unique, increasing integer offsets. Offsets have arbitrary origin but preserve differences; offsets between distinct groups are unknown. Expandable segments acquire token offsets after realization. Structural edits remap references or explicitly invalidate dependent annotations.
 
-## Shared draft definitions
+A `model Cartesian` frame refers to the set model. An `independent rigid` frame permits whole-frame rotation/translation while preserving relative geometry. Points rotate/translate; vectors rotate only. Complete finite XYZ values are required. Group-local Cartesian targets are not bond-angle/torsion coordinates; reserved legacy group integers become frame IDs/kinds and states.
 
-The `proposal:` namespace and `draft-1` version below are part of this proposed component, not already approved registry terms. Their metadata cannot be redefined locally.
+`subject.kind = reference` selects one atom, chain/residue or group for pair endpoints and mappings. `position` or `segment` directly declares a logical subject: atom/residue/token level, no model/structural selector, an ordered coordinate-free context containing it, and explicit length bounds. Positions have length one; segments have `0 <= min_length <= max_length`. Zero permits deletion. A segment value applies to each realized member; differing values need separate positions or post-realization rows. A pair with segment endpoints applies to every realized endpoint combination; the scientific definition determines whether resulting self-relations are meaningful.
 
-| Definition | Level/body/type | Interpretation |
+## Relations
+
+`relation` uses common source/target subject references for topology and correspondence:
+
+| Relation | Rules |
+| --- | --- |
+| `before`, `after`, `adjacent_before`, `adjacent_after` | Logical source; no producing step. Order agrees with context and is acyclic. Adjacency prohibits intervening realized positions. |
+| `connected` | Logical source; chemical bond order, with atom names only for residue endpoints. No producing step. |
+| `mapped`, `copy` | Source and target; producing protocol step; matching levels. Copy permits one-to-many mapping. |
+| `realized` | Logical source to referenced output subjects; matching levels; step and contiguous `target_ordinal_id` starting at one. |
+| `generated`, `deleted` | Generated has only a target; deleted only a source; producing step required. |
+
+Logical topology endpoints share context; a structural anchor shares a declared data-group context with its logical artifact. Chemical feasibility, valence and realized adjacency are interpreter checks. Mapping sources belong to protocol inputs and targets to outputs. Mapping rows do not carry topology-only bond/name fields. Count distinct realized identities against bounds; duplicates are invalid. Record zero realization by deletion. A site cannot be both realized and deleted in the same step. Copying, generation and deletion preserve artifact/instance identity without asserting geometric equality.
+
+## Arrays
+
+An `array` has exactly one owning value row. The owning definition supplies scalar element type, positive rank and transform. Row-major traversal, with the last axis fastest, is fixed by the specification. Missing element rows inherit the array's omission state, never numeric zero. Elements have one-based flat indices and explicit states where needed.
+
+`axis` serves both shared declarations and instance dimensions. Exactly one of `definition_id`/`array_id` is present. Definition axes are contiguous from one through rank, with label kind, optional domain and fixed length, or `.` for a variable dimension. Unknown `?` is not a variable-dimension declaration. Array axes provide actual nonnegative lengths and inherit interpretation. A fixed length must agree; a variable dimension needs an array row. Fixed axes need no repeated per-array row.
+
+`axis_label` references an axis ID and one-based index. Labelled axes have one unique label per position: explicit text, component identity, or exactly x/y/z for Cartesian. Fixed labels may be supplied once on the definition axis and cannot be overridden. Otherwise arrays provide their labels; variable definition axes have no fixed label list. Zero-length dimensions are allowed.
+
+Geometric arrays have real elements and a final Cartesian axis of length three. Each triple is wholly finite/specified or wholly in one non-specified state. Point arrays use angstroms and rotate/translate; vectors rotate; invariant arrays do not transform. Other tensor laws or unsupported NumPy dtypes require an explicit supported mapping or rejection, not an opaque private encoding.
+
+## Shared draft terms
+
+These `proposal:` keys use version `draft-1` and omission state `unconstrained`; their meanings cannot be redefined locally. They are proposed terms, not already approved registry entries.
+
+| Definition | Level/body/type | Meaning |
 | --- | --- | --- |
-| `proposal:coordinate` | Atom / 1 / point3, angstroms | Complete Cartesian target in the referenced frame; omission is unconstrained. |
-| `proposal:sequence_identity` | Residue / 1 / component, none | Exact requested chemical component on a structural or logical residue; omission is unconstrained. It is independent of observed reference identity. |
-| `proposal:sequence_probability` | Residue / 1 / component-parameterized real, none | Partial probabilities over canonical-polymer-28 below; omission is unconstrained. |
+| `proposal:coordinate` | Atom / 1 / point3, angstroms | Complete Cartesian target in the referenced frame. |
+| `proposal:sequence_identity` | Residue / 1 / component, none | Exact requested identity, independent of observed identity. |
+| `proposal:sequence_probability` | Residue / 1 / component-parameterized real, none | Partial probabilities over canonical-polymer-28. |
 
-The fixed canonical-polymer-28 domain is `ALA ARG ASN ASP CYS GLN GLU GLY HIS ILE LEU LYS MET PHE PRO SER THR TRP TYR VAL A C G U DA DC DG DT`. It is defined once here; files need not repeat 28 domain or axis rows. Each actually referenced component requires its `chem_comp` declaration. Another alphabet, including noncanonical components, uses a separately versioned custom definition with an explicit domain.
+Canonical-polymer-28 is `ALA ARG ASN ASP CYS GLN GLU GLY HIS ILE LEU LYS MET PHE PRO SER THR TRP TYR VAL A C G U DA DC DG DT`. It is defined once here; no per-file alphabet/axis table is needed. Actually referenced components require `chem_comp` records. Other alphabets, including noncanonical components, use custom versioned definitions/domains.
 
-Each specified probability is in [0,1]. Specified probabilities sum to at most one, and a fully specified distribution sums to one (absolute numerical tolerance 1e-6). Zero explicitly excludes that component. Unconstrained candidates may share the remaining mass without an implicit uniform distribution or renormalization. Unknown values remain unresolved; inapplicable candidates cannot receive mass. Required execution must resolve unknown applicability/value states and produce a valid distribution under its declared model policy.
+Specified probabilities lie in [0,1] and sum to at most one; a complete distribution sums to one, with absolute tolerance 1e-6. Zero excludes a component. Unconstrained candidates share remaining mass without implicit uniformity or renormalization. Unknown values remain unresolved; inapplicable candidates receive no mass. Required execution resolves unknown states and supplies a valid distribution under its declared policy.
 
-An exact identity fixes a one-hot distribution. Coexisting explicitly specified probabilities must agree with it (same tolerance); conflicting values are errors, not silently overridden. A fixed identity outside the probability domain is also a conflict. The reference sequence is not an exact-identity condition. In the compact example, ALA=0.7 and GLY=0 leave 0.3 for other unconstrained candidates; no identity condition is present.
+Exact identity fixes one-hot probabilities. Explicit probabilities must agree within tolerance; conflicts, including fixed identities outside the applicable domain, are errors. The reference sequence is not itself an identity condition. The compact example gives ALA=0.7 and GLY=0, leaving 0.3 for other unconstrained candidates.
 
-## Existing restraints and scientific profiles
-
-Use existing ModelCIF distance restraints where their endpoint, unit and bound semantics fit. Use protocol/data associations to establish their condition role. Do not duplicate an authoritative distance in a custom annotation. Existing QA, energy and experimental categories keep their meanings.
-
-Other source annotations are representable through custom versioned definitions and domains, as detailed in [API coverage](annotation-coverage.md). An interoperable profile must supply operational definitions for terms such as solvent accessibility, secondary structure, CATH classifications and interaction roles; integer storage codes alone are insufficient. Shared registry adoption of those definitions is a separate scientific review, not a limitation of the generic carrier schema. The validators check structural and stated shared-term rules; they do not certify arbitrary custom scientific calculations or production conditioning equivalence.
+Use existing ModelCIF distance restraints wherever their semantics fit, and existing QA/energy/experimental categories for results. The [coverage table](annotation-coverage.md) maps other source annotations through the same carriers. Shared profiles must define operational terms such as solvent accessibility, secondary structure, classification releases and interaction roles. Validation of the data contract does not certify custom calculations, chemical feasibility or production conditioning equivalence.

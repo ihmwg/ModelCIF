@@ -1,10 +1,10 @@
 # Annotation coverage
 
-The implemented draft dictionary covers the six semantic levels, body orders 0/1/2, typed scalars and shaped values, domains/defaults, sparse relations, custom definitions and metadata-preserving edits. This table groups all 59 entries in a scoped source inventory; it is not a full live-registry enumeration or proof of production-library conformance. All entries have a carrier mapping; shared scientific registration of custom operational definitions still requires domain review.
+The consolidated 16-category draft dictionary covers the six semantic levels, body orders 0/1/2, typed scalars and shaped values, domains/defaults, sparse relations, custom definitions and metadata-preserving edits. This table groups all 59 entries in a scoped source inventory; it is not a full live-registry enumeration or proof of production-library conformance. All entries have a carrier mapping; shared scientific registration of custom operational definitions still requires domain review.
 
 | Existing annotations | Canonical representation and conversion requirements |
 | --- | --- |
-| `expsegmin`, `expsegmax` | Logical design segment with minimum/maximum realized length, context, anchors/order and later realization correspondence. Replace placeholder-residue sentinel encoding with declared logical subjects. Preserve zero-length bounds; -1 means this annotation is inactive, not a negative segment length. Use the module’s bound, order and protocol-linked realization rules. |
+| `expsegmin`, `expsegmax` | A logical subject of kind segment with minimum/maximum realized length, context and topology/realization relations. Replace placeholder-residue sentinel encoding with declared logical subjects. Preserve zero-length bounds; -1 means this annotation is inactive, not a negative segment length. Use the module’s bound, order and protocol-linked realization rules. |
 | `atomize` | Tokenization definition/version and resulting explicit membership, plus an atomistic treatment request where necessary. Materialize structure-dependent defaults. Distinguish an authored request from the tokenization actually consumed. Retain atom-level source semantics; a boolean alone is not a portable tokenizer. |
 | `sequence` | Component identity assignment on a residue or logical position. Map <M> to explicit condition state. Reference unambiguous canonical or custom component definitions. Use proposal:sequence_identity: conflicting explicit probabilities are errors; exact identity determines one-hot probabilities. Record inferred identities in an effective set. |
 | `coordinate`, `InternalCoordinate`, `CoordinateGroup` | One atom/XYZ row per target, with a frame reference identifying placement and rigid-group membership. Distinguish absolute model placement from independent rigid placement. InternalCoordinate is group-local Cartesian geometry, not bond/angle/torsion coordinates. Replace reserved -1/0/positive group conventions with explicit states/frame kind. Require complete finite triples; reject/report partial legacy triples, whose handling differs between current paths. Keep coordinate presence and group membership consistent. |
@@ -31,13 +31,13 @@ The 28 probability components are `ALA ARG ASN ASP CYS GLN GLU GLY HIS ILE LEU L
 | --- | --- |
 | definition identity and extension registry | Stable identifier/namespace/version, scientific definition, registered shared terms and custom terms; no executable code loading. |
 | semantic level | Direct atom/residue/chain references where sufficient; explicit membership/context/order for groups. Existing features support complex selections. |
-| body order | Zero-body set context, one direct subject or two ordered endpoints on the value row; explicit pair symmetry and independent group size. |
+| body order | Zero-body set context, direct atom/residue rows or the shared value table for other subjects/pairs/defaults; explicit pair symmetry and independent group size. |
 | scalar type and categorical domain | Defined portable scalar domains and symbolic/code meanings; reject unsupported dtypes explicitly rather than silently coercing. |
-| value shape | Dictionary-fixed scalar/XYZ fields for common values; explicit rank, dimensions, axes and element states for general arrays within declared limits. |
+| value shape | Dictionary-fixed scalar/XYZ fields for common values; definition rank, shared fixed axes/labels, instance dimensions only where needed, and explicit element states. |
 | defaults and masks | Definition-specific inactive/unknown/not-applicable/explicit states; uniform scalar defaults and per-element omission states; materialize structure-dependent default functions as effective values with provenance. |
 | broadcasting and sparse pairs | Validate level consistency before collapse; preserve sparse storage and omitted-value rules; no forced dense pair matrices. |
 | coordinates and transformations | Frame/scoped membership, point versus vector transformation rule, explicit revalidation after membership change. |
-| index and future topology | Logical positions/segments, order, bounds, anchors, relative offsets, context and later realization mappings without fake atoms. |
+| index and future topology | Logical subject records with bounds/context; topology and ordered realization use one relation table, without fake atoms. |
 | metadata lifecycle | Retain definitions/provenance alongside arrays; copy/slice/concatenate/assembly/edit remap or explicitly invalidate references. |
 | custom definitions and unknown content | Same generic representation and types; distinguish retention from semantic execution support; reject unsupported required conditions. |
 | file migration | One canonical ModelCIF representation, retaining compact tables where possible. A versioned converter may rewrite historical files; permanent legacy reading and byte/name identity are unnecessary. |

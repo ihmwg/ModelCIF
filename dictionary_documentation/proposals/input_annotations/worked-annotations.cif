@@ -1,4 +1,4 @@
-# Complete illustrative ModelCIF input with proposed annotation module 0.1.0.
+# Complete illustrative ModelCIF input with proposed annotation module 0.2.0.
 # This is an example, not an executed design or a deposited structure.
 data_worked_annotations
 _entry.id annotation_example
@@ -13,7 +13,7 @@ _audit_conform.dict_name
 _audit_conform.dict_version
 _audit_conform.dict_location
 'mmcif_ma.dic' 1.4.9 'https://mmcif.wwpdb.org/dictionaries/ascii/mmcif_ma.dic'
-'mmcif_ma-annotation.dic' 0.1.0 'https://github.com/kierandidi/ModelCIF/blob/propose-input-annotations/base/mmcif_ma-annotation.dic'
+'mmcif_ma-annotation.dic' 0.2.0 'https://github.com/kierandidi/ModelCIF/blob/propose-input-annotations/base/mmcif_ma-annotation.dic'
 
 loop_
 _chem_comp.id

@@ -1,4 +1,4 @@
-# Validation of draft component 0.1.0
+# Validation of draft component 0.2.0
 
 The Python files are narrowly scoped validation tools: one checks conditional rules that DDL2 cannot express, and one tests the contract. They are not an alternative format, a migration implementation or a required production dependency. The dictionary component is the authoritative item/type/key reference.
 
@@ -41,13 +41,13 @@ Inspect `*-diag.log` and `*-parser.log` in the working directory, **not just pro
 
 | Check | Result |
 | --- | --- |
-| Combined and extension-only source assembly | Passed; includes 24 annotation categories / 247 items |
+| Combined and extension-only source assembly | Passed; includes 16 annotation categories / 157 items |
 | Combined dictionary against RCSB DDL | No diagnostic errors |
 | Both complete annotation examples against assembled dictionary | No parser or dictionary diagnostics |
 | Deliberately invalid `value_kind` enumeration | Rejected in diagnostic log |
 | Existing four repository examples | Diagnostics identical with published baseline and proposed dictionary; existing examples are not all clean under the current validator |
-| Semantic suite | 9 tests passed, including 50 invalid-input mutations plus identity conflict, symmetric-pair duplicate and incomplete geometric-triple rejection |
-| Valid edge cases | Unknown data retention, zero-length array dimension, point/vector arrays, explicit defaults/states, shuffled records and frame-ID renaming |
+| Semantic suite | 12 tests passed, including 64 invalid-input mutations plus identity conflict, symmetric-pair duplicate and incomplete geometric-triple rejection |
+| Valid edge cases | Unknown data retention, zero-length array dimension, point/vector arrays, explicit defaults/states, shared fixed axes/labels, no redundant per-array axes, shuffled records and frame-ID renaming |
 | Independent interchange | Gemmi and Biotite CIF/BinaryCIF roundtrip preserves category content and null states; semantic checks pass after roundtrip |
 
-The extended example exercises every proposed category. Conditional checks cover selectors, scopes, payloads, domains, frames, pair uniqueness, membership/order, logical bounds, arrays, shared probability/identity semantics and protocol-linked correspondence. Production readers must additionally implement scientific definitions, final chemical/topological feasibility, lifecycle transformations and effective-condition execution. These checks are not a ModelArchive deposition certification, a throughput benchmark or proof of AtomWorks/RFD4/python-modelcif adapter compatibility. No such adapter is claimed in this PR.
+The extended example exercises all 16 categories. Parsed definitions, sets, frames, atom rows and residue rows in the compact example are unchanged from draft 0.1.0; only its draft audit/version declaration changes. The dictionary shrinks from 247 to 157 items without dropping the 59-entry source crosswalk. Conditional checks cover selectors, scopes, payloads, domains, frames, pair uniqueness, membership/order, logical bounds, arrays, shared probability/identity semantics and protocol-linked correspondence. Production readers must additionally implement scientific definitions, final chemical/topological feasibility, lifecycle transformations and effective-condition execution. These checks are not a ModelArchive deposition certification, a throughput benchmark or proof of AtomWorks/RFD4/python-modelcif adapter compatibility. No such adapter is claimed in this PR.

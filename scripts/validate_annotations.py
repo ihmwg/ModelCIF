@@ -6,16 +6,16 @@ Run CifCheck with the assembled dictionary first: this checker supplements DDL2
 an interpreter of arbitrary custom scientific definitions.
 """
 import argparse
-from collections import Counter, defaultdict
+from collections import defaultdict
 import math
 import sys
 import gemmi
 
-PREFIX = '_ma_annotation_'
 CANONICAL28 = set('ALA ARG ASN ASP CYS GLN GLU GLY HIS ILE LEU LYS MET PHE PRO SER THR TRP TYR VAL A C G U DA DC DG DT'.split())
 SCALAR = dict(real='value_real', integer='value_integer', boolean='value_boolean', text='value_text', component='value_comp_id')
 PAYLOAD = set(SCALAR.values()) | {'x', 'y', 'z', 'array_id', 'value_group_id', 'frame_id'}
-CARRIERS = ('atom', 'residue', 'chain', 'group_value', 'system', 'site_value', 'pair')
+CARRIERS = ('atom', 'residue', 'value')
+TOPOLOGY = {'before','after','adjacent_before','adjacent_after','connected'}
 TOLERANCE = 1e-6
 
 
@@ -54,7 +54,8 @@ def validate(block):
     def selected(row, fields):
         return {k for k in fields if row.get(k) is not None}
     defs, sets, frames = idx('definition'), idx('set'), idx('frame')
-    groups, sites, subjects = idx('group'), idx('site'), idx('subject')
+    groups, subjects = idx('group'), idx('subject')
+    sites = {i:r for i,r in subjects.items() if r.get('kind') in ('position','segment')}
     domains, arrays = idx('domain'), idx('array')
     atoms = idx('atom_site', standard=True)
     models = idx('ma_model_list', 'ordinal_id', True)
@@ -81,9 +82,20 @@ def validate(block):
             check(len({v.get('comp_id') for v in vv.values()}) == len(vv), 'domain: duplicate component identity')
     meanings = set()
     def_axes = defaultdict(list)
-    for r in rows('definition_axis'):
-        get(defs, r.get('definition_id'), 'definition_axis: missing definition')
-        def_axes[r.get('definition_id')].append(r)
+    axis_records = idx('axis')
+    raw_axes = block.get_mmcif_category('_ma_annotation_axis.')
+    if 'length' in raw_axes:
+        check(all(v is not None for v in raw_axes['length']), 'axis: unknown length is not a variable dimension; use inapplicable')
+    for r in axis_records.values():
+        check(bool(r.get('definition_id')) != bool(r.get('array_id')), 'axis: exactly one definition/array owner')
+        if r.get('definition_id'):
+            get(defs, r['definition_id'], 'axis: missing definition')
+            def_axes[r['definition_id']].append(r)
+            check(r.get('label_kind') is not None, 'axis: definition needs label kind')
+        else:
+            get(arrays, r.get('array_id'), 'axis: missing array')
+            check(not selected(r, {'label_kind','domain_id'}), 'axis: array dimensions inherit label/domain semantics')
+            check(r.get('length') is not None, 'axis: array dimension needs actual length')
     for ident, d in defs.items():
         meaning = (d.get('definition_key'), d.get('version'))
         check(meaning not in meanings, 'definition: duplicate scientific key/version')
@@ -99,10 +111,10 @@ def validate(block):
             rank = num(d.get('array_rank'), 'definition: invalid array rank', True)
             check(rank > 0, 'definition: array rank must be positive')
             aa = def_axes[ident]
-            check(sorted(num(a.get('axis_order'), 'definition_axis: invalid order', True) for a in aa) == list(range(1, rank + 1)), 'definition: incomplete or duplicate axes')
+            check(sorted(num(a.get('axis_order'), 'axis: invalid order', True) for a in aa) == list(range(1, rank + 1)), 'definition: incomplete or duplicate axes')
             for a in aa:
                 if a.get('length'):
-                    check(num(a['length'], 'definition_axis: invalid length', True) >= 0, 'definition_axis: negative length')
+                    check(num(a['length'], 'axis: invalid length', True) >= 0, 'axis: negative length')
         else:
             check(not def_axes[ident], 'definition: axes on a non-array')
         if kind in ('boolean', 'text', 'component', 'group'):
@@ -171,9 +183,9 @@ def validate(block):
         check(len(set(ordinals)) == len(mm) and all(i > 0 for i in ordinals), 'group: duplicate/nonpositive ordinal')
         seen = set()
         for m in mm:
-            selector = selected(m, {'atom_id', 'child_group_id', 'site_id'})
+            selector = selected(m, {'atom_id', 'child_group_id', 'subject_id'})
             check(len(selector) == 1, 'group: member needs exactly one selector')
-            identity = tuple(m.get(k) for k in ('atom_id', 'child_group_id', 'site_id'))
+            identity = tuple(m.get(k) for k in ('atom_id', 'child_group_id', 'subject_id'))
             check(identity not in seen, 'group: duplicate member')
             seen.add(identity)
             if m.get('atom_id'):
@@ -182,12 +194,12 @@ def validate(block):
                 child = get(groups, m['child_group_id'], 'group: missing child')
                 same_context(g, child, 'nested group')
                 graph[gid].add(m['child_group_id'])
-            if m.get('site_id'):
-                site = get(sites, m['site_id'], 'group: missing site')
+            if m.get('subject_id'):
+                site = get(sites, m['subject_id'], 'group: missing site')
                 check(not g.get('model_id') and site.get('data_id') == g.get('data_id'), 'group: site context mismatch')
             check((g.get('kind') == 'index') == bool(m.get('index_offset') is not None), 'group: index offset applicability')
             if g.get('kind') == 'index':
-                check((m.get('child_group_id') and groups.get(m['child_group_id'], {}).get('kind') == 'token') or (m.get('site_id') and sites.get(m['site_id'], {}).get('level') == 'token' and sites.get(m['site_id'], {}).get('kind') == 'position'), 'index group: member must be token or unit token position')
+                check((m.get('child_group_id') and groups.get(m['child_group_id'], {}).get('kind') == 'token') or (m.get('subject_id') and sites.get(m['subject_id'], {}).get('level') == 'token' and sites.get(m['subject_id'], {}).get('kind') == 'position'), 'index group: member must be token or unit token position')
         if g.get('context_group_id'):
             context = get(groups, g['context_group_id'], 'group: missing context')
             same_context(g, context, 'group context')
@@ -219,59 +231,66 @@ def validate(block):
             if m.get('child_group_id'):
                 result |= leaves(m['child_group_id'], path | {gid})
             else:
-                result.add((m.get('atom_id'), m.get('site_id')))
+                result.add((m.get('atom_id'), m.get('subject_id')))
         return result
     for gid, g in groups.items():
         if g.get('kind') == 'index' and g.get('context_group_id'):
             check(leaves(gid) <= leaves(g['context_group_id']), 'index group: members outside enclosing context')
-    for i, s in sites.items():
-        check(s.get('data_id') in data, 'site: missing data')
-        context = get(groups, s.get('context_group_id'), 'site: missing context')
-        check(not context.get('model_id') and context.get('data_id') == s.get('data_id') and context.get('ordered') == 'YES', 'site: context must be ordered and coordinate-free')
-        check(any(m.get('site_id') == i for m in members[s.get('context_group_id')]), 'site: absent from context membership')
-        lo, hi = (num(s.get(k), 'site: invalid bounds', True) for k in ('min_length','max_length'))
-        check(0 <= lo <= hi, 'site: invalid bounds')
-        if s.get('kind') == 'position':
-            check(lo == hi == 1, 'site: position must have length one')
-    for s in subjects.values():
-        scope(s, 'subject')
-        selector = selected(s, {'atom_id', 'label_asym_id', 'group_id', 'site_id'})
-        check(len(selector) == 1, 'subject: exactly one selector')
-        level = s.get('level')
-        if s.get('site_id'):
-            site = get(sites, s['site_id'], 'subject: missing site')
-            check(not s.get('model_id') and site.get('data_id') == s.get('data_id') and site.get('level') == level, 'subject: site scope/level mismatch')
-        elif s.get('group_id'):
-            g = get(groups, s['group_id'], 'subject: missing group')
-            same_context(s, g, 'subject group')
-            check(g.get('kind') == level and level in ('token', 'molecule'), 'subject: group level mismatch')
+    for ident, subject in subjects.items():
+        scope(subject, 'subject')
+        selectors = selected(subject, {'atom_id','label_asym_id','group_id'})
+        logical_fields = selected(subject, {'context_group_id','min_length','max_length'})
+        if ident in sites:
+            check(not selectors and not subject.get('model_id') and not selected(subject, {'label_entity_id','label_seq_id'}), 'subject: logical position has no structural selector/model')
+            check(subject.get('level') in ('atom','residue','token'), 'subject: invalid logical level')
+            check(logical_fields == {'context_group_id','min_length','max_length'}, 'subject: incomplete logical bounds/context')
+            context = get(groups, subject.get('context_group_id'), 'subject: missing logical context')
+            check(not context.get('model_id') and context.get('data_id') == subject.get('data_id') and context.get('ordered') == 'YES', 'subject: context must be ordered and coordinate-free')
+            check(any(m.get('subject_id') == ident for m in members[subject.get('context_group_id')]), 'subject: absent from context membership')
+            lo, hi = (num(subject.get(k), 'subject: invalid bounds', True) for k in ('min_length','max_length'))
+            check(0 <= lo <= hi, 'subject: invalid bounds')
+            if subject.get('kind') == 'position':
+                check(lo == hi == 1, 'subject: position must have length one')
         else:
-            structural(s, s.get('model_id'), 'subject')
-            expected = 'atom' if s.get('atom_id') else 'residue' if s.get('label_seq_id') else 'chain'
-            check(level == expected, 'subject: selector level mismatch')
-        check((level == 'residue' and bool(s.get('label_asym_id'))) == bool(s.get('label_entity_id') and s.get('label_seq_id')), 'subject: residue selector incomplete')
+            check(subject.get('kind') == 'reference', 'subject: invalid reference kind')
+            check(len(selectors) == 1 and not logical_fields, 'subject: exactly one selector and no logical bounds/context')
+            level = subject.get('level')
+            if subject.get('group_id'):
+                group = get(groups, subject['group_id'], 'subject: missing group')
+                same_context(subject, group, 'subject group')
+                check(group.get('kind') == level and level in ('token','molecule'), 'subject: group level mismatch')
+            else:
+                structural(subject, subject.get('model_id'), 'subject')
+                expected = 'atom' if subject.get('atom_id') else 'residue' if subject.get('label_seq_id') else 'chain'
+                check(level == expected, 'subject: selector level mismatch')
+            required = {'label_entity_id','label_seq_id'} if level == 'residue' and subject.get('label_asym_id') else set()
+            check(selected(subject, {'label_entity_id','label_seq_id'}) == required, 'subject: residue selector incomplete')
     order_edges = defaultdict(set)
-    for r in rows('site_link'):
-        site = get(sites, r.get('site_id'), 'site_link: missing site')
-        sub = get(subjects, r.get('subject_id'), 'site_link: missing subject')
+    relations = rows('relation')
+    for r in relations:
         rel = r.get('relation')
-        if sub.get('site_id'):
-            other = sites.get(sub['site_id'], {})
-            check(other.get('context_group_id') == site.get('context_group_id'), 'site_link: different logical context')
+        if rel not in TOPOLOGY:
+            check(not selected(r, {'source_atom_name','target_atom_name','bond_order'}), 'relation: mapping has no topology-only fields')
+            continue
+        source = get(sites, r.get('source_subject_id'), 'relation: topology source must be logical')
+        target = get(subjects, r.get('target_subject_id'), 'relation: missing target')
+        check(not selected(r, {'protocol_step_id','target_ordinal_id'}), 'relation: topology has no producing step/realization order')
+        if r.get('target_subject_id') in sites:
+            check(target.get('context_group_id') == source.get('context_group_id'), 'relation: different logical context')
             if rel != 'connected':
-                a,b = r.get('site_id'), sub['site_id']
-                if rel in ('after', 'adjacent_after'): a,b = b,a
+                a,b = r.get('source_subject_id'),r.get('target_subject_id')
+                if rel in ('after','adjacent_after'): a,b = b,a
                 order_edges[a].add(b)
-                ordinals = {m.get('site_id'): int(m['ordinal_id']) for m in members[site.get('context_group_id')] if m.get('site_id')}
-                check(a in ordinals and b in ordinals and ordinals[a] < ordinals[b], 'site_link: inconsistent with declared order')
+                ordinals = {m.get('subject_id'): int(m['ordinal_id']) for m in members[source.get('context_group_id')] if m.get('subject_id')}
+                check(a in ordinals and b in ordinals and ordinals[a] < ordinals[b], 'relation: inconsistent with declared order')
         else:
-            check(any({site.get('data_id'), sub.get('data_id')} <= contents for contents in data_groups.values()), 'site_link: structural anchor lacks shared data context')
-        check((rel == 'connected') == bool(r.get('bond_order')), 'site_link: bond order applicability')
-        for role, level in [('site', site.get('level')), ('subject', sub.get('level'))]:
-            check(bool(r.get(role+'_atom_name')) == (rel == 'connected' and level == 'residue'), 'site_link: named atom applicability')
+            check(any({source.get('data_id'),target.get('data_id')} <= contents for contents in data_groups.values()), 'relation: structural anchor lacks shared data context')
+        check((rel == 'connected') == bool(r.get('bond_order')), 'relation: bond order applicability')
+        for role, endpoint in [('source',source),('target',target)]:
+            check(bool(r.get(role+'_atom_name')) == (rel == 'connected' and endpoint.get('level') == 'residue'), 'relation: named atom applicability')
         if rel == 'connected':
-            check(site.get('level') in ('atom','residue') and sub.get('level') in ('atom','residue'), 'site_link: chemical endpoints must be atoms/residues')
-    acyclic(order_edges, 'site order')
+            check(source.get('level') in ('atom','residue') and target.get('level') in ('atom','residue'), 'relation: chemical endpoints must be atoms/residues')
+    acyclic(order_edges, 'logical order')
 
     owners = defaultdict(list)
     semantic_keys = set()
@@ -311,67 +330,86 @@ def validate(block):
         if domain and definition.get('parameter_kind') != 'component':
             allowed = set(domain_values[domain]) if kind == 'text' else {v.get('comp_id') for v in domain_values[domain].values()}
             check(row.get(SCALAR.get(kind)) in allowed, label + ': value outside closed domain')
+    default_keys = set()
+    selector_fields = {'label_asym_id','group_id','subject_id_1','subject_id_2'}
+    def identity(endpoint):
+        if endpoint.get('kind') in ('position','segment'):
+            return ('logical',endpoint.get('id'))
+        return tuple(endpoint.get(k) for k in ('data_id','model_id','level','atom_id','label_asym_id','label_entity_id','label_seq_id','group_id'))
     for cat in CARRIERS:
         for r in rows(cat):
-            s = get(sets, r.get('set_id'), cat + ': missing set')
-            d = get(defs, r.get('definition_id'), cat + ': missing definition')
-            level = d.get('subject_level')
-            order = '0' if cat == 'system' else '2' if cat == 'pair' else '1'
-            check(d.get('body_order') == order, cat + ': body order mismatch')
+            context = get(sets, r.get('set_id'), cat + ': missing set')
+            definition = get(defs, r.get('definition_id'), cat + ': missing definition')
+            level, order = definition.get('subject_level'), definition.get('body_order')
+            if cat == 'value':
+                check(r.get('is_default','NO') in ('YES','NO'), 'value: invalid default flag')
+            if cat == 'value' and r.get('is_default') == 'YES':
+                key = (r.get('set_id'),r.get('definition_id'))
+                check(key not in default_keys, 'default: duplicate assignment'); default_keys.add(key)
+                check(not selected(r,selector_fields | {'component_id','context_group_id'}), 'default: no subject, parameter or partner selectors')
+                check(definition.get('parameter_kind') != 'component', 'default: component parameters must be materialized')
+                check(definition.get('definition_key') != 'proposal:sequence_identity', 'default: exact identities must be materialized')
+                payload(r,definition,context,'default',True)
+                continue
             subject = ()
-            if cat in ('atom','residue','chain'):
+            if cat in ('atom','residue'):
+                check(order == '1', cat + ': body order mismatch')
                 check(level == cat, cat + ': level mismatch')
-                structural(r, s.get('model_id'), cat)
-                subject = (r.get('atom_id'),) if cat == 'atom' else (r.get('label_asym_id'), r.get('label_entity_id'), r.get('label_seq_id'))
-            elif cat == 'group_value':
-                g = get(groups, r.get('group_id'), 'group_value: missing group')
-                same_context(s, g, cat)
-                check(level == g.get('kind') and level in ('token','molecule'), 'group_value: level mismatch')
-                subject = (r.get('group_id'),)
-            elif cat == 'site_value':
-                site = get(sites, r.get('site_id'), 'site_value: missing site')
-                check(not s.get('model_id') and site.get('data_id') == s.get('data_id') and site.get('level') == level, 'site_value: context/level mismatch')
-                subject = (r.get('site_id'),)
-            elif cat == 'pair':
-                endpoints = [get(subjects, r.get(k), 'pair: missing endpoint') for k in ('subject_id_1','subject_id_2')]
-                for endpoint in endpoints:
-                    same_context(s, endpoint, 'pair endpoint')
-                    check(endpoint.get('level') == level, 'pair: endpoint level mismatch')
-                # Resolve alias subject IDs to scientific identity before deduplication.
-                subject = tuple(tuple(e.get(k) for k in ('data_id','model_id','level','atom_id','label_asym_id','label_entity_id','label_seq_id','group_id','site_id')) for e in endpoints)
-                if d.get('symmetric') == 'YES': subject = tuple(sorted(subject, key=repr))
+                structural(r,context.get('model_id'),cat)
+                subject = (r.get('atom_id'),) if cat == 'atom' else (r.get('label_asym_id'),r.get('label_entity_id'),r.get('label_seq_id'))
+            else:
+                selectors = selected(r,selector_fields)
+                expected = set()
+                if order == '0':
+                    check(level == 'system','value: zero-body level mismatch')
+                elif order == '2':
+                    expected = {'subject_id_1','subject_id_2'}
+                    endpoints = [get(subjects,r.get(k),'pair: missing endpoint') for k in ('subject_id_1','subject_id_2')]
+                    for endpoint in endpoints:
+                        same_context(context,endpoint,'pair endpoint')
+                        check(endpoint.get('level') == level,'pair: endpoint level mismatch')
+                    subject = tuple(identity(e) for e in endpoints)
+                    if definition.get('symmetric') == 'YES': subject = tuple(sorted(subject,key=repr))
+                elif order == '1':
+                    if level == 'chain':
+                        expected = {'label_asym_id'}
+                        structural(r,context.get('model_id'),'value chain')
+                        subject = ('chain',r.get('label_asym_id'))
+                    elif level in ('token','molecule') and r.get('group_id'):
+                        expected = {'group_id'}
+                        group = get(groups,r.get('group_id'),'value: missing group')
+                        same_context(context,group,'value group')
+                        check(group.get('kind') == level,'value: group level mismatch')
+                        subject = ('group',r.get('group_id'))
+                    else:
+                        expected = {'subject_id_1'}
+                        site = get(sites,r.get('subject_id_1'),'value: one-body subject must be logical')
+                        same_context(context,site,'value logical subject')
+                        check(site.get('level') == level,'value: logical level mismatch')
+                        subject = ('logical',r.get('subject_id_1'))
+                check(selectors == expected,'value: subject selectors do not match level/body order')
             param = r.get('component_id')
-            check(bool(param) == (d.get('parameter_kind') == 'component'), cat + ': component parameter applicability')
+            check(bool(param) == (definition.get('parameter_kind') == 'component'),cat + ': component parameter applicability')
             if param:
-                check(param in components, cat + ': missing candidate component')
-                allowed = CANONICAL28 if d.get('definition_key') == 'proposal:sequence_probability' else {v.get('comp_id') for v in domain_values[d.get('domain_id')].values()}
-                check(param in allowed, cat + ': component outside domain')
+                check(param in components,cat + ': missing candidate component')
+                allowed = CANONICAL28 if definition.get('definition_key') == 'proposal:sequence_probability' else {v.get('comp_id') for v in domain_values[definition.get('domain_id')].values()}
+                check(param in allowed,cat + ': component outside domain')
             if r.get('context_group_id'):
-                g = get(groups, r['context_group_id'], cat + ': missing context group')
-                same_context(s, g, cat + ' context')
-            key = (cat, r.get('set_id'), r.get('definition_id'), subject, param, r.get('context_group_id'))
-            check(key not in semantic_keys, cat + ': duplicate semantic assignment')
-            semantic_keys.add(key)
-            payload(r, d, s, cat)
-            sitekey = (r.get('set_id'), cat, subject)
-            if d.get('definition_key') == 'proposal:sequence_probability':
-                probability_states[sitekey][param] = r.get('state', 'specified')
-            if r.get('state', 'specified') == 'specified':
-                if d.get('definition_key') == 'proposal:sequence_probability':
-                    value = num(r.get('value_real'), 'probability: invalid value')
-                    check(0 <= value <= 1, 'probability: value outside [0,1]')
+                group = get(groups,r['context_group_id'],cat + ': missing context group')
+                same_context(context,group,cat + ' context')
+            key = (cat,r.get('set_id'),r.get('definition_id'),subject,param,r.get('context_group_id'))
+            check(key not in semantic_keys,cat + ': duplicate semantic assignment'); semantic_keys.add(key)
+            payload(r,definition,context,cat)
+            sitekey = (r.get('set_id'),cat,subject)
+            if definition.get('definition_key') == 'proposal:sequence_probability':
+                probability_states[sitekey][param] = r.get('state','specified')
+            if r.get('state','specified') == 'specified':
+                if definition.get('definition_key') == 'proposal:sequence_probability':
+                    value = num(r.get('value_real'),'probability: invalid value')
+                    check(0 <= value <= 1,'probability: value outside [0,1]')
                     probabilities[sitekey][param] = value
-                if d.get('definition_key') == 'proposal:sequence_identity':
+                if definition.get('definition_key') == 'proposal:sequence_identity':
                     identities[sitekey] = r.get('value_comp_id')
-    default_keys = set()
-    for r in rows('default'):
-        s = get(sets, r.get('set_id'), 'default: missing set')
-        d = get(defs, r.get('definition_id'), 'default: missing definition')
-        key = (r.get('set_id'), r.get('definition_id'))
-        check(key not in default_keys, 'default: duplicate assignment'); default_keys.add(key)
-        check(d.get('parameter_kind') != 'component', 'default: component parameters must be materialized')
-        check(d.get('definition_key') != 'proposal:sequence_identity', 'default: exact identities must be materialized')
-        payload(r, d, s, 'default', True)
     for key, values in probabilities.items():
         total = sum(values.values())
         check(total <= 1 + TOLERANCE, 'probability: supplied mass exceeds one')
@@ -388,60 +426,79 @@ def validate(block):
     axes = defaultdict(list)
     labels = defaultdict(list)
     elements = defaultdict(list)
-    for r in rows('axis'): axes[r.get('array_id')].append(r)
-    for r in rows('axis_label'): labels[(r.get('array_id'),r.get('axis_order'))].append(r)
-    for r in rows('array_value'): elements[r.get('array_id')].append(r)
-    for arrid in set(axes) | set(elements) | {k[0] for k in labels}:
-        check(arrid in arrays, 'array: orphan axis/element')
-    for aid, axis_order in labels:
-        check(any(a.get('axis_order') == axis_order for a in axes[aid]), 'axis_label: missing axis')
+    for r in axis_records.values():
+        if r.get('array_id'): axes[r['array_id']].append(r)
+    for r in rows('axis_label'):
+        get(axis_records,r.get('axis_id'),'axis_label: missing axis')
+        labels[r.get('axis_id')].append(r)
+    for r in rows('array_value'):
+        get(arrays,r.get('array_id'),'array_value: missing array')
+        elements[r.get('array_id')].append(r)
+    def axis_labels(axis, kind, length, domain_id, required):
+        ll = labels[axis.get('id')]
+        indices = [num(l.get('index'),'axis_label: invalid index',True) for l in ll]
+        expected = [] if kind == 'unlabelled' else list(range(1,length+1))
+        if required or ll:
+            check(sorted(indices) == expected,'axis: incomplete/duplicate labels')
+        vv = [l.get('comp_id' if kind == 'component' else 'label') for l in sorted(ll,key=lambda l:num(l.get('index'),'axis_label: invalid index',True))]
+        check(len(set(vv)) == len(vv) and all(v is not None for v in vv),'axis: labels must be non-null and unique')
+        for l in ll:
+            check(selected(l,{'label','comp_id'}) == ({'comp_id'} if kind == 'component' else {'label'}),'axis_label: payload mismatch')
+            if kind == 'component': check(l.get('comp_id') in components,'axis_label: missing chem_comp')
+        if kind == 'Cartesian' and (required or ll):
+            check(length == 3 and vv == ['x','y','z'],'axis: Cartesian order must be x/y/z')
+        if domain_id:
+            domain = get(domains,domain_id,'axis: missing domain')
+            allowed = {v.get('comp_id') for v in domain_values[domain_id].values()} if kind == 'component' else set(domain_values[domain_id])
+            check(set(vv) <= allowed and (domain.get('kind') == 'component') == (kind == 'component'),'axis: labels outside domain')
+    for axis in axis_records.values():
+        if axis.get('definition_id'):
+            if axis.get('length') is None:
+                check(not labels[axis['id']],'axis: variable definition axis cannot have fixed labels')
+            else:
+                n = num(axis['length'],'axis: invalid length',True)
+                axis_labels(axis,axis.get('label_kind'),n,axis.get('domain_id'),False)
     for aid, array in arrays.items():
-        check(len(owners[aid]) == 1, 'array: requires exactly one owner')
+        check(len(owners[aid]) == 1,'array: requires exactly one owner')
         if len(owners[aid]) != 1: continue
         d, context = owners[aid][0]
-        rank = num(array.get('rank'), 'array: invalid rank', True)
-        check(rank == num(d.get('array_rank'), 'array: invalid definition rank', True), 'array: rank mismatch')
-        aa = sorted(axes[aid], key=lambda r: num(r.get('axis_order'), 'axis: invalid order', True))
-        check([a.get('axis_order') for a in aa] == [str(i) for i in range(1,rank+1)], 'array: missing/duplicate axis')
+        rank = num(d.get('array_rank'),'array: invalid definition rank',True)
+        declared = {a.get('axis_order'):a for a in def_axes[d.get('id')]}
+        dimensions = {a.get('axis_order'):a for a in axes[aid]}
+        check(len(dimensions) == len(axes[aid]) and set(dimensions) <= set(declared),'array: duplicate or undeclared axis')
         shape = []
-        declared = {a.get('axis_order'): a for a in def_axes[d.get('id')]}
-        for a in aa:
-            n = num(a.get('length'), 'axis: invalid length', True); shape.append(n)
-            check(n >= 0, 'axis: negative length')
-            da = declared.get(a.get('axis_order'), {})
-            check(a.get('label_kind') == da.get('label_kind') and a.get('domain_id') == da.get('domain_id') and (not da.get('length') or da['length'] == a.get('length')), 'axis: disagrees with definition')
-            ll = labels[(aid,a.get('axis_order'))]
-            kind = a.get('label_kind')
-            indices = [num(l.get('index'), 'axis_label: invalid index', True) for l in ll]
-            check(sorted(indices) == ([] if kind == 'unlabelled' else list(range(1,n+1))), 'axis: incomplete/duplicate labels')
-            vv = [l.get('comp_id' if kind == 'component' else 'label') for l in sorted(ll,key=lambda l: int(l['index']))]
-            check(len(set(vv)) == len(vv) and all(v is not None for v in vv), 'axis: labels must be non-null and unique')
-            for l in ll:
-                check(selected(l, {'label','comp_id'}) == ({'comp_id'} if kind == 'component' else {'label'}), 'axis_label: payload mismatch')
-                if kind == 'component': check(l.get('comp_id') in components, 'axis_label: missing chem_comp')
-            if kind == 'Cartesian': check(n == 3 and vv == ['x','y','z'], 'axis: Cartesian order must be x/y/z')
-            if a.get('domain_id'):
-                domain = get(domains, a['domain_id'], 'axis: missing domain')
-                allowed = {v.get('comp_id') for v in domain_values[a['domain_id']].values()} if kind == 'component' else set(domain_values[a['domain_id']])
-                check(set(vv) <= allowed and (domain.get('kind') == 'component') == (kind == 'component'), 'axis: labels outside domain')
+        for order in range(1,rank+1):
+            da = declared.get(str(order),{})
+            actual = dimensions.get(str(order))
+            fixed = da.get('length')
+            if fixed is None: check(actual is not None,'array: missing variable dimension')
+            length = actual.get('length') if actual else fixed
+            n = num(length,'array: invalid/missing dimension length',True); shape.append(n)
+            check(n >= 0,'axis: negative length')
+            if fixed is not None: check(str(n) == fixed,'axis: disagrees with definition')
+            inherited = bool(labels[da.get('id')])
+            if inherited:
+                check(not actual or not labels[actual.get('id')],'axis: cannot override shared labels')
+            label_owner = da if inherited or actual is None else actual
+            axis_labels(label_owner,da.get('label_kind'),n,da.get('domain_id'),True)
         size = math.prod(shape)
-        seen = set()
-        element_states = {}
+        seen, element_states = set(), {}
         for e in elements[aid]:
-            i = num(e.get('element_index'), 'array_value: invalid index', True)
-            check(1 <= i <= size and i not in seen, 'array_value: duplicate/out-of-range index'); seen.add(i)
-            payload({k:v for k,v in e.items() if k != 'array_id'}, {'value_kind':d.get('array_element_kind')}, context, 'array_value', True)
+            i = num(e.get('element_index'),'array_value: invalid index',True)
+            check(1 <= i <= size and i not in seen,'array_value: duplicate/out-of-range index'); seen.add(i)
+            payload({k:v for k,v in e.items() if k != 'array_id'},{'value_kind':d.get('array_element_kind')},context,'array_value',True)
             element_states[i] = e.get('state','specified')
         if d.get('array_transform') in ('point3','vector3'):
-            check(bool(aa) and aa[-1].get('label_kind') == 'Cartesian' and shape[-1] == 3 and d.get('array_element_kind') == 'real', 'array: geometric values require final real Cartesian axis')
+            check(bool(shape) and declared.get(str(rank),{}).get('label_kind') == 'Cartesian' and shape[-1] == 3 and d.get('array_element_kind') == 'real','array: geometric values require final real Cartesian axis')
             for start in {((i-1)//3)*3+1 for i in seen}:
                 states = {element_states.get(i,array.get('omitted_state')) for i in range(start,start+3)}
-                check(len(states) == 1, 'array: partial geometric triple')
+                check(len(states) == 1,'array: partial geometric triple')
     realized = defaultdict(set)
     realization_modes = defaultdict(set)
     realization_order = defaultdict(list)
     mapping_keys = set()
-    for r in rows('correspondence'):
+    for r in relations:
+        if r.get('relation') in TOPOLOGY: continue
         rel = r.get('relation')
         source, target = subjects.get(r.get('source_subject_id')), subjects.get(r.get('target_subject_id'))
         check(bool(source) == (rel != 'generated') and bool(target) == (rel != 'deleted'), 'correspondence: endpoint pattern')
@@ -454,15 +511,15 @@ def validate(block):
         if source and target:
             check(source.get('level') == target.get('level'), 'correspondence: level mismatch')
         if rel == 'realized' and source and target:
-            check(bool(source.get('site_id')) and not target.get('site_id'), 'correspondence: realization needs logical source and realized target')
+            check(source.get('id') in sites and target.get('kind') == 'reference', 'correspondence: realization needs logical source and realized target')
             identity = tuple(target.get(k) for k in ('data_id','model_id','level','atom_id','label_asym_id','label_entity_id','label_seq_id','group_id'))
-            check(identity not in realized[(source.get('site_id'),r.get('protocol_step_id'))], 'correspondence: duplicate realized identity')
-            realized[(source.get('site_id'),r.get('protocol_step_id'))].add(identity)
-            realization_modes[(source.get('site_id'),r.get('protocol_step_id'))].add('realized')
-            realization_order[(source.get('site_id'),r.get('protocol_step_id'))].append(num(r.get('target_ordinal_id'), 'correspondence: invalid realized order', True))
-        if rel == 'deleted' and source and source.get('site_id'):
-            realized[(source['site_id'],r.get('protocol_step_id'))]
-            realization_modes[(source['site_id'],r.get('protocol_step_id'))].add('deleted')
+            check(identity not in realized[(source.get('id'),r.get('protocol_step_id'))], 'correspondence: duplicate realized identity')
+            realized[(source.get('id'),r.get('protocol_step_id'))].add(identity)
+            realization_modes[(source.get('id'),r.get('protocol_step_id'))].add('realized')
+            realization_order[(source.get('id'),r.get('protocol_step_id'))].append(num(r.get('target_ordinal_id'), 'correspondence: invalid realized order', True))
+        if rel == 'deleted' and source and source.get('id') in sites:
+            realized[(source['id'],r.get('protocol_step_id'))]
+            realization_modes[(source['id'],r.get('protocol_step_id'))].add('deleted')
     for (site_id, step_id), targets in realized.items():
         site = sites.get(site_id,{})
         check(len(realization_modes[(site_id,step_id)]) == 1, 'correspondence: site both realized and deleted')
